@@ -5,6 +5,7 @@ import '../../providers/auth_provider.dart';
 import '../../models/quest.dart';
 import '../../models/enums.dart';
 import '../../widgets/quest_card.dart';
+import '../quest_detail_page.dart';
 
 class QuestBoardPage extends StatefulWidget {
   const QuestBoardPage({super.key});
@@ -63,11 +64,17 @@ class _QuestBoardPageState extends State<QuestBoardPage>
     await _loadQuests();
   }
 
-  void _handleQuestTap(Quest quest, QuestInstance? instance) {
-    // TODO: Navigate to QuestDetailPage
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Quest: ${quest.name}')),
+  Future<void> _handleQuestTap(Quest quest, QuestInstance? instance) async {
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => QuestDetailPage(
+          quest: quest,
+          instance: instance,
+        ),
+      ),
     );
+    // Refresh after returning from detail page
+    _loadQuests();
   }
 
   List<Quest> _getFilteredQuests(List<Quest> quests) {
