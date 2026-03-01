@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'enums.dart';
+import '../theme/app_colors.dart';
 
 class Quest {
   final String id;
@@ -45,13 +46,13 @@ class Quest {
   Color get rarityColor {
     switch (rarity) {
       case QuestRarity.common:
-        return const Color(0xFFB8B8B8);
+        return AppColors.rarityCommon;
       case QuestRarity.rare:
-        return const Color(0xFF4A9DFF);
+        return AppColors.rarityRare;
       case QuestRarity.epic:
-        return const Color(0xFFA855F7);
+        return AppColors.rarityEpic;
       case QuestRarity.legendary:
-        return const Color(0xFFF59E0B);
+        return AppColors.rarityLegendary;
     }
   }
 

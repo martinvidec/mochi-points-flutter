@@ -5,6 +5,7 @@ import '../../providers/auth_provider.dart';
 import '../../providers/hero_provider.dart';
 import '../../providers/points_provider.dart';
 import '../../providers/quest_provider.dart';
+import '../../theme/app_colors.dart';
 import '../../widgets/hero_card.dart';
 import '../../widgets/points_display.dart';
 import '../../widgets/quest_card.dart';
@@ -22,7 +23,7 @@ class _ChildHeroHomePageState extends State<ChildHeroHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF1A1B2E),
+      backgroundColor: AppColors.backgroundStart,
       body: IndexedStack(
         index: _currentNavIndex,
         children: [
@@ -65,7 +66,7 @@ class _ChildHeroHomePageState extends State<ChildHeroHomePage> {
               slivers: [
                 // App Bar
                 SliverAppBar(
-                  backgroundColor: const Color(0xFF1A1B2E),
+                  backgroundColor: AppColors.backgroundStart,
                   floating: true,
                   title: const Text(
                     'Mochi Hero',
@@ -134,7 +135,7 @@ class _ChildHeroHomePageState extends State<ChildHeroHomePage> {
                           child: const Text(
                             'Alle anzeigen',
                             style: TextStyle(
-                              color: Color(0xFF4ECDC4),
+                              color: AppColors.teal,
                             ),
                           ),
                         ),
@@ -208,7 +209,7 @@ class _ChildHeroHomePageState extends State<ChildHeroHomePage> {
         ),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: const Color(0xFF4ECDC4).withAlpha(128),
+          color: AppColors.teal.withAlpha(128),
           width: 2,
         ),
       ),
@@ -217,7 +218,7 @@ class _ChildHeroHomePageState extends State<ChildHeroHomePage> {
           const Icon(
             Icons.person_add,
             size: 48,
-            color: Color(0xFF4ECDC4),
+            color: AppColors.teal,
           ),
           const SizedBox(height: 12),
           const Text(
@@ -247,13 +248,13 @@ class _ChildHeroHomePageState extends State<ChildHeroHomePage> {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [Color(0xFF2A2B42), Color(0xFF3A3B52)],
+          colors: [AppColors.surface, AppColors.surfaceElevated],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: const Color(0xFFFFE66D).withAlpha(51),
+          color: AppColors.gold.withAlpha(51),
           width: 1,
         ),
       ),
@@ -282,7 +283,7 @@ class _ChildHeroHomePageState extends State<ChildHeroHomePage> {
                   children: [
                     const Icon(
                       Icons.trending_up,
-                      color: Color(0xFF4ECDC4),
+                      color: AppColors.teal,
                       size: 20,
                     ),
                     const SizedBox(width: 4),
@@ -291,7 +292,7 @@ class _ChildHeroHomePageState extends State<ChildHeroHomePage> {
                       style: const TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFF4ECDC4),
+                        color: AppColors.teal,
                       ),
                     ),
                   ],
@@ -317,7 +318,7 @@ class _ChildHeroHomePageState extends State<ChildHeroHomePage> {
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: const Color(0xFF2A2B42),
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: Colors.white.withAlpha(26),
@@ -359,7 +360,7 @@ class _ChildHeroHomePageState extends State<ChildHeroHomePage> {
             icon: const Icon(Icons.explore),
             label: const Text('Quest Board'),
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF4ECDC4),
+              backgroundColor: AppColors.teal,
               foregroundColor: Colors.white,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
@@ -378,7 +379,7 @@ class _ChildHeroHomePageState extends State<ChildHeroHomePage> {
           child: _buildQuickActionButton(
             icon: Icons.explore,
             label: 'Alle Quests',
-            color: const Color(0xFF4A9DFF),
+            color: AppColors.rarityRare,
             onTap: () {
               setState(() {
                 _currentNavIndex = 1;
@@ -391,7 +392,7 @@ class _ChildHeroHomePageState extends State<ChildHeroHomePage> {
           child: _buildQuickActionButton(
             icon: Icons.store,
             label: 'Shop',
-            color: const Color(0xFFFFE66D),
+            color: AppColors.gold,
             onTap: () {
               setState(() {
                 _currentNavIndex = 2;
@@ -490,7 +491,7 @@ class _ChildHeroHomePageState extends State<ChildHeroHomePage> {
   Widget _buildBottomNav() {
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFF2A2B42),
+        color: AppColors.surface,
         boxShadow: [
           BoxShadow(
             color: Colors.black.withAlpha(77),
@@ -551,7 +552,7 @@ class _ChildHeroHomePageState extends State<ChildHeroHomePage> {
     int? badge,
   }) {
     final isActive = _currentNavIndex == index;
-    final color = isActive ? const Color(0xFFFF6B6B) : Colors.white54;
+    final color = isActive ? AppColors.primaryStart : Colors.white54;
 
     return InkWell(
       onTap: () {
@@ -580,7 +581,7 @@ class _ChildHeroHomePageState extends State<ChildHeroHomePage> {
                     child: Container(
                       padding: const EdgeInsets.all(4),
                       decoration: const BoxDecoration(
-                        color: Color(0xFFFF6B6B),
+                        color: AppColors.primaryStart,
                         shape: BoxShape.circle,
                       ),
                       constraints: const BoxConstraints(
@@ -615,7 +616,7 @@ class _ChildHeroHomePageState extends State<ChildHeroHomePage> {
                 width: 4,
                 height: 4,
                 decoration: const BoxDecoration(
-                  color: Color(0xFFFF6B6B),
+                  color: AppColors.primaryStart,
                   shape: BoxShape.circle,
                 ),
               ),
@@ -645,7 +646,7 @@ class _ChildHeroHomePageState extends State<ChildHeroHomePage> {
   void _showSettingsMenu(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      backgroundColor: const Color(0xFF2A2B42),
+      backgroundColor: AppColors.surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -689,10 +690,10 @@ class _ChildHeroHomePageState extends State<ChildHeroHomePage> {
                 ),
                 const Divider(color: Colors.white24),
                 ListTile(
-                  leading: const Icon(Icons.logout, color: Color(0xFFFF6B6B)),
+                  leading: const Icon(Icons.logout, color: AppColors.primaryStart),
                   title: const Text(
                     'Abmelden',
-                    style: TextStyle(color: Color(0xFFFF6B6B)),
+                    style: TextStyle(color: AppColors.primaryStart),
                   ),
                   onTap: () async {
                     Navigator.pop(context);

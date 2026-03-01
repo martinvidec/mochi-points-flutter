@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 import '../models/achievement.dart';
+import '../theme/app_colors.dart';
 
 /// Shows a celebratory dialog when an achievement is unlocked
 class AchievementUnlockDialog extends StatefulWidget {
@@ -456,10 +457,10 @@ class _ConfettiPainter extends CustomPainter {
 
     final colors = [
       color,
-      const Color(0xFFFF6B6B),
-      const Color(0xFF4ECDC4),
-      const Color(0xFFFFE66D),
-      const Color(0xFFA855F7),
+      AppColors.primaryStart,
+      AppColors.teal,
+      AppColors.gold,
+      AppColors.rarityEpic,
       Colors.white,
     ];
 

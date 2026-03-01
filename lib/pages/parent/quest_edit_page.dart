@@ -4,6 +4,7 @@ import '../../models/quest.dart';
 import '../../models/enums.dart';
 import '../../providers/quest_provider.dart';
 import '../../providers/auth_provider.dart';
+import '../../theme/app_colors.dart';
 
 class QuestEditPage extends StatefulWidget {
   final Quest? quest;
@@ -258,19 +259,19 @@ class _QuestEditPageState extends State<QuestEditPage> {
                 switch (rarity) {
                   case QuestRarity.common:
                     label = 'Gewöhnlich';
-                    color = const Color(0xFFB8B8B8);
+                    color = AppColors.rarityCommon;
                     break;
                   case QuestRarity.rare:
                     label = 'Selten';
-                    color = const Color(0xFF4A9DFF);
+                    color = AppColors.rarityRare;
                     break;
                   case QuestRarity.epic:
                     label = 'Episch';
-                    color = const Color(0xFFA855F7);
+                    color = AppColors.rarityEpic;
                     break;
                   case QuestRarity.legendary:
                     label = 'Legendär';
-                    color = const Color(0xFFF59E0B);
+                    color = AppColors.rarityLegendary;
                     break;
                 }
                 return ChoiceChip(
