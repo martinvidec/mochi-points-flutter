@@ -221,7 +221,7 @@ class RewardProvider extends ChangeNotifier {
     }
   }
 
-  // Cancel redemption request
+  // Cancel redemption request (back to purchased)
   Future<bool> cancelRedemption(String purchaseId) async {
     try {
       for (final userId in _purchases.keys) {
@@ -243,6 +243,48 @@ class RewardProvider extends ChangeNotifier {
       return false;
     } catch (e) {
       debugPrint('RewardProvider.cancelRedemption error: $e');
+      return false;
+    }
+  }
+
+  // Reject redemption (refund points, cancel purchase)
+  Future<bool> rejectRedemption(String purchaseId) async {
+    try {
+      if (_pointsProvider == null) {
+        debugPrint('RewardProvider: PointsProvider not set');
+        return false;
+      }
+
+      for (final userId in _purchases.keys) {
+        final purchaseIndex = _purchases[userId]!.indexWhere((p) => p.id == purchaseId);
+        if (purchaseIndex != -1) {
+          final purchase = _purchases[userId]![purchaseIndex];
+
+          if (purchase.status != PurchaseStatus.pendingRedemption) return false;
+
+          // Refund points
+          final reward = getRewardById(purchase.rewardId);
+          await _pointsProvider!.earn(
+            userId,
+            purchase.totalPrice,
+            TransactionType.refund,
+            referenceId: purchaseId,
+            description: 'Rückerstattung: ${reward?.name ?? "Belohnung"}',
+          );
+
+          // Set status to cancelled
+          _purchases[userId]![purchaseIndex] = purchase.copyWith(
+            status: PurchaseStatus.cancelled,
+          );
+
+          await _savePurchases();
+          notifyListeners();
+          return true;
+        }
+      }
+      return false;
+    } catch (e) {
+      debugPrint('RewardProvider.rejectRedemption error: $e');
       return false;
     }
   }

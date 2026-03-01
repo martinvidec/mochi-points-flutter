@@ -165,7 +165,7 @@ class _RewardEditPageState extends State<RewardEditPage> {
 
             // Category
             DropdownButtonFormField<RewardCategory>(
-              value: _selectedCategory,
+              initialValue: _selectedCategory,
               decoration: const InputDecoration(
                 labelText: 'Kategorie',
                 border: OutlineInputBorder(),
@@ -178,7 +178,7 @@ class _RewardEditPageState extends State<RewardEditPage> {
               }).toList(),
               onChanged: (value) {
                 if (value != null) {
-                  setState(() => _selectedCategory = value);
+                  _selectedCategory = value;
                 }
               },
             ),

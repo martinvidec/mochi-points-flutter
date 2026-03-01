@@ -23,6 +23,9 @@ class AuthProvider extends ChangeNotifier {
   List<User> get parents =>
       _familyMembers.where((user) => user.isParent).toList();
 
+  User? getUserById(String userId) =>
+      _familyMembers.where((user) => user.id == userId).firstOrNull;
+
   static const String _familyKey = 'family';
   static const String _membersKey = 'family_members';
   static const String _lastUserIdKey = 'last_user_id';
