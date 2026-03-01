@@ -5,7 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Session Start Instructions
 
 **At the start of each session:**
-1. Check for open GitHub issues: `gh issue list`
+1. Check for open GitHub issues (oldest first): `gh issue list --limit 50 --state open --json number,title,labels,createdAt --jq 'sort_by(.createdAt) | .[] | "#\(.number)\t\(.title)"'`
 2. Ask the user which issue to work on
 3. Create a feature branch for the selected issue
 
@@ -41,6 +41,14 @@ gh pr create --fill                        # Create PR
 gh pr merge                                # Merge to main
 git checkout main && git pull
 ```
+
+### Pull Request Workflow
+**IMPORTANT**: After creating a PR, always ask the user if it should be merged.
+
+1. Create PR with `gh pr create`
+2. **Ask user: "Soll ich PR #X mergen?"**
+3. Only merge after explicit confirmation
+4. After merge, switch to main and pull: `git checkout main && git pull`
 
 ## Project Vision
 
