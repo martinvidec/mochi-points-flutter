@@ -17,7 +17,7 @@ enum QuestStatus { available, inProgress, pendingApproval, completed, expired }
 enum RewardCategory { experience, item, privilege, custom }
 
 /// Status of a reward purchase
-enum PurchaseStatus { purchased, redeemed, expired, cancelled }
+enum PurchaseStatus { purchased, pendingRedemption, redeemed, expired, cancelled }
 
 /// Type of point transaction
 enum TransactionType { questComplete, purchase, bonus, adjustment, refund }
