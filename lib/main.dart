@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'models/enums.dart';
 import 'providers/auth_provider.dart';
 import 'providers/quest_provider.dart';
 import 'providers/points_provider.dart';
@@ -23,9 +24,63 @@ void main() {
         ChangeNotifierProvider(create: (context) => RewardProvider()),
         ChangeNotifierProvider(create: (context) => HeroProvider()),
       ],
-      child: const MochiPointsApp(),
+      child: const ProviderConnector(child: MochiPointsApp()),
     ),
   );
+}
+
+/// Connects providers with callbacks for cross-provider communication
+class ProviderConnector extends StatefulWidget {
+  final Widget child;
+
+  const ProviderConnector({super.key, required this.child});
+
+  @override
+  State<ProviderConnector> createState() => _ProviderConnectorState();
+}
+
+class _ProviderConnectorState extends State<ProviderConnector> {
+  @override
+  void initState() {
+    super.initState();
+    // Connect providers after first frame
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _connectProviders();
+    });
+  }
+
+  void _connectProviders() {
+    final questProvider = context.read<QuestProvider>();
+    final pointsProvider = context.read<PointsProvider>();
+    final heroProvider = context.read<HeroProvider>();
+
+    // When a quest is approved, award points and XP
+    questProvider.onQuestApproved = ({
+      required String childId,
+      required int points,
+      required int xp,
+      required String questId,
+      required String questName,
+    }) {
+      // Award points
+      pointsProvider.earn(
+        childId,
+        points,
+        TransactionType.questComplete,
+        referenceId: questId,
+        description: 'Quest abgeschlossen: $questName',
+      );
+
+      // Award XP and update streak
+      heroProvider.addXP(childId, xp);
+      heroProvider.updateStreak(childId);
+    };
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return widget.child;
+  }
 }
 
 class MochiPointsApp extends StatelessWidget {

@@ -3,6 +3,15 @@ import '../models/quest.dart';
 import '../models/enums.dart';
 import '../services/storage_service.dart';
 
+/// Callback when a quest is approved with rewards
+typedef QuestApprovedCallback = void Function({
+  required String childId,
+  required int points,
+  required int xp,
+  required String questId,
+  required String questName,
+});
+
 class QuestProvider extends ChangeNotifier {
   List<Quest> _quests = [];
   Map<String, List<QuestInstance>> _instances = {};
@@ -12,6 +21,9 @@ class QuestProvider extends ChangeNotifier {
 
   static const String _questsKey = 'quests';
   static const String _instancesKey = 'quest_instances';
+
+  /// Callback triggered when a quest is approved (for awarding points/XP)
+  QuestApprovedCallback? onQuestApproved;
 
   // Getters
   List<Quest> availableQuests(String childId) {
@@ -212,6 +224,10 @@ class QuestProvider extends ChangeNotifier {
 
       if (instance == null || childId == null) return false;
 
+      // Get the quest for reward amounts
+      final quest = _quests.where((q) => q.id == instance!.questId).firstOrNull;
+      if (quest == null) return false;
+
       final updatedInstance = instance.copyWith(
         status: QuestStatus.completed,
         approvedAt: DateTime.now(),
@@ -221,10 +237,21 @@ class QuestProvider extends ChangeNotifier {
       final index = _instances[childId]!.indexWhere((i) => i.id == instanceId);
       _instances[childId]![index] = updatedInstance;
 
-      // TODO: Award points and XP via PointsProvider and HeroProvider
-
       await _saveInstances();
       notifyListeners();
+
+      // Trigger callback to award points and XP
+      final points = quest.rewardPoints;
+      final xp = quest.rewardXP > 0 ? quest.rewardXP : quest.rewardPoints * 10;
+
+      onQuestApproved?.call(
+        childId: childId,
+        points: points,
+        xp: xp,
+        questId: quest.id,
+        questName: quest.name,
+      );
+
       return true;
     } catch (e) {
       debugPrint('QuestProvider.approveQuest error: $e');
