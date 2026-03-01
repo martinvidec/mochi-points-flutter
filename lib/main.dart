@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'providers/auth_provider.dart';
+import 'providers/quest_provider.dart';
+import 'providers/points_provider.dart';
 import 'providers/challenge_provider.dart';
-import 'providers/mochi_point_account_provider.dart';
-import 'providers/mochi_point_provider.dart';
 import 'providers/eaty_provider.dart';
 import 'providers/cart_item_provider.dart';
 import 'pages/splash_page.dart';
@@ -11,16 +11,15 @@ import 'pages/login_page.dart';
 import 'pages/hero_home_page.dart';
 import 'pages/parent_dashboard_page.dart';
 import 'pages/setup/family_setup_page.dart';
-import 'pages/summary_page.dart';
 
 void main() {
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => AuthProvider()),
+        ChangeNotifierProvider(create: (context) => QuestProvider()),
+        ChangeNotifierProvider(create: (context) => PointsProvider()),
         ChangeNotifierProvider(create: (context) => ChallengeProvider()),
-        ChangeNotifierProvider(create: (context) => MochiPointAccountProvider()),
-        ChangeNotifierProvider(create: (context) => MochiPointProvider()),
         ChangeNotifierProvider(create: (context) => EatyProvider()),
         ChangeNotifierProvider(create: (context) => CartItemProvider()),
       ],
@@ -52,7 +51,6 @@ class MochiPointsApp extends StatelessWidget {
         '/family-setup': (context) => const FamilySetupPage(),
         '/hero-home': (context) => const HeroHomePage(),
         '/parent-dashboard': (context) => const ParentDashboardPage(),
-        '/summary': (context) => const SummaryPage(),
       },
     );
   }
