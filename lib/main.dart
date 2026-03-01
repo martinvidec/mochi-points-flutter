@@ -62,7 +62,18 @@ class _ProviderConnectorState extends State<ProviderConnector> {
       required String questId,
       required String questName,
     }) {
-      // Award points
+      // First record activity to update streak
+      heroProvider.recordActivity(childId);
+
+      // Get streak bonus multiplier
+      final bonusMultiplier = heroProvider.getStreakBonus(childId);
+      final bonusPercent = heroProvider.getStreakBonusPercent(childId);
+
+      // Calculate bonus points (only the extra amount)
+      final bonusPoints = ((points * bonusMultiplier) - points).round();
+      final totalPoints = points + bonusPoints;
+
+      // Award base points
       pointsProvider.earn(
         childId,
         points,
@@ -71,9 +82,24 @@ class _ProviderConnectorState extends State<ProviderConnector> {
         description: 'Quest abgeschlossen: $questName',
       );
 
-      // Award XP and update streak
+      // Award bonus points separately (if any)
+      if (bonusPoints > 0) {
+        final hero = heroProvider.heroForUser(childId);
+        final streak = hero?.currentStreak ?? 0;
+        pointsProvider.earn(
+          childId,
+          bonusPoints,
+          TransactionType.bonus,
+          referenceId: questId,
+          description: 'Streak Bonus +$bonusPercent% (🔥 $streak)',
+        );
+      }
+
+      // Award XP (no streak bonus on XP)
       heroProvider.addXP(childId, xp);
-      heroProvider.updateStreak(childId);
+
+      // Log total for debugging
+      debugPrint('Quest approved: $questName - $points MP + $bonusPoints Bonus = $totalPoints MP');
     };
   }
 
