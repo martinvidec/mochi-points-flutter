@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'models/enums.dart';
+import 'theme/app_theme.dart';
 import 'providers/auth_provider.dart';
 import 'providers/quest_provider.dart';
 import 'providers/points_provider.dart';
@@ -118,16 +119,8 @@ class MochiPointsApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Mochi Points',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFFFF7E7E), // Sakura pink
-          primary: const Color(0xFFFF7E7E), // Sakura pink
-          secondary: const Color(0xFFFFD23F), // Yuzu yellow
-          tertiary: const Color(0xFF7EAE4E), // Matcha green
-          surface: const Color(0xFFFFF3E0), // Light cream
-        ),
-        useMaterial3: true,
-      ),
+      theme: AppTheme.darkTheme(),
+      debugShowCheckedModeBanner: false,
       home: const SplashPage(),
       routes: {
         '/login': (context) => const LoginPage(),

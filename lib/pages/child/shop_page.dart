@@ -5,6 +5,7 @@ import '../../models/enums.dart';
 import '../../providers/reward_provider.dart';
 import '../../providers/points_provider.dart';
 import '../../providers/auth_provider.dart';
+import '../../theme/app_colors.dart';
 import '../../widgets/points_display.dart';
 import '../../widgets/reward_card.dart';
 
@@ -166,7 +167,7 @@ class _ShopPageState extends State<ShopPage> {
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: const Color(0xFFFFE66D).withAlpha(50),
+                color: AppColors.gold.withAlpha(50),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Row(
@@ -194,7 +195,7 @@ class _ShopPageState extends State<ShopPage> {
           ElevatedButton(
             onPressed: () => _purchaseReward(context, reward, userId),
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFFFFE66D),
+              backgroundColor: AppColors.gold,
               foregroundColor: Colors.black87,
             ),
             child: const Text('Kaufen'),

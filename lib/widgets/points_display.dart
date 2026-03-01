@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../theme/app_colors.dart';
 
 enum PointsDisplayVariant { compact, large }
 
@@ -22,8 +23,8 @@ class PointsDisplay extends StatefulWidget {
 
 class _PointsDisplayState extends State<PointsDisplay>
     with TickerProviderStateMixin {
-  static const Color mochiGold = Color(0xFFFFE66D);
-  static const Color mochiGoldDark = Color(0xFFD4A800);
+  static const Color mochiGold = AppColors.gold;
+  static const Color mochiGoldDark = AppColors.warning;
 
   late AnimationController _countController;
   late AnimationController _changeController;
@@ -108,7 +109,7 @@ class _PointsDisplayState extends State<PointsDisplay>
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [mochiGold, Color(0xFFFFD93D)],
+          colors: [mochiGold, AppColors.gold],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -152,7 +153,7 @@ class _PointsDisplayState extends State<PointsDisplay>
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           decoration: BoxDecoration(
             gradient: const LinearGradient(
-              colors: [mochiGold, Color(0xFFFFD93D)],
+              colors: [mochiGold, AppColors.gold],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/streak_service.dart';
+import '../theme/app_colors.dart';
 
 enum StreakWidgetVariant { compact, expanded }
 
@@ -23,9 +24,9 @@ class StreakWidget extends StatefulWidget {
 
 class _StreakWidgetState extends State<StreakWidget>
     with TickerProviderStateMixin {
-  static const Color fireColor = Color(0xFFFF6B6B);
-  static const Color fireColorBright = Color(0xFFFF8E53);
-  static const Color inactiveColor = Color(0xFF4A4B62);
+  static const Color fireColor = AppColors.primaryStart;
+  static const Color fireColorBright = AppColors.primaryEnd;
+  static const Color inactiveColor = AppColors.surfaceElevated;
 
   late AnimationController _pulseController;
   late AnimationController _shakeController;
@@ -191,7 +192,7 @@ class _StreakWidgetState extends State<StreakWidget>
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFF2A2B42),
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: widget.streak > 0
@@ -402,14 +403,14 @@ class _StreakWidgetState extends State<StreakWidget>
               height: 36,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: hasActivity ? fireColor : const Color(0xFF4ECDC4),
+                color: hasActivity ? fireColor : AppColors.teal,
                 border: Border.all(
                   color: Colors.white.withAlpha(128),
                   width: 2,
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: (hasActivity ? fireColor : const Color(0xFF4ECDC4))
+                    color: (hasActivity ? fireColor : AppColors.teal)
                         .withAlpha(128),
                     blurRadius: 12,
                   ),

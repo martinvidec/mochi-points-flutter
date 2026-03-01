@@ -4,6 +4,7 @@ import '../models/achievement.dart';
 import '../models/enums.dart';
 import '../providers/achievement_provider.dart';
 import '../providers/auth_provider.dart';
+import '../theme/app_colors.dart';
 import '../widgets/achievement_badge.dart';
 
 class AchievementsPage extends StatefulWidget {
@@ -96,7 +97,7 @@ class _AchievementsPageState extends State<AchievementsPage>
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFF2A2B42),
+        color: AppColors.surface,
         border: Border(
           bottom: BorderSide(
             color: Colors.white.withAlpha(26),
@@ -113,7 +114,7 @@ class _AchievementsPageState extends State<AchievementsPage>
               gradient: const LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                colors: [Color(0xFFFFD700), Color(0xFFFFA500)],
+                colors: [AppColors.gold, AppColors.primaryEnd],
               ),
               borderRadius: BorderRadius.circular(12),
             ),
@@ -143,7 +144,7 @@ class _AchievementsPageState extends State<AchievementsPage>
                     value: progress,
                     backgroundColor: Colors.white.withAlpha(26),
                     valueColor: const AlwaysStoppedAnimation<Color>(
-                      Color(0xFFFFD700),
+                      AppColors.gold,
                     ),
                     minHeight: 8,
                   ),
@@ -269,7 +270,7 @@ class _AchievementsPageState extends State<AchievementsPage>
 
     showModalBottomSheet(
       context: context,
-      backgroundColor: const Color(0xFF2A2B42),
+      backgroundColor: AppColors.surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -408,7 +409,7 @@ class _AchievementsPageState extends State<AchievementsPage>
               value: progress.progressPercent,
               backgroundColor: Colors.white.withAlpha(26),
               valueColor: const AlwaysStoppedAnimation<Color>(
-                Color(0xFF4ECDC4),
+                AppColors.teal,
               ),
               minHeight: 8,
             ),

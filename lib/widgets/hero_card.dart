@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/hero.dart' as app;
 import '../services/level_service.dart';
+import '../theme/app_colors.dart';
 
 class HeroCard extends StatefulWidget {
   final app.Hero hero;
@@ -85,13 +86,13 @@ class _HeroCardState extends State<HeroCard>
   Color _getLevelTierGlow() {
     final level = widget.hero.level;
     if (level <= 10) {
-      return const Color(0xFF4ECDC4); // Teal
+      return AppColors.teal;
     } else if (level <= 25) {
-      return const Color(0xFF4A9DFF); // Blue
+      return AppColors.rarityRare;
     } else if (level <= 50) {
-      return const Color(0xFFA855F7); // Purple
+      return AppColors.rarityEpic;
     } else {
-      return const Color(0xFFF59E0B); // Gold
+      return AppColors.rarityLegendary;
     }
   }
 
@@ -106,7 +107,7 @@ class _HeroCardState extends State<HeroCard>
       case 'dark':
         return const Color(0xFF8B6F47);
       default:
-        return const Color(0xFFFF6B6B); // Primary coral
+        return AppColors.primaryStart;
     }
   }
 
@@ -395,14 +396,14 @@ class _HeroCardState extends State<HeroCard>
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           colors: [
-                            const Color(0xFF4ECDC4),
-                            const Color(0xFF45B7D1),
+                            AppColors.teal,
+                            AppColors.teal,
                           ],
                         ),
                         borderRadius: BorderRadius.circular(4),
                         boxShadow: [
                           BoxShadow(
-                            color: const Color(0xFF4ECDC4).withAlpha(128),
+                            color: AppColors.teal.withAlpha(128),
                             blurRadius: 6,
                           ),
                         ],
@@ -424,7 +425,7 @@ class _HeroCardState extends State<HeroCard>
         const Icon(
           Icons.local_fire_department,
           size: 20,
-          color: Color(0xFFFF6B6B),
+          color: AppColors.primaryStart,
         ),
         const SizedBox(width: 4),
         Text(
@@ -432,7 +433,7 @@ class _HeroCardState extends State<HeroCard>
           style: const TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.bold,
-            color: Color(0xFFFF6B6B),
+            color: AppColors.primaryStart,
           ),
         ),
         if (widget.hero.longestStreak > widget.hero.currentStreak) ...[
@@ -453,10 +454,10 @@ class _HeroCardState extends State<HeroCard>
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: const Color(0xFFFF6B6B).withAlpha(51),
+        color: AppColors.primaryStart.withAlpha(51),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: const Color(0xFFFF6B6B).withAlpha(128),
+          color: AppColors.primaryStart.withAlpha(128),
           width: 1,
         ),
       ),
@@ -466,7 +467,7 @@ class _HeroCardState extends State<HeroCard>
           const Icon(
             Icons.local_fire_department,
             size: 14,
-            color: Color(0xFFFF6B6B),
+            color: AppColors.primaryStart,
           ),
           const SizedBox(width: 2),
           Text(
@@ -474,7 +475,7 @@ class _HeroCardState extends State<HeroCard>
             style: const TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.bold,
-              color: Color(0xFFFF6B6B),
+              color: AppColors.primaryStart,
             ),
           ),
         ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/reward.dart';
 import '../models/enums.dart';
+import '../theme/app_colors.dart';
 
 class RewardCard extends StatelessWidget {
   final Reward reward;
@@ -103,7 +104,7 @@ class RewardCard extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFFFE66D).withAlpha(50),
+                        color: AppColors.gold.withAlpha(50),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Row(
@@ -129,7 +130,7 @@ class RewardCard extends StatelessWidget {
                       child: ElevatedButton(
                         onPressed: isAvailable ? onPurchase : null,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFFFFE66D),
+                          backgroundColor: AppColors.gold,
                           foregroundColor: Colors.black87,
                           padding: const EdgeInsets.symmetric(horizontal: 12),
                           shape: RoundedRectangleBorder(
