@@ -1,8 +1,11 @@
 import 'package:flutter/foundation.dart';
 import '../models/hero.dart';
 import '../services/storage_service.dart';
+import '../services/streak_service.dart';
 
 typedef LevelUpCallback = void Function(String userId, int oldLevel, int newLevel);
+typedef StreakMilestoneCallback = void Function(String userId, int milestone);
+typedef StreakLostCallback = void Function(String userId, int previousStreak);
 
 class HeroProvider extends ChangeNotifier {
   Map<String, Hero> _heroes = {};
@@ -14,6 +17,8 @@ class HeroProvider extends ChangeNotifier {
 
   // Callbacks
   LevelUpCallback? onLevelUp;
+  StreakMilestoneCallback? onStreakMilestone;
+  StreakLostCallback? onStreakLost;
 
   // Getters
   Hero? get currentHero {
@@ -96,60 +101,110 @@ class HeroProvider extends ChangeNotifier {
     }
   }
 
-  // Update streak
-  Future<bool> updateStreak(String userId) async {
+  /// Record activity for today and update streak
+  ///
+  /// This is the main method to call when a user completes an action.
+  /// Returns true if activity was recorded (false if already recorded today).
+  Future<bool> recordActivity(String userId) async {
     try {
       final hero = _heroes[userId];
       if (hero == null) return false;
 
       final now = DateTime.now();
       final today = DateTime(now.year, now.month, now.day);
-      final lastActive = hero.lastActiveDate;
 
-      int newStreak = hero.currentStreak;
-      int newLongestStreak = hero.longestStreak;
-
-      if (lastActive == null) {
-        // First activity
-        newStreak = 1;
-      } else {
-        final lastActiveDay = DateTime(
-          lastActive.year,
-          lastActive.month,
-          lastActive.day,
-        );
-        final daysDifference = today.difference(lastActiveDay).inDays;
-
-        if (daysDifference == 0) {
-          // Same day, no change
-          return true;
-        } else if (daysDifference == 1) {
-          // Consecutive day
-          newStreak = hero.currentStreak + 1;
-        } else {
-          // Streak broken
-          newStreak = 1;
-        }
+      // Check if already recorded today
+      if (StreakService.hasActivityToday(hero.lastActiveDate)) {
+        return false; // Already recorded
       }
 
-      // Update longest streak
-      if (newStreak > newLongestStreak) {
-        newLongestStreak = newStreak;
-      }
+      // Check if streak was lost before recording new activity
+      final oldStreak = hero.currentStreak;
+      final wasActive = StreakService.isStreakActive(hero.lastActiveDate);
 
+      // Add today to activity dates
+      final updatedDates = [...hero.activityDates, today];
+
+      // Calculate new streak
+      final newStreak = StreakService.calculateStreak(updatedDates);
+      final newLongestStreak =
+          newStreak > hero.longestStreak ? newStreak : hero.longestStreak;
+
+      // Update hero
       _heroes[userId] = hero.copyWith(
         currentStreak: newStreak,
         longestStreak: newLongestStreak,
         lastActiveDate: now,
+        activityDates: updatedDates,
       );
 
       await _saveHeroes();
       notifyListeners();
+
+      // Check for streak lost (had streak, but it was broken)
+      if (wasActive == false && oldStreak > 0) {
+        onStreakLost?.call(userId, oldStreak);
+      }
+
+      // Check for milestone
+      final milestone = StreakService.checkStreakMilestone(oldStreak, newStreak);
+      if (milestone != null) {
+        onStreakMilestone?.call(userId, milestone);
+      }
+
       return true;
     } catch (e) {
-      debugPrint('HeroProvider.updateStreak error: $e');
+      debugPrint('HeroProvider.recordActivity error: $e');
       return false;
     }
+  }
+
+  /// Check and update streak status without recording new activity
+  ///
+  /// Call this on app start to detect if streak was lost while away.
+  Future<void> checkStreak(String userId) async {
+    try {
+      final hero = _heroes[userId];
+      if (hero == null) return;
+
+      final wasActive = StreakService.isStreakActive(hero.lastActiveDate);
+
+      if (!wasActive && hero.currentStreak > 0) {
+        // Streak was lost while away
+        final lostStreak = hero.currentStreak;
+
+        _heroes[userId] = hero.copyWith(
+          currentStreak: 0,
+        );
+
+        await _saveHeroes();
+        notifyListeners();
+
+        onStreakLost?.call(userId, lostStreak);
+      }
+    } catch (e) {
+      debugPrint('HeroProvider.checkStreak error: $e');
+    }
+  }
+
+  /// Legacy method - calls recordActivity internally
+  @Deprecated('Use recordActivity instead')
+  Future<bool> updateStreak(String userId) async {
+    return recordActivity(userId);
+  }
+
+  /// Get streak bonus multiplier for a user
+  double getStreakBonus(String userId) {
+    final hero = _heroes[userId];
+    if (hero == null) return 1.0;
+    return StreakService.streakBonusMultiplier(hero.currentStreak);
+  }
+
+  /// Get streak bonus as percentage for display
+  int getStreakBonusPercent(String userId) {
+    final hero = _heroes[userId];
+    if (hero == null) return 0;
+    return StreakService.streakBonusPercent(hero.currentStreak);
   }
 
   // Equip item

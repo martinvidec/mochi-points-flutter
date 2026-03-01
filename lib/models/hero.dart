@@ -72,6 +72,7 @@ class Hero {
   final int currentStreak;
   final int longestStreak;
   final DateTime? lastActiveDate;
+  final List<DateTime> activityDates;
   final HeroAppearance appearance;
   final List<String> unlockedItems;
   final List<String> equippedItems;
@@ -87,6 +88,7 @@ class Hero {
     this.currentStreak = 0,
     this.longestStreak = 0,
     this.lastActiveDate,
+    this.activityDates = const [],
     required this.appearance,
     this.unlockedItems = const [],
     this.equippedItems = const [],
@@ -137,6 +139,7 @@ class Hero {
       'currentStreak': currentStreak,
       'longestStreak': longestStreak,
       'lastActiveDate': lastActiveDate?.toIso8601String(),
+      'activityDates': activityDates.map((d) => d.toIso8601String()).toList(),
       'appearance': appearance.toJson(),
       'unlockedItems': unlockedItems,
       'equippedItems': equippedItems,
@@ -157,6 +160,11 @@ class Hero {
       lastActiveDate: json['lastActiveDate'] != null
           ? DateTime.parse(json['lastActiveDate'] as String)
           : null,
+      activityDates: json['activityDates'] != null
+          ? (json['activityDates'] as List)
+              .map((d) => DateTime.parse(d as String))
+              .toList()
+          : [],
       appearance:
           HeroAppearance.fromJson(json['appearance'] as Map<String, dynamic>),
       unlockedItems: List<String>.from(json['unlockedItems'] as List),
@@ -175,6 +183,7 @@ class Hero {
     int? currentStreak,
     int? longestStreak,
     DateTime? lastActiveDate,
+    List<DateTime>? activityDates,
     HeroAppearance? appearance,
     List<String>? unlockedItems,
     List<String>? equippedItems,
@@ -190,6 +199,7 @@ class Hero {
       currentStreak: currentStreak ?? this.currentStreak,
       longestStreak: longestStreak ?? this.longestStreak,
       lastActiveDate: lastActiveDate ?? this.lastActiveDate,
+      activityDates: activityDates ?? this.activityDates,
       appearance: appearance ?? this.appearance,
       unlockedItems: unlockedItems ?? this.unlockedItems,
       equippedItems: equippedItems ?? this.equippedItems,
