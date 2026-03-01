@@ -8,12 +8,12 @@ class ChallengesView extends StatelessWidget {
   final VoidCallback onAdd;
 
   const ChallengesView({
-    Key? key,
+    super.key,
     required this.challenges,
     required this.onEdit,
     required this.onDelete,
     required this.onAdd,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

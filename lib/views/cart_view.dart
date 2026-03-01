@@ -10,12 +10,12 @@ class CartView extends StatelessWidget {
   final double totalPoints;
 
   const CartView({
-    Key? key,
+    super.key,
     required this.cartItems,
     required this.onRemove,
     required this.onAdd,
     required this.totalPoints,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -56,22 +56,21 @@ class CartView extends StatelessWidget {
             children: [
               Text('Gesamtpreis: $totalPrice Punkte'),
               ElevatedButton(
-                child: Text('Kaufen'),
                 onPressed: cartItems.isEmpty || totalPrice > accountProvider.balance
                     ? null
                     : () async {
+                        final messenger = ScaffoldMessenger.of(context);
                         if (await accountProvider.deductPoints(totalPrice)) {
-                          // Clear the cart and show a success message
-                          ScaffoldMessenger.of(context).showSnackBar(
+                          messenger.showSnackBar(
                             SnackBar(content: Text('Kauf erfolgreich!')),
                           );
-                          // You might want to clear the cart here
                         } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
+                          messenger.showSnackBar(
                             SnackBar(content: Text('Nicht genug Punkte!')),
                           );
                         }
                       },
+                child: Text('Kaufen'),
               ),
             ],
           ),

@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import '../models/challenge.dart';
 
 class ChallengeProvider extends ChangeNotifier {
-  List<Challenge> _challenges = [];
+  final List<Challenge> _challenges = [];
 
   List<Challenge> get challenges => _challenges;
 

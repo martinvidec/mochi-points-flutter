@@ -5,10 +5,10 @@ class ChallengeEditPage extends StatefulWidget {
   final Function(Challenge) onSave;
   final Challenge? challenge;
 
-  ChallengeEditPage({Key? key, required this.onSave, this.challenge}) : super(key: key);
+  const ChallengeEditPage({super.key, required this.onSave, this.challenge});
 
   @override
-  _ChallengeEditPageState createState() => _ChallengeEditPageState();
+  State<ChallengeEditPage> createState() => _ChallengeEditPageState();
 }
 
 class _ChallengeEditPageState extends State<ChallengeEditPage> {

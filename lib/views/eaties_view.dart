@@ -9,13 +9,13 @@ class EatiesView extends StatelessWidget {
   final Function(Eaty) onDelete;
 
   const EatiesView({
-    Key? key,
+    super.key,
     required this.eaties,
     required this.totalPoints,
     required this.onAddToCart,
     required this.onEdit,
     required this.onDelete,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -1,6 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
 import '../services/storage_service.dart';
 
 class MochiPointAccountProvider extends ChangeNotifier {
