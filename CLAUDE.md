@@ -2,6 +2,46 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Session Start Instructions
+
+**At the start of each session:**
+1. Check for open GitHub issues: `gh issue list`
+2. Ask the user which issue to work on
+3. Create a feature branch for the selected issue
+
+## Git Workflow (GitHub Flow)
+
+We use **GitHub Flow** (https://githubflow.github.io/):
+
+1. **`main` is always deployable** - never commit broken code to main
+2. **Create feature branches** - descriptive names like `feature/quest-system` or `fix/streak-calculation`
+3. **Open Pull Requests** - for code review before merging
+4. **Merge after review** - then deploy immediately
+
+### Branch Naming Convention
+- `feature/<issue-number>-<short-description>` - new features
+- `fix/<issue-number>-<short-description>` - bug fixes
+- `docs/<description>` - documentation only
+
+### Workflow Commands
+```bash
+# Start working on an issue
+gh issue list                              # Check open issues
+git checkout -b feature/123-quest-system   # Create feature branch
+
+# During development
+git add <files>
+git commit -m "Add quest type selection"
+
+# Ready for review
+git push -u origin feature/123-quest-system
+gh pr create --fill                        # Create PR
+
+# After approval
+gh pr merge                                # Merge to main
+git checkout main && git pull
+```
+
 ## Project Vision
 
 **Mochi Points** is a gamified family rewards app where parents create challenges and rewards, and children earn Mochi Points by completing quests. The app transforms household chores into an engaging gaming experience with levels, streaks, achievements, and a customizable avatar system.
