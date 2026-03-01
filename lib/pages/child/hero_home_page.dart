@@ -6,6 +6,7 @@ import '../../providers/hero_provider.dart';
 import '../../providers/points_provider.dart';
 import '../../providers/quest_provider.dart';
 import '../../theme/app_colors.dart';
+import '../../widgets/bottom_navigation.dart';
 import '../../widgets/hero_card.dart';
 import '../../widgets/points_display.dart';
 import '../../widgets/quest_card.dart';
@@ -489,151 +490,21 @@ class _ChildHeroHomePageState extends State<ChildHeroHomePage> {
   }
 
   Widget _buildBottomNav() {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withAlpha(77),
-            blurRadius: 8,
-            offset: const Offset(0, -2),
-          ),
-        ],
-      ),
-      child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _buildNavItem(
-                icon: Icons.home_outlined,
-                activeIcon: Icons.home,
-                label: 'Home',
-                index: 0,
-              ),
-              _buildNavItem(
-                icon: Icons.explore_outlined,
-                activeIcon: Icons.explore,
-                label: 'Quests',
-                index: 1,
-                badge: _getQuestBadgeCount(),
-              ),
-              _buildNavItem(
-                icon: Icons.store_outlined,
-                activeIcon: Icons.store,
-                label: 'Shop',
-                index: 2,
-              ),
-              _buildNavItem(
-                icon: Icons.card_giftcard_outlined,
-                activeIcon: Icons.card_giftcard,
-                label: 'Rewards',
-                index: 3,
-              ),
-              _buildNavItem(
-                icon: Icons.emoji_events_outlined,
-                activeIcon: Icons.emoji_events,
-                label: 'Stats',
-                index: 4,
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildNavItem({
-    required IconData icon,
-    required IconData activeIcon,
-    required String label,
-    required int index,
-    int? badge,
-  }) {
-    final isActive = _currentNavIndex == index;
-    final color = isActive ? AppColors.primaryStart : Colors.white54;
-
-    return InkWell(
-      onTap: () {
+    return BottomNavigation(
+      currentIndex: _currentNavIndex,
+      onTap: (index) {
         setState(() {
           _currentNavIndex = index;
         });
       },
-      borderRadius: BorderRadius.circular(12),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Stack(
-              clipBehavior: Clip.none,
-              children: [
-                Icon(
-                  isActive ? activeIcon : icon,
-                  color: color,
-                  size: 24,
-                ),
-                if (badge != null && badge > 0)
-                  Positioned(
-                    right: -8,
-                    top: -4,
-                    child: Container(
-                      padding: const EdgeInsets.all(4),
-                      decoration: const BoxDecoration(
-                        color: AppColors.primaryStart,
-                        shape: BoxShape.circle,
-                      ),
-                      constraints: const BoxConstraints(
-                        minWidth: 16,
-                        minHeight: 16,
-                      ),
-                      child: Text(
-                        badge > 9 ? '9+' : '$badge',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-              ],
-            ),
-            const SizedBox(height: 4),
-            Text(
-              label,
-              style: TextStyle(
-                color: color,
-                fontSize: 12,
-                fontWeight: isActive ? FontWeight.w600 : FontWeight.normal,
-              ),
-            ),
-            if (isActive)
-              Container(
-                margin: const EdgeInsets.only(top: 4),
-                width: 4,
-                height: 4,
-                decoration: const BoxDecoration(
-                  color: AppColors.primaryStart,
-                  shape: BoxShape.circle,
-                ),
-              ),
-          ],
-        ),
-      ),
+      role: UserRole.child,
+      pendingRewards: _getPendingRewardsCount(),
     );
   }
 
-  int? _getQuestBadgeCount() {
-    final authProvider = context.read<AuthProvider>();
-    final questProvider = context.read<QuestProvider>();
-    final userId = authProvider.currentUser?.id;
-    if (userId == null) return null;
-
-    final availableCount = questProvider.availableQuests(userId).length;
-    return availableCount > 0 ? availableCount : null;
+  int _getPendingRewardsCount() {
+    // TODO: Implement pending rewards count from provider
+    return 0;
   }
 
   void _onQuestTap(Quest quest, QuestInstance? instance) {

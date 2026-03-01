@@ -65,6 +65,8 @@ class QuestProvider extends ChangeNotifier {
     return allInstances;
   }
 
+  int get pendingApprovalCount => pendingApproval.length;
+
   List<QuestInstance> completedToday(String childId) {
     final childInstances = _instances[childId] ?? [];
     final today = DateTime.now();
