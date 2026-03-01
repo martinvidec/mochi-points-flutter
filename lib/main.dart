@@ -7,6 +7,7 @@ import 'providers/points_provider.dart';
 import 'providers/challenge_provider.dart';
 import 'providers/reward_provider.dart';
 import 'providers/hero_provider.dart';
+import 'providers/achievement_provider.dart';
 import 'pages/splash_page.dart';
 import 'pages/login_page.dart';
 import 'pages/hero_home_page.dart';
@@ -23,6 +24,7 @@ void main() {
         ChangeNotifierProvider(create: (context) => ChallengeProvider()),
         ChangeNotifierProvider(create: (context) => RewardProvider()),
         ChangeNotifierProvider(create: (context) => HeroProvider()),
+        ChangeNotifierProvider(create: (context) => AchievementProvider()),
       ],
       child: const ProviderConnector(child: MochiPointsApp()),
     ),
