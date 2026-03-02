@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/reward.dart';
 import '../models/enums.dart';
 import '../theme/app_colors.dart';
+import 'app_button.dart';
 
 class RewardCard extends StatelessWidget {
   final Reward reward;
@@ -127,23 +128,12 @@ class RewardCard extends StatelessWidget {
                     // Buy button
                     SizedBox(
                       height: 32,
-                      child: ElevatedButton(
+                      child: AppButton.primary(
                         onPressed: isAvailable ? onPurchase : null,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.gold,
-                          foregroundColor: Colors.black87,
-                          padding: const EdgeInsets.symmetric(horizontal: 12),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                        child: const Text(
-                          'Kaufen',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                        label: 'Kaufen',
+                        backgroundColor: AppColors.gold,
+                        foregroundColor: Colors.black87,
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                       ),
                     ),
                   ],

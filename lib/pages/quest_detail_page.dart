@@ -5,6 +5,7 @@ import '../models/enums.dart';
 import '../providers/quest_provider.dart';
 import '../providers/auth_provider.dart';
 import '../theme/app_colors.dart';
+import '../widgets/app_button.dart';
 import '../widgets/error_state.dart';
 
 class QuestDetailPage extends StatelessWidget {
@@ -334,17 +335,13 @@ class QuestDetailPage extends StatelessWidget {
       return SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: ElevatedButton(
+          child: AppButton.primary(
             onPressed: () => _acceptQuest(context),
-            style: ElevatedButton.styleFrom(
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              backgroundColor: quest.rarityColor,
-              foregroundColor: AppColors.text,
-            ),
-            child: const Text(
-              'Quest annehmen',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
+            label: 'Quest annehmen',
+            expanded: true,
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            backgroundColor: quest.rarityColor,
+            foregroundColor: AppColors.text,
           ),
         ),
       );
@@ -361,31 +358,23 @@ class QuestDetailPage extends StatelessWidget {
               child: Row(
                 children: [
                   Expanded(
-                    child: ElevatedButton(
+                    child: AppButton.primary(
                       onPressed: () => _incrementProgress(context),
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                      ),
-                      child: const Text(
-                        '+1',
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
+                      label: '+1',
+                      expanded: true,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
                     ),
                   ),
                   if (instance!.isComplete) ...[
                     const SizedBox(width: 8),
                     Expanded(
-                      child: ElevatedButton(
+                      child: AppButton.primary(
                         onPressed: () => _completeQuest(context),
-                        style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          backgroundColor: AppColors.success,
-                          foregroundColor: AppColors.text,
-                        ),
-                        child: const Text(
-                          'Als erledigt markieren',
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
+                        label: 'Als erledigt markieren',
+                        expanded: true,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        backgroundColor: AppColors.success,
+                        foregroundColor: AppColors.text,
                       ),
                     ),
                   ],
@@ -398,17 +387,13 @@ class QuestDetailPage extends StatelessWidget {
           return SafeArea(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
-              child: ElevatedButton(
+              child: AppButton.primary(
                 onPressed: () => _completeQuest(context),
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  backgroundColor: AppColors.success,
-                  foregroundColor: AppColors.text,
-                ),
-                child: const Text(
-                  'Als erledigt markieren',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
+                label: 'Als erledigt markieren',
+                expanded: true,
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                backgroundColor: AppColors.success,
+                foregroundColor: AppColors.text,
               ),
             ),
           );
@@ -417,15 +402,11 @@ class QuestDetailPage extends StatelessWidget {
         return SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
-            child: ElevatedButton(
+            child: AppButton.primary(
               onPressed: null,
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 16),
-              ),
-              child: const Text(
-                'Warte auf Bestätigung',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
+              label: 'Warte auf Bestätigung',
+              expanded: true,
+              padding: const EdgeInsets.symmetric(vertical: 16),
             ),
           ),
         );

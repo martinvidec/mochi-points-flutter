@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../models/enums.dart';
+import '../../widgets/app_button.dart';
 
 class MemberData {
   final String name;
@@ -134,12 +135,11 @@ class _AddMemberPageState extends State<AddMemberPage> {
                   },
                 ),
                 const SizedBox(height: 32),
-                ElevatedButton(
+                AppButton.primary(
                   onPressed: _save,
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                  ),
-                  child: const Text('Speichern'),
+                  label: 'Speichern',
+                  expanded: true,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
                 ),
               ],
             ),

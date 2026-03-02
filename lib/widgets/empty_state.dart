@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
+import 'app_button.dart';
 
 /// A reusable empty state widget with consistent styling.
 ///
@@ -129,18 +130,10 @@ class EmptyState extends StatelessWidget {
             ],
             if (actionLabel != null && onAction != null) ...[
               const SizedBox(height: 24),
-              ElevatedButton.icon(
+              AppButton.primary(
                 onPressed: onAction,
-                icon: const Icon(Icons.add),
-                label: Text(actionLabel!),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.teal,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 24,
-                    vertical: 12,
-                  ),
-                ),
+                label: actionLabel!,
+                icon: Icons.add,
               ),
             ],
           ],

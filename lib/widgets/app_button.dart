@@ -28,6 +28,12 @@ class AppButton extends StatefulWidget {
   /// Custom padding.
   final EdgeInsets? padding;
 
+  /// Custom background color (overrides variant default).
+  final Color? backgroundColor;
+
+  /// Custom foreground color (overrides variant default).
+  final Color? foregroundColor;
+
   const AppButton({
     super.key,
     required this.label,
@@ -37,6 +43,8 @@ class AppButton extends StatefulWidget {
     this.icon,
     this.expanded = false,
     this.padding,
+    this.backgroundColor,
+    this.foregroundColor,
   });
 
   /// Creates a primary button.
@@ -46,6 +54,9 @@ class AppButton extends StatefulWidget {
     bool isLoading = false,
     IconData? icon,
     bool expanded = false,
+    EdgeInsets? padding,
+    Color? backgroundColor,
+    Color? foregroundColor,
   }) {
     return AppButton(
       label: label,
@@ -54,6 +65,9 @@ class AppButton extends StatefulWidget {
       isLoading: isLoading,
       icon: icon,
       expanded: expanded,
+      padding: padding,
+      backgroundColor: backgroundColor,
+      foregroundColor: foregroundColor,
     );
   }
 
@@ -64,6 +78,9 @@ class AppButton extends StatefulWidget {
     bool isLoading = false,
     IconData? icon,
     bool expanded = false,
+    EdgeInsets? padding,
+    Color? backgroundColor,
+    Color? foregroundColor,
   }) {
     return AppButton(
       label: label,
@@ -72,6 +89,9 @@ class AppButton extends StatefulWidget {
       isLoading: isLoading,
       icon: icon,
       expanded: expanded,
+      padding: padding,
+      backgroundColor: backgroundColor,
+      foregroundColor: foregroundColor,
     );
   }
 
@@ -81,6 +101,7 @@ class AppButton extends StatefulWidget {
     VoidCallback? onPressed,
     bool isLoading = false,
     IconData? icon,
+    Color? foregroundColor,
   }) {
     return AppButton(
       label: label,
@@ -88,6 +109,7 @@ class AppButton extends StatefulWidget {
       variant: AppButtonVariant.text,
       isLoading: isLoading,
       icon: icon,
+      foregroundColor: foregroundColor,
     );
   }
 
@@ -98,6 +120,7 @@ class AppButton extends StatefulWidget {
     bool isLoading = false,
     IconData? icon,
     bool expanded = false,
+    EdgeInsets? padding,
   }) {
     return AppButton(
       label: label,
@@ -106,6 +129,7 @@ class AppButton extends StatefulWidget {
       isLoading: isLoading,
       icon: icon,
       expanded: expanded,
+      padding: padding,
     );
   }
 
@@ -247,32 +271,38 @@ class _AppButtonState extends State<AppButton>
   }
 
   _ButtonColors _getColors() {
+    final _ButtonColors defaults;
     switch (widget.variant) {
       case AppButtonVariant.primary:
-        return _ButtonColors(
+        defaults = _ButtonColors(
           background: AppColors.teal,
           foreground: Colors.white,
           border: Colors.transparent,
         );
       case AppButtonVariant.secondary:
-        return _ButtonColors(
+        defaults = _ButtonColors(
           background: Colors.transparent,
           foreground: AppColors.teal,
           border: AppColors.teal,
         );
       case AppButtonVariant.text:
-        return _ButtonColors(
+        defaults = _ButtonColors(
           background: Colors.transparent,
           foreground: AppColors.teal,
           border: Colors.transparent,
         );
       case AppButtonVariant.destructive:
-        return _ButtonColors(
+        defaults = _ButtonColors(
           background: AppColors.error,
           foreground: Colors.white,
           border: Colors.transparent,
         );
     }
+    return _ButtonColors(
+      background: widget.backgroundColor ?? defaults.background,
+      foreground: widget.foregroundColor ?? defaults.foreground,
+      border: defaults.border,
+    );
   }
 }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
+import 'app_button.dart';
 
 /// A reusable error state widget with retry functionality.
 ///
@@ -114,18 +115,10 @@ class ErrorState extends StatelessWidget {
             ],
             if (onRetry != null) ...[
               const SizedBox(height: 24),
-              ElevatedButton.icon(
+              AppButton.primary(
                 onPressed: onRetry,
-                icon: const Icon(Icons.refresh),
-                label: const Text('Erneut versuchen'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.teal,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 24,
-                    vertical: 12,
-                  ),
-                ),
+                label: 'Erneut versuchen',
+                icon: Icons.refresh,
               ),
             ],
           ],
@@ -181,46 +174,48 @@ class InlineError extends StatelessWidget {
   }
 }
 
-/// A snackbar-style error notification.
-class ErrorSnackbar {
-  static void show(BuildContext context, String message, {VoidCallback? onRetry}) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Row(
-          children: [
-            const Icon(Icons.error_outline, color: Colors.white, size: 20),
-            const SizedBox(width: 12),
-            Expanded(child: Text(message)),
-          ],
-        ),
-        backgroundColor: AppColors.error,
-        behavior: SnackBarBehavior.floating,
-        action: onRetry != null
-            ? SnackBarAction(
-                label: 'Erneut',
-                textColor: Colors.white,
-                onPressed: onRetry,
-              )
-            : null,
-      ),
+/// Unified snackbar helper for error and success notifications.
+class AppSnackbar {
+  static void error(BuildContext context, String message, {VoidCallback? onRetry}) {
+    _show(
+      context,
+      message: message,
+      icon: Icons.error_outline,
+      backgroundColor: AppColors.error,
+      action: onRetry != null
+          ? SnackBarAction(label: 'Erneut', textColor: Colors.white, onPressed: onRetry)
+          : null,
     );
   }
-}
 
-/// A success snackbar notification.
-class SuccessSnackbar {
-  static void show(BuildContext context, String message) {
+  static void success(BuildContext context, String message) {
+    _show(
+      context,
+      message: message,
+      icon: Icons.check_circle,
+      backgroundColor: AppColors.teal,
+    );
+  }
+
+  static void _show(
+    BuildContext context, {
+    required String message,
+    required IconData icon,
+    required Color backgroundColor,
+    SnackBarAction? action,
+  }) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Row(
           children: [
-            const Icon(Icons.check_circle, color: Colors.white, size: 20),
+            Icon(icon, color: Colors.white, size: 20),
             const SizedBox(width: 12),
             Expanded(child: Text(message)),
           ],
         ),
-        backgroundColor: AppColors.teal,
+        backgroundColor: backgroundColor,
         behavior: SnackBarBehavior.floating,
+        action: action,
       ),
     );
   }

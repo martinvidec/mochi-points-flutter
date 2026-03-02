@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../models/enums.dart';
+import '../../widgets/app_button.dart';
 import '../../widgets/error_state.dart';
 import 'add_member_page.dart';
 
@@ -160,10 +161,11 @@ class _FamilySetupPageState extends State<FamilySetupPage> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   if (_firstParent == null)
-                    ElevatedButton.icon(
+                    AppButton.primary(
                       onPressed: _addFirstParent,
-                      icon: const Icon(Icons.person_add),
-                      label: const Text('Elternteil erstellen'),
+                      label: 'Elternteil erstellen',
+                      icon: Icons.person_add,
+                      expanded: true,
                     )
                   else
                     Card(
@@ -189,10 +191,11 @@ class _FamilySetupPageState extends State<FamilySetupPage> {
               content: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  ElevatedButton.icon(
+                  AppButton.primary(
                     onPressed: _addMember,
-                    icon: const Icon(Icons.person_add),
-                    label: const Text('Mitglied hinzufügen'),
+                    label: 'Mitglied hinzufügen',
+                    icon: Icons.person_add,
+                    expanded: true,
                   ),
                   const SizedBox(height: 16),
                   ..._members.asMap().entries.map((entry) {
@@ -228,15 +231,15 @@ class _FamilySetupPageState extends State<FamilySetupPage> {
               padding: const EdgeInsets.only(top: 16.0),
               child: Row(
                 children: [
-                  ElevatedButton(
+                  AppButton.primary(
                     onPressed: details.onStepContinue,
-                    child: Text(_currentStep == 2 ? 'Fertig' : 'Weiter'),
+                    label: _currentStep == 2 ? 'Fertig' : 'Weiter',
                   ),
                   const SizedBox(width: 8),
                   if (_currentStep > 0)
-                    TextButton(
+                    AppButton.text(
                       onPressed: details.onStepCancel,
-                      child: const Text('Zurück'),
+                      label: 'Zurück',
                     ),
                 ],
               ),
