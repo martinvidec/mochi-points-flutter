@@ -6,10 +6,13 @@ import '../../providers/hero_provider.dart';
 import '../../providers/points_provider.dart';
 import '../../providers/quest_provider.dart';
 import '../../theme/app_colors.dart';
+import '../../models/enums.dart';
 import '../../widgets/bottom_navigation.dart';
 import '../../widgets/hero_card.dart';
 import '../../widgets/points_display.dart';
 import '../../widgets/quest_card.dart';
+import '../quest_detail_page.dart';
+import '../transaction_history_page.dart';
 import 'quest_board_page.dart';
 import 'shop_page.dart';
 import 'my_rewards_page.dart';
@@ -493,9 +496,13 @@ class _ChildHeroHomePageState extends State<ChildHeroHomePage> {
   }
 
   void _onQuestTap(Quest quest, QuestInstance? instance) {
-    Navigator.of(context).pushNamed(
-      '/quest-detail',
-      arguments: {'quest': quest, 'instance': instance},
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => QuestDetailPage(
+          quest: quest,
+          instance: instance,
+        ),
+      ),
     );
   }
 
@@ -541,7 +548,11 @@ class _ChildHeroHomePageState extends State<ChildHeroHomePage> {
                   ),
                   onTap: () {
                     Navigator.pop(context);
-                    Navigator.of(context).pushNamed('/transactions');
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const TransactionHistoryPage(),
+                      ),
+                    );
                   },
                 ),
                 const Divider(color: Colors.white24),
