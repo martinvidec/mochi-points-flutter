@@ -120,8 +120,11 @@ class AuthProvider extends ChangeNotifier {
     try {
       if (_currentFamily == null) return false;
 
+      // Generate unique ID using timestamp + member count to avoid collisions
+      final uniqueId = '${DateTime.now().millisecondsSinceEpoch}_${_familyMembers.length}';
+
       final user = User(
-        id: DateTime.now().millisecondsSinceEpoch.toString(),
+        id: uniqueId,
         familyId: _currentFamily!.id,
         name: name,
         email: '', // TODO: Add email support
