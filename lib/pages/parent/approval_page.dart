@@ -4,6 +4,7 @@ import '../../providers/quest_provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../models/quest.dart';
 import '../../widgets/approval_card.dart';
+import '../../widgets/empty_state.dart';
 import '../../widgets/error_state.dart';
 
 class ApprovalPage extends StatefulWidget {
@@ -122,34 +123,7 @@ class _ApprovalPageState extends State<ApprovalPage> {
         title: const Text('Freigabe'),
       ),
       body: pendingInstances.isEmpty
-          ? Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.check_circle_outline,
-                    size: 64,
-                    color: Colors.grey.shade400,
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    'Keine Quests zur Freigabe',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.grey.shade600,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Alle Quests sind bereits freigegeben',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey.shade500,
-                    ),
-                  ),
-                ],
-              ),
-            )
+          ? EmptyState.approvals()
           : RefreshIndicator(
               onRefresh: _loadQuests,
               child: ListView(

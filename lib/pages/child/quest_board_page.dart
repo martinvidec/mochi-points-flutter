@@ -4,6 +4,7 @@ import '../../providers/quest_provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../models/quest.dart';
 import '../../models/enums.dart';
+import '../../widgets/empty_state.dart';
 import '../../widgets/quest_card.dart';
 import '../quest_detail_page.dart';
 
@@ -179,13 +180,8 @@ class _QuestBoardPageState extends State<QuestBoardPage>
               ),
             ),
             if (filteredQuests.isEmpty)
-              const SliverFillRemaining(
-                child: Center(
-                  child: Text(
-                    'Keine Quests verfügbar',
-                    style: TextStyle(fontSize: 16, color: Colors.grey),
-                  ),
-                ),
+              SliverFillRemaining(
+                child: EmptyState.quests(),
               )
             else
               SliverList(

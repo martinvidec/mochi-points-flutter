@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../models/reward.dart';
 import '../../providers/reward_provider.dart';
+import '../../widgets/empty_state.dart';
 import '../../widgets/error_state.dart';
 import 'reward_edit_page.dart';
 
@@ -19,7 +20,7 @@ class RewardManagementPage extends StatelessWidget {
         centerTitle: true,
       ),
       body: rewards.isEmpty
-          ? _buildEmptyState(context)
+          ? EmptyState.rewards(onCreateReward: () => _openRewardEditor(context, null))
           : ListView.builder(
               padding: const EdgeInsets.all(16),
               itemCount: rewards.length,
@@ -32,44 +33,6 @@ class RewardManagementPage extends StatelessWidget {
         onPressed: () => _openRewardEditor(context, null),
         icon: const Icon(Icons.add),
         label: const Text('Neue Belohnung'),
-      ),
-    );
-  }
-
-  Widget _buildEmptyState(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.card_giftcard_outlined,
-            size: 64,
-            color: Colors.grey.shade400,
-          ),
-          const SizedBox(height: 16),
-          Text(
-            'Keine Belohnungen',
-            style: TextStyle(
-              fontSize: 18,
-              color: Colors.grey.shade600,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'Erstelle Belohnungen, die deine Kinder\nim Shop kaufen können.',
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.grey.shade500,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 24),
-          ElevatedButton.icon(
-            onPressed: () => _openRewardEditor(context, null),
-            icon: const Icon(Icons.add),
-            label: const Text('Erste Belohnung erstellen'),
-          ),
-        ],
       ),
     );
   }

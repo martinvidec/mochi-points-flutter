@@ -5,6 +5,7 @@ import '../../models/reward.dart';
 import '../../models/enums.dart';
 import '../../providers/reward_provider.dart';
 import '../../providers/auth_provider.dart';
+import '../../widgets/empty_state.dart';
 import '../../widgets/error_state.dart';
 
 class MyRewardsPage extends StatelessWidget {
@@ -51,10 +52,10 @@ class _ActiveRewardsTab extends StatelessWidget {
       ..sort((a, b) => b.purchasedAt.compareTo(a.purchasedAt));
 
     if (purchases.isEmpty) {
-      return _buildEmptyState(
+      return const EmptyState(
         icon: Icons.card_giftcard_outlined,
         title: 'Keine aktiven Belohnungen',
-        subtitle: 'Kaufe Belohnungen im Shop!',
+        description: 'Kaufe Belohnungen im Shop!',
       );
     }
 
@@ -90,10 +91,10 @@ class _RedeemedRewardsTab extends StatelessWidget {
           .compareTo(a.redeemedAt ?? a.purchasedAt));
 
     if (purchases.isEmpty) {
-      return _buildEmptyState(
+      return const EmptyState(
         icon: Icons.check_circle_outline,
         title: 'Noch keine eingelösten Belohnungen',
-        subtitle: 'Löse deine gekauften Belohnungen ein!',
+        description: 'Löse deine gekauften Belohnungen ein!',
       );
     }
 
@@ -111,31 +112,6 @@ class _RedeemedRewardsTab extends StatelessWidget {
       },
     );
   }
-}
-
-Widget _buildEmptyState({
-  required IconData icon,
-  required String title,
-  required String subtitle,
-}) {
-  return Center(
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(icon, size: 64, color: Colors.grey.shade400),
-        const SizedBox(height: 16),
-        Text(
-          title,
-          style: TextStyle(fontSize: 18, color: Colors.grey.shade600),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          subtitle,
-          style: TextStyle(fontSize: 14, color: Colors.grey.shade500),
-        ),
-      ],
-    ),
-  );
 }
 
 class _PurchaseCard extends StatelessWidget {

@@ -4,6 +4,7 @@ import '../models/transaction.dart';
 import '../models/enums.dart';
 import '../providers/points_provider.dart';
 import '../providers/auth_provider.dart';
+import '../widgets/empty_state.dart';
 import '../widgets/points_display.dart';
 
 enum TransactionFilter { all, earned, spent }
@@ -86,7 +87,7 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
           // Transaction list
           Expanded(
             child: filteredTransactions.isEmpty
-                ? _buildEmptyState()
+                ? EmptyState.transactions()
                 : ListView.builder(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     itemCount: filteredTransactions.length,
@@ -120,37 +121,6 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
       labelStyle: TextStyle(
         color: isSelected ? (color ?? Theme.of(context).colorScheme.primary) : null,
         fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-      ),
-    );
-  }
-
-  Widget _buildEmptyState() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.receipt_long_outlined,
-            size: 64,
-            color: Colors.grey.shade400,
-          ),
-          const SizedBox(height: 16),
-          Text(
-            'Keine Transaktionen',
-            style: TextStyle(
-              fontSize: 18,
-              color: Colors.grey.shade600,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'Schließe Quests ab, um Punkte zu verdienen!',
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.grey.shade500,
-            ),
-          ),
-        ],
       ),
     );
   }

@@ -6,6 +6,7 @@ import '../providers/achievement_provider.dart';
 import '../providers/auth_provider.dart';
 import '../theme/app_colors.dart';
 import '../widgets/achievement_badge.dart';
+import '../widgets/empty_state.dart';
 
 class AchievementsPage extends StatefulWidget {
   const AchievementsPage({super.key});
@@ -221,29 +222,12 @@ class _AchievementsPageState extends State<AchievementsPage>
   }
 
   Widget _buildEmptyState(AchievementCategory? category) {
-    final message = category == null
-        ? 'Keine Achievements vorhanden'
-        : 'Keine ${_getCategoryName(category)} Achievements';
-
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.emoji_events_outlined,
-            size: 64,
-            color: Colors.grey.shade600,
-          ),
-          const SizedBox(height: 16),
-          Text(
-            message,
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.grey.shade500,
-            ),
-          ),
-        ],
-      ),
+    if (category == null) {
+      return EmptyState.achievements();
+    }
+    return EmptyState(
+      icon: Icons.emoji_events_outlined,
+      title: 'Keine ${_getCategoryName(category)} Achievements',
     );
   }
 
