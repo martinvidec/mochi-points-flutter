@@ -10,6 +10,9 @@ import '../../widgets/bottom_navigation.dart';
 import '../../widgets/hero_card.dart';
 import '../../widgets/points_display.dart';
 import '../../widgets/quest_card.dart';
+import 'quest_board_page.dart';
+import 'shop_page.dart';
+import 'my_rewards_page.dart';
 
 class ChildHeroHomePage extends StatefulWidget {
   const ChildHeroHomePage({super.key});
@@ -450,33 +453,15 @@ class _ChildHeroHomePageState extends State<ChildHeroHomePage> {
   }
 
   Widget _buildQuestsTab() {
-    return const Center(
-      child: Text(
-        'Quest Board\n(Öffnet quest_board_page.dart)',
-        textAlign: TextAlign.center,
-        style: TextStyle(color: Colors.white70),
-      ),
-    );
+    return const QuestBoardPage();
   }
 
   Widget _buildShopTab() {
-    return const Center(
-      child: Text(
-        'Shop\n(Öffnet shop_page.dart)',
-        textAlign: TextAlign.center,
-        style: TextStyle(color: Colors.white70),
-      ),
-    );
+    return const ShopPage();
   }
 
   Widget _buildRewardsTab() {
-    return const Center(
-      child: Text(
-        'Meine Belohnungen\n(Öffnet my_rewards_page.dart)',
-        textAlign: TextAlign.center,
-        style: TextStyle(color: Colors.white70),
-      ),
-    );
+    return const MyRewardsPage();
   }
 
   Widget _buildStatsTab() {
