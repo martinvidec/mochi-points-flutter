@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
+import '../models/enums.dart';
 import '../theme/app_colors.dart';
-
-enum UserRole { child, parent }
 
 /// Navigation item configuration
 class NavItem {

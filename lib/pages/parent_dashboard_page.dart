@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
 import '../providers/quest_provider.dart';
 import '../theme/app_colors.dart';
+import '../models/enums.dart';
 import '../widgets/bottom_navigation.dart';
 import 'parent/quest_management_page.dart';
 import 'parent/reward_management_page.dart';
