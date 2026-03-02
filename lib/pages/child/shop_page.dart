@@ -32,6 +32,7 @@ class _ShopPageState extends State<ShopPage> {
     final rewards = _filterByCategory(rewardProvider.availableRewards);
 
     return Scaffold(
+      backgroundColor: AppColors.backgroundStart,
       appBar: AppBar(
         title: const Text('Shop'),
         centerTitle: true,
@@ -117,6 +118,7 @@ class _ShopPageState extends State<ShopPage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
+        backgroundColor: AppColors.surface,
         title: Row(
           children: [
             Text(reward.icon, style: const TextStyle(fontSize: 24)),

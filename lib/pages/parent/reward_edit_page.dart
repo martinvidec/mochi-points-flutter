@@ -4,6 +4,7 @@ import '../../models/reward.dart';
 import '../../models/enums.dart';
 import '../../providers/reward_provider.dart';
 import '../../providers/auth_provider.dart';
+import '../../theme/app_colors.dart';
 import '../../widgets/error_state.dart';
 
 class RewardEditPage extends StatefulWidget {
@@ -65,6 +66,7 @@ class _RewardEditPageState extends State<RewardEditPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.backgroundStart,
       appBar: AppBar(
         title: Text(isEditing ? 'Belohnung bearbeiten' : 'Neue Belohnung'),
         centerTitle: true,

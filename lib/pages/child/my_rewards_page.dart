@@ -5,6 +5,7 @@ import '../../models/reward.dart';
 import '../../models/enums.dart';
 import '../../providers/reward_provider.dart';
 import '../../providers/auth_provider.dart';
+import '../../theme/app_colors.dart';
 import '../../widgets/empty_state.dart';
 import '../../widgets/error_state.dart';
 
@@ -16,6 +17,7 @@ class MyRewardsPage extends StatelessWidget {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
+        backgroundColor: AppColors.backgroundStart,
         appBar: AppBar(
           title: const Text('Meine Belohnungen'),
           centerTitle: true,
@@ -248,6 +250,7 @@ class _PurchaseCard extends StatelessWidget {
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
+        backgroundColor: AppColors.surface,
         title: Row(
           children: [
             Text(reward?.icon ?? '🎁', style: const TextStyle(fontSize: 24)),

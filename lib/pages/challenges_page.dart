@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../models/challenge.dart';
 import '../providers/challenge_provider.dart';
+import '../theme/app_colors.dart';
 import '../views/challenges_view.dart';
 import 'challenge_edit_page.dart';
 
@@ -43,6 +44,7 @@ class ChallengesPage extends StatelessWidget {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
+            backgroundColor: AppColors.surface,
             title: Text('Challenge löschen'),
             content: Text('Möchten Sie "${challenge.name}" wirklich löschen?'),
             actions: [

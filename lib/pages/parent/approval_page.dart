@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../providers/quest_provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../models/quest.dart';
+import '../../theme/app_colors.dart';
 import '../../widgets/approval_card.dart';
 import '../../widgets/empty_state.dart';
 import '../../widgets/error_state.dart';
@@ -62,6 +63,7 @@ class _ApprovalPageState extends State<ApprovalPage> {
       builder: (context) {
         final controller = TextEditingController();
         return AlertDialog(
+          backgroundColor: AppColors.surface,
           title: const Text('Quest ablehnen'),
           content: TextField(
             controller: controller,
@@ -119,6 +121,7 @@ class _ApprovalPageState extends State<ApprovalPage> {
     }
 
     return Scaffold(
+      backgroundColor: AppColors.backgroundStart,
       appBar: AppBar(
         title: const Text('Freigabe'),
       ),
