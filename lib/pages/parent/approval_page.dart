@@ -4,6 +4,7 @@ import '../../providers/quest_provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../models/quest.dart';
 import '../../widgets/approval_card.dart';
+import '../../widgets/error_state.dart';
 
 class ApprovalPage extends StatefulWidget {
   const ApprovalPage({super.key});
@@ -39,30 +40,20 @@ class _ApprovalPageState extends State<ApprovalPage> {
             .where((q) => q.id == instance.questId)
             .firstOrNull;
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              quest != null
-                  ? 'Quest bestätigt! ${quest.rewardPoints} Punkte + ${quest.rewardXP} XP vergeben'
-                  : 'Quest bestätigt!',
-            ),
-            backgroundColor: Colors.green,
-          ),
+        AppSnackbar.success(
+          context,
+          quest != null
+              ? 'Quest bestätigt! ${quest.rewardPoints} Punkte + ${quest.rewardXP} XP vergeben'
+              : 'Quest bestätigt!',
         );
         _loadQuests();
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Fehler beim Bestätigen der Quest'),
-            backgroundColor: Colors.red,
-          ),
-        );
+        AppSnackbar.error(context, 'Fehler beim Bestätigen der Quest');
       }
     }
   }
 
   Future<void> _rejectQuest(QuestInstance instance) async {
-    final messenger = ScaffoldMessenger.of(context);
     final questProvider = context.read<QuestProvider>();
 
     final reason = await showDialog<String>(
@@ -103,20 +94,10 @@ class _ApprovalPageState extends State<ApprovalPage> {
 
     if (mounted) {
       if (success) {
-        messenger.showSnackBar(
-          const SnackBar(
-            content: Text('Quest abgelehnt'),
-            backgroundColor: Colors.orange,
-          ),
-        );
+        AppSnackbar.success(context, 'Quest abgelehnt');
         _loadQuests();
       } else {
-        messenger.showSnackBar(
-          const SnackBar(
-            content: Text('Fehler beim Ablehnen der Quest'),
-            backgroundColor: Colors.red,
-          ),
-        );
+        AppSnackbar.error(context, 'Fehler beim Ablehnen der Quest');
       }
     }
   }

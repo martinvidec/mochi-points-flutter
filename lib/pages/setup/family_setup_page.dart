@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../models/enums.dart';
+import '../../widgets/error_state.dart';
 import 'add_member_page.dart';
 
 class FamilySetupPage extends StatefulWidget {
@@ -68,9 +69,7 @@ class _FamilySetupPageState extends State<FamilySetupPage> {
 
     if (!familyCreated) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Fehler beim Erstellen der Familie')),
-        );
+        AppSnackbar.error(context, 'Fehler beim Erstellen der Familie');
       }
       return;
     }
@@ -120,11 +119,7 @@ class _FamilySetupPageState extends State<FamilySetupPage> {
                   _currentStep = 2;
                 });
               } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Bitte einen Elternteil erstellen'),
-                  ),
-                );
+                AppSnackbar.error(context, 'Bitte einen Elternteil erstellen');
               }
             } else if (_currentStep == 2) {
               _finishSetup();
