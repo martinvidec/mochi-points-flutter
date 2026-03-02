@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../providers/quest_provider.dart';
 import '../../models/quest.dart';
 import '../../models/enums.dart';
+import '../../theme/app_colors.dart';
 import '../../widgets/empty_state.dart';
 import 'quest_edit_page.dart';
 
@@ -89,6 +90,7 @@ class _QuestManagementPageState extends State<QuestManagementPage> {
     final filteredQuests = _getFilteredQuests(allQuests);
 
     return Scaffold(
+      backgroundColor: AppColors.backgroundStart,
       appBar: AppBar(
         title: const Text('Quest Verwaltung'),
         actions: [
@@ -139,6 +141,7 @@ class _QuestManagementPageState extends State<QuestManagementPage> {
                     return await showDialog<bool>(
                       context: context,
                       builder: (context) => AlertDialog(
+                        backgroundColor: AppColors.surface,
                         title: const Text('Quest löschen?'),
                         content: Text('Möchtest du "${quest.name}" wirklich löschen?'),
                         actions: [

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../models/reward.dart';
 import '../../providers/reward_provider.dart';
+import '../../theme/app_colors.dart';
 import '../../widgets/empty_state.dart';
 import '../../widgets/error_state.dart';
 import 'reward_edit_page.dart';
@@ -15,6 +16,7 @@ class RewardManagementPage extends StatelessWidget {
     final rewards = rewardProvider.rewards;
 
     return Scaffold(
+      backgroundColor: AppColors.backgroundStart,
       appBar: AppBar(
         title: const Text('Belohnungen verwalten'),
         centerTitle: true,
@@ -178,6 +180,7 @@ class _RewardManagementCard extends StatelessWidget {
     final result = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
+        backgroundColor: AppColors.surface,
         title: const Text('Belohnung löschen?'),
         content: Text('Möchtest du "${reward.name}" wirklich löschen?'),
         actions: [

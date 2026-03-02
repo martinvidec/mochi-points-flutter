@@ -4,6 +4,7 @@ import '../../models/purchase.dart';
 import '../../models/enums.dart';
 import '../../providers/reward_provider.dart';
 import '../../providers/auth_provider.dart';
+import '../../theme/app_colors.dart';
 import '../../widgets/empty_state.dart';
 import '../../widgets/error_state.dart';
 
@@ -15,6 +16,7 @@ class RedemptionPage extends StatelessWidget {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
+        backgroundColor: AppColors.backgroundStart,
         appBar: AppBar(
           title: const Text('Einlösungen'),
           centerTitle: true,
@@ -324,6 +326,7 @@ class _RedemptionCard extends StatelessWidget {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
+        backgroundColor: AppColors.surface,
         title: const Text('Einlösung ablehnen?'),
         content: const Text(
           'Die Punkte werden dem Kind zurückerstattet.',

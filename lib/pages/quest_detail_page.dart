@@ -4,6 +4,7 @@ import '../models/quest.dart';
 import '../models/enums.dart';
 import '../providers/quest_provider.dart';
 import '../providers/auth_provider.dart';
+import '../theme/app_colors.dart';
 import '../widgets/error_state.dart';
 
 class QuestDetailPage extends StatelessWidget {
@@ -97,6 +98,7 @@ class QuestDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.backgroundStart,
       appBar: AppBar(
         title: const Text('Quest Details'),
       ),

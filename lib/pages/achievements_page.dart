@@ -49,6 +49,7 @@ class _AchievementsPageState extends State<AchievementsPage>
     final totalCount = achievementProvider.totalCount;
 
     return Scaffold(
+      backgroundColor: AppColors.backgroundStart,
       appBar: AppBar(
         title: const Text('Achievements'),
         centerTitle: true,

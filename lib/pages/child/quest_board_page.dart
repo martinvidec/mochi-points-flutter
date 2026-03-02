@@ -4,6 +4,7 @@ import '../../providers/quest_provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../models/quest.dart';
 import '../../models/enums.dart';
+import '../../theme/app_colors.dart';
 import '../../widgets/empty_state.dart';
 import '../../widgets/quest_card.dart';
 import '../quest_detail_page.dart';
@@ -94,6 +95,7 @@ class _QuestBoardPageState extends State<QuestBoardPage>
     final filteredQuests = _getFilteredQuests(availableQuests);
 
     return Scaffold(
+      backgroundColor: AppColors.backgroundStart,
       appBar: AppBar(
         title: const Text('Quest Board'),
         bottom: TabBar(

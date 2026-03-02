@@ -137,6 +137,7 @@ class _QuestEditPageState extends State<QuestEditPage> {
     final children = context.watch<AuthProvider>().children;
 
     return Scaffold(
+      backgroundColor: AppColors.backgroundStart,
       appBar: AppBar(
         title: Text(widget.quest == null ? 'Quest erstellen' : 'Quest bearbeiten'),
         actions: [

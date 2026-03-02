@@ -4,6 +4,7 @@ import '../models/transaction.dart';
 import '../models/enums.dart';
 import '../providers/points_provider.dart';
 import '../providers/auth_provider.dart';
+import '../theme/app_colors.dart';
 import '../widgets/empty_state.dart';
 import '../widgets/points_display.dart';
 
@@ -30,6 +31,7 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
     final filteredTransactions = _applyFilter(transactions);
 
     return Scaffold(
+      backgroundColor: AppColors.backgroundStart,
       appBar: AppBar(
         title: const Text('Transaktionen'),
         centerTitle: true,
