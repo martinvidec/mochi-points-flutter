@@ -6,6 +6,7 @@ import '../../providers/reward_provider.dart';
 import '../../providers/points_provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../theme/app_colors.dart';
+import '../../widgets/error_state.dart';
 import '../../widgets/points_display.dart';
 import '../../widgets/reward_card.dart';
 
@@ -221,39 +222,10 @@ class _ShopPageState extends State<ShopPage> {
   }
 
   void _showSuccessSnackbar(Reward reward) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Row(
-          children: [
-            const Text('🎉', style: TextStyle(fontSize: 20)),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Text('${reward.name} gekauft!'),
-            ),
-          ],
-        ),
-        backgroundColor: Colors.green,
-        behavior: SnackBarBehavior.floating,
-        duration: const Duration(seconds: 3),
-      ),
-    );
+    AppSnackbar.success(context, '${reward.name} gekauft!');
   }
 
   void _showErrorSnackbar() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Row(
-          children: [
-            Text('❌', style: TextStyle(fontSize: 20)),
-            SizedBox(width: 12),
-            Expanded(
-              child: Text('Kauf fehlgeschlagen. Nicht genug Punkte?'),
-            ),
-          ],
-        ),
-        backgroundColor: Colors.red,
-        behavior: SnackBarBehavior.floating,
-      ),
-    );
+    AppSnackbar.error(context, 'Kauf fehlgeschlagen. Nicht genug Punkte?');
   }
 }

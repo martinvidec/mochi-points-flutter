@@ -4,6 +4,7 @@ import '../models/quest.dart';
 import '../models/enums.dart';
 import '../providers/quest_provider.dart';
 import '../providers/auth_provider.dart';
+import '../widgets/error_state.dart';
 
 class QuestDetailPage extends StatelessWidget {
   final Quest quest;
@@ -52,14 +53,10 @@ class QuestDetailPage extends StatelessWidget {
 
     if (context.mounted) {
       if (success) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Quest angenommen!')),
-        );
+        AppSnackbar.success(context, 'Quest angenommen!');
         Navigator.of(context).pop();
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Fehler beim Annehmen der Quest')),
-        );
+        AppSnackbar.error(context, 'Fehler beim Annehmen der Quest');
       }
     }
   }
@@ -73,14 +70,10 @@ class QuestDetailPage extends StatelessWidget {
 
     if (context.mounted) {
       if (success) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Quest als erledigt markiert!')),
-        );
+        AppSnackbar.success(context, 'Quest als erledigt markiert!');
         Navigator.of(context).pop();
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Fehler beim Markieren der Quest')),
-        );
+        AppSnackbar.error(context, 'Fehler beim Markieren der Quest');
       }
     }
   }
@@ -94,13 +87,9 @@ class QuestDetailPage extends StatelessWidget {
 
     if (context.mounted) {
       if (success) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Fortschritt +1')),
-        );
+        AppSnackbar.success(context, 'Fortschritt +1');
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Fehler beim Update des Fortschritts')),
-        );
+        AppSnackbar.error(context, 'Fehler beim Update des Fortschritts');
       }
     }
   }

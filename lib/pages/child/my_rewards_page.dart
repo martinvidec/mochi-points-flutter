@@ -5,6 +5,7 @@ import '../../models/reward.dart';
 import '../../models/enums.dart';
 import '../../providers/reward_provider.dart';
 import '../../providers/auth_provider.dart';
+import '../../widgets/error_state.dart';
 
 class MyRewardsPage extends StatelessWidget {
   const MyRewardsPage({super.key});
@@ -331,17 +332,11 @@ class _PurchaseCard extends StatelessWidget {
     final success = await rewardProvider.requestRedemption(purchase.id);
 
     if (dialogContext.mounted) {
-      ScaffoldMessenger.of(dialogContext).showSnackBar(
-        SnackBar(
-          content: Text(
-            success
-                ? 'Einlösung angefragt! Warte auf Bestätigung.'
-                : 'Fehler beim Einlösen.',
-          ),
-          backgroundColor: success ? Colors.green : Colors.red,
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
+      if (success) {
+        AppSnackbar.success(dialogContext, 'Einlösung angefragt! Warte auf Bestätigung.');
+      } else {
+        AppSnackbar.error(dialogContext, 'Fehler beim Einlösen.');
+      }
     }
   }
 }

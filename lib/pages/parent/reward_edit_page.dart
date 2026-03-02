@@ -4,6 +4,7 @@ import '../../models/reward.dart';
 import '../../models/enums.dart';
 import '../../providers/reward_provider.dart';
 import '../../providers/auth_provider.dart';
+import '../../widgets/error_state.dart';
 
 class RewardEditPage extends StatefulWidget {
   final Reward? reward;
@@ -324,13 +325,7 @@ class _RewardEditPageState extends State<RewardEditPage> {
 
     if (mounted) {
       Navigator.pop(context);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(isEditing ? 'Belohnung aktualisiert' : 'Belohnung erstellt'),
-          backgroundColor: Colors.green,
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
+      AppSnackbar.success(context, isEditing ? 'Belohnung aktualisiert' : 'Belohnung erstellt');
     }
   }
 }

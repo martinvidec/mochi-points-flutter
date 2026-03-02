@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../models/reward.dart';
 import '../../providers/reward_provider.dart';
+import '../../widgets/error_state.dart';
 import 'reward_edit_page.dart';
 
 class RewardManagementPage extends StatelessWidget {
@@ -239,11 +240,6 @@ class _RewardManagementCard extends StatelessWidget {
     final rewardProvider = context.read<RewardProvider>();
     rewardProvider.deleteReward(reward.id);
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('${reward.name} gelöscht'),
-        behavior: SnackBarBehavior.floating,
-      ),
-    );
+    AppSnackbar.success(context, '${reward.name} gelöscht');
   }
 }

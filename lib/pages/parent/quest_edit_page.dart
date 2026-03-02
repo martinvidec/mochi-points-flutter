@@ -5,6 +5,7 @@ import '../../models/enums.dart';
 import '../../providers/quest_provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../theme/app_colors.dart';
+import '../../widgets/error_state.dart';
 
 class QuestEditPage extends StatefulWidget {
   final Quest? quest;
@@ -126,9 +127,7 @@ class _QuestEditPageState extends State<QuestEditPage> {
       if (success) {
         Navigator.of(context).pop(true);
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Fehler beim Speichern der Quest')),
-        );
+        AppSnackbar.error(context, 'Fehler beim Speichern der Quest');
       }
     }
   }

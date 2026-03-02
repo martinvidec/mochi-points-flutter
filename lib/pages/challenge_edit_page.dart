@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/challenge.dart';
+import '../widgets/error_state.dart';
 
 class ChallengeEditPage extends StatefulWidget {
   final Function(Challenge) onSave;
@@ -79,9 +80,7 @@ class _ChallengeEditPageState extends State<ChallengeEditPage> {
             Navigator.of(context).pop();
           } else {
             // Show an error message
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Bitte füllen Sie alle Felder korrekt aus.')),
-            );
+            AppSnackbar.error(context, 'Bitte füllen Sie alle Felder korrekt aus.');
           }
         },
         child: Icon(Icons.save),

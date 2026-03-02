@@ -4,6 +4,7 @@ import '../../models/purchase.dart';
 import '../../models/enums.dart';
 import '../../providers/reward_provider.dart';
 import '../../providers/auth_provider.dart';
+import '../../widgets/error_state.dart';
 
 class RedemptionPage extends StatelessWidget {
   const RedemptionPage({super.key});
@@ -336,13 +337,11 @@ class _RedemptionCard extends StatelessWidget {
     final success = await rewardProvider.confirmRedemption(purchase.id, parentId);
 
     if (context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(success ? 'Einlösung bestätigt!' : 'Fehler bei der Bestätigung'),
-          backgroundColor: success ? Colors.green : Colors.red,
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
+      if (success) {
+        AppSnackbar.success(context, 'Einlösung bestätigt!');
+      } else {
+        AppSnackbar.error(context, 'Fehler bei der Bestätigung');
+      }
     }
   }
 
@@ -379,17 +378,11 @@ class _RedemptionCard extends StatelessWidget {
     final success = await rewardProvider.rejectRedemption(purchase.id);
 
     if (context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            success
-                ? 'Einlösung abgelehnt. Punkte wurden zurückerstattet.'
-                : 'Fehler bei der Ablehnung',
-          ),
-          backgroundColor: success ? Colors.orange : Colors.red,
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
+      if (success) {
+        AppSnackbar.success(context, 'Einlösung abgelehnt. Punkte wurden zurückerstattet.');
+      } else {
+        AppSnackbar.error(context, 'Fehler bei der Ablehnung');
+      }
     }
   }
 }
