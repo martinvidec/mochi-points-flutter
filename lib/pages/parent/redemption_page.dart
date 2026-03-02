@@ -4,6 +4,7 @@ import '../../models/purchase.dart';
 import '../../models/enums.dart';
 import '../../providers/reward_provider.dart';
 import '../../providers/auth_provider.dart';
+import '../../widgets/empty_state.dart';
 import '../../widgets/error_state.dart';
 
 class RedemptionPage extends StatelessWidget {
@@ -44,10 +45,10 @@ class _PendingTab extends StatelessWidget {
     final pending = rewardProvider.pendingRedemptions;
 
     if (pending.isEmpty) {
-      return _buildEmptyState(
+      return const EmptyState(
         icon: Icons.check_circle_outline,
         title: 'Keine ausstehenden Einlösungen',
-        subtitle: 'Wenn deine Kinder Belohnungen einlösen möchten,\nerscheinen sie hier.',
+        description: 'Wenn deine Kinder Belohnungen einlösen möchten, erscheinen sie hier.',
       );
     }
 
@@ -85,10 +86,10 @@ class _HistoryTab extends StatelessWidget {
     });
 
     if (history.isEmpty) {
-      return _buildEmptyState(
+      return const EmptyState(
         icon: Icons.history,
         title: 'Kein Verlauf',
-        subtitle: 'Bestätigte und abgelehnte Einlösungen\nerscheinen hier.',
+        description: 'Bestätigte und abgelehnte Einlösungen erscheinen hier.',
       );
     }
 
@@ -103,32 +104,6 @@ class _HistoryTab extends StatelessWidget {
       },
     );
   }
-}
-
-Widget _buildEmptyState({
-  required IconData icon,
-  required String title,
-  required String subtitle,
-}) {
-  return Center(
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(icon, size: 64, color: Colors.grey.shade400),
-        const SizedBox(height: 16),
-        Text(
-          title,
-          style: TextStyle(fontSize: 18, color: Colors.grey.shade600),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          subtitle,
-          style: TextStyle(fontSize: 14, color: Colors.grey.shade500),
-          textAlign: TextAlign.center,
-        ),
-      ],
-    ),
-  );
 }
 
 class _RedemptionCard extends StatelessWidget {

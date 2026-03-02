@@ -6,6 +6,7 @@ import '../../providers/reward_provider.dart';
 import '../../providers/points_provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../theme/app_colors.dart';
+import '../../widgets/empty_state.dart';
 import '../../widgets/error_state.dart';
 import '../../widgets/points_display.dart';
 import '../../widgets/reward_card.dart';
@@ -68,7 +69,7 @@ class _ShopPageState extends State<ShopPage> {
           // Rewards grid
           Expanded(
             child: rewards.isEmpty
-                ? _buildEmptyState()
+                ? EmptyState.rewards()
                 : GridView.builder(
                     padding: const EdgeInsets.all(16),
                     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -104,37 +105,6 @@ class _ShopPageState extends State<ShopPage> {
           _selectedCategory = selected ? category : null;
         });
       },
-    );
-  }
-
-  Widget _buildEmptyState() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.storefront_outlined,
-            size: 64,
-            color: Colors.grey.shade400,
-          ),
-          const SizedBox(height: 16),
-          Text(
-            'Keine Belohnungen verfügbar',
-            style: TextStyle(
-              fontSize: 18,
-              color: Colors.grey.shade600,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'Deine Eltern können neue Belohnungen erstellen.',
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.grey.shade500,
-            ),
-          ),
-        ],
-      ),
     );
   }
 

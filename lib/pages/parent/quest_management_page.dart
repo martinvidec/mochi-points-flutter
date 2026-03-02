@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../providers/quest_provider.dart';
 import '../../models/quest.dart';
 import '../../models/enums.dart';
+import '../../widgets/empty_state.dart';
 import 'quest_edit_page.dart';
 
 class QuestManagementPage extends StatefulWidget {
@@ -115,21 +116,12 @@ class _QuestManagementPageState extends State<QuestManagementPage> {
         ],
       ),
       body: filteredQuests.isEmpty
-          ? Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.task_alt, size: 64, color: Colors.grey.shade400),
-                  const SizedBox(height: 16),
-                  Text(
-                    _filterType == null
-                        ? 'Noch keine Quests erstellt'
-                        : 'Keine ${_getTypeText(_filterType!)} Quests',
-                    style: TextStyle(fontSize: 16, color: Colors.grey.shade600),
-                  ),
-                ],
-              ),
-            )
+          ? _filterType == null
+              ? EmptyState.quests(onCreateQuest: _createQuest)
+              : EmptyState(
+                  icon: Icons.explore_outlined,
+                  title: 'Keine ${_getTypeText(_filterType!)} Quests',
+                )
           : ListView.builder(
               itemCount: filteredQuests.length,
               itemBuilder: (context, index) {
