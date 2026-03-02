@@ -66,7 +66,7 @@ class _RewardManagementCard extends StatelessWidget {
         padding: const EdgeInsets.only(right: 20),
         margin: const EdgeInsets.only(bottom: 12),
         decoration: BoxDecoration(
-          color: Colors.red,
+          color: AppColors.error,
           borderRadius: BorderRadius.circular(12),
         ),
         child: const Icon(Icons.delete, color: Colors.white),
@@ -87,7 +87,7 @@ class _RewardManagementCard extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: reward.isActive
                         ? Theme.of(context).colorScheme.primaryContainer
-                        : Colors.grey.shade300,
+                        : AppColors.textSecondary.withAlpha(100),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Center(
@@ -95,7 +95,7 @@ class _RewardManagementCard extends StatelessWidget {
                       reward.icon,
                       style: TextStyle(
                         fontSize: 24,
-                        color: reward.isActive ? null : Colors.grey,
+                        color: reward.isActive ? null : AppColors.textSecondary,
                       ),
                     ),
                   ),
@@ -112,7 +112,7 @@ class _RewardManagementCard extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
-                          color: reward.isActive ? null : Colors.grey,
+                          color: reward.isActive ? null : AppColors.textSecondary,
                         ),
                       ),
                       const SizedBox(height: 4),
@@ -124,7 +124,7 @@ class _RewardManagementCard extends StatelessWidget {
                             '${reward.price} Punkte',
                             style: TextStyle(
                               fontSize: 13,
-                              color: Colors.grey.shade600,
+                              color: AppColors.textSecondary,
                             ),
                           ),
                           if (reward.hasLimitedStock) ...[
@@ -132,14 +132,14 @@ class _RewardManagementCard extends StatelessWidget {
                             Icon(
                               Icons.inventory_2_outlined,
                               size: 14,
-                              color: Colors.grey.shade600,
+                              color: AppColors.textSecondary,
                             ),
                             const SizedBox(width: 4),
                             Text(
                               '${reward.stock}',
                               style: TextStyle(
                                 fontSize: 13,
-                                color: Colors.grey.shade600,
+                                color: AppColors.textSecondary,
                               ),
                             ),
                           ],
@@ -191,8 +191,8 @@ class _RewardManagementCard extends StatelessWidget {
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red,
-              foregroundColor: Colors.white,
+              backgroundColor: AppColors.error,
+              foregroundColor: AppColors.text,
             ),
             child: const Text('Löschen'),
           ),

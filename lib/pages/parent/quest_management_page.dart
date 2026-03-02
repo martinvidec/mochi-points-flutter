@@ -132,7 +132,7 @@ class _QuestManagementPageState extends State<QuestManagementPage> {
                   key: Key(quest.id),
                   direction: DismissDirection.endToStart,
                   background: Container(
-                    color: Colors.red,
+                    color: AppColors.error,
                     alignment: Alignment.centerRight,
                     padding: const EdgeInsets.only(right: 16),
                     child: const Icon(Icons.delete, color: Colors.white),
@@ -208,14 +208,14 @@ class _QuestManagementPageState extends State<QuestManagementPage> {
                                   vertical: 2,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: Colors.blue.shade100,
+                                  color: AppColors.rarityRare.withAlpha(51),
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                                 child: Text(
                                   _getTypeText(quest.type),
                                   style: TextStyle(
                                     fontSize: 11,
-                                    color: Colors.blue.shade700,
+                                    color: AppColors.rarityRare,
                                   ),
                                 ),
                               ),

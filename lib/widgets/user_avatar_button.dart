@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/user.dart';
+import '../theme/app_colors.dart';
 
 class UserAvatarButton extends StatelessWidget {
   final User user;
@@ -44,8 +45,8 @@ class UserAvatarButton extends StatelessWidget {
             child: CircleAvatar(
               radius: 38,
               backgroundColor: user.isParent
-                  ? Colors.blue.shade200
-                  : Colors.green.shade200,
+                  ? AppColors.rarityRare.withAlpha(102)
+                  : AppColors.success.withAlpha(102),
               backgroundImage:
                   user.avatarUrl != null ? NetworkImage(user.avatarUrl!) : null,
               child: user.avatarUrl == null
@@ -54,7 +55,7 @@ class UserAvatarButton extends StatelessWidget {
                       style: const TextStyle(
                         fontSize: 32,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                        color: AppColors.text,
                       ),
                     )
                   : null,
@@ -73,15 +74,15 @@ class UserAvatarButton extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
             decoration: BoxDecoration(
               color: user.isParent
-                  ? Colors.blue.shade100
-                  : Colors.green.shade100,
+                  ? AppColors.rarityRare.withAlpha(51)
+                  : AppColors.success.withAlpha(51),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Text(
               user.isParent ? 'Eltern' : 'Kind',
               style: TextStyle(
                 fontSize: 12,
-                color: user.isParent ? Colors.blue.shade700 : Colors.green.shade700,
+                color: user.isParent ? AppColors.rarityRare : AppColors.success,
               ),
             ),
           ),
