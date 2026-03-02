@@ -6,6 +6,7 @@ import '../../providers/reward_provider.dart';
 import '../../providers/points_provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../theme/app_colors.dart';
+import '../../widgets/app_button.dart';
 import '../../widgets/empty_state.dart';
 import '../../widgets/error_state.dart';
 import '../../widgets/points_display.dart';
@@ -161,17 +162,15 @@ class _ShopPageState extends State<ShopPage> {
           ],
         ),
         actions: [
-          TextButton(
+          AppButton.text(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Abbrechen'),
+            label: 'Abbrechen',
           ),
-          ElevatedButton(
+          AppButton.primary(
             onPressed: () => _purchaseReward(context, reward, userId),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.gold,
-              foregroundColor: Colors.black87,
-            ),
-            child: const Text('Kaufen'),
+            label: 'Kaufen',
+            backgroundColor: AppColors.gold,
+            foregroundColor: Colors.black87,
           ),
         ],
       ),

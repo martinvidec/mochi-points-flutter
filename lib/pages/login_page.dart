@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
+import '../widgets/app_button.dart';
 import '../widgets/user_avatar_button.dart';
 
 class LoginPage extends StatefulWidget {
@@ -56,11 +57,11 @@ class _LoginPageState extends State<LoginPage> {
                       style: TextStyle(fontSize: 18),
                     ),
                     const SizedBox(height: 16),
-                    ElevatedButton(
+                    AppButton.primary(
                       onPressed: () {
                         Navigator.of(context).pushReplacementNamed('/family-setup');
                       },
-                      child: const Text('Familie einrichten'),
+                      label: 'Familie einrichten',
                     ),
                   ],
                 ),

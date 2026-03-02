@@ -5,6 +5,7 @@ import '../../models/enums.dart';
 import '../../providers/reward_provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../theme/app_colors.dart';
+import '../../widgets/app_button.dart';
 import '../../widgets/empty_state.dart';
 import '../../widgets/error_state.dart';
 
@@ -236,26 +237,18 @@ class _RedemptionCard extends StatelessWidget {
               const SizedBox(height: 16),
               Row(
                 children: [
-                  Expanded(
-                    child: OutlinedButton(
-                      onPressed: () => _rejectRedemption(context),
-                      style: OutlinedButton.styleFrom(
-                        foregroundColor: AppColors.error,
-                        side: const BorderSide(color: AppColors.error),
-                      ),
-                      child: const Text('Ablehnen'),
-                    ),
+                  AppButton.destructive(
+                    onPressed: () => _rejectRedemption(context),
+                    label: 'Ablehnen',
+                    expanded: true,
                   ),
                   const SizedBox(width: 12),
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () => _confirmRedemption(context),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.success,
-                        foregroundColor: AppColors.text,
-                      ),
-                      child: const Text('Bestätigen'),
-                    ),
+                  AppButton.primary(
+                    onPressed: () => _confirmRedemption(context),
+                    label: 'Bestätigen',
+                    expanded: true,
+                    backgroundColor: AppColors.success,
+                    foregroundColor: AppColors.text,
                   ),
                 ],
               ),
@@ -332,17 +325,13 @@ class _RedemptionCard extends StatelessWidget {
           'Die Punkte werden dem Kind zurückerstattet.',
         ),
         actions: [
-          TextButton(
+          AppButton.text(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Abbrechen'),
+            label: 'Abbrechen',
           ),
-          ElevatedButton(
+          AppButton.destructive(
             onPressed: () => Navigator.pop(context, true),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.error,
-              foregroundColor: AppColors.text,
-            ),
-            child: const Text('Ablehnen'),
+            label: 'Ablehnen',
           ),
         ],
       ),

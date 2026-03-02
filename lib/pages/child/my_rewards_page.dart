@@ -6,6 +6,7 @@ import '../../models/enums.dart';
 import '../../providers/reward_provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../theme/app_colors.dart';
+import '../../widgets/app_button.dart';
 import '../../widgets/empty_state.dart';
 import '../../widgets/error_state.dart';
 
@@ -180,13 +181,9 @@ class _PurchaseCard extends StatelessWidget {
 
             // Action button
             if (showRedeemButton && purchase.status == PurchaseStatus.purchased)
-              ElevatedButton(
+              AppButton.primary(
                 onPressed: () => _showRedeemDialog(context),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.success,
-                  foregroundColor: AppColors.text,
-                ),
-                child: const Text('Einlösen'),
+                label: 'Einlösen',
               ),
           ],
         ),
@@ -287,17 +284,13 @@ class _PurchaseCard extends StatelessWidget {
           ],
         ),
         actions: [
-          TextButton(
+          AppButton.text(
             onPressed: () => Navigator.pop(dialogContext),
-            child: const Text('Abbrechen'),
+            label: 'Abbrechen',
           ),
-          ElevatedButton(
+          AppButton.primary(
             onPressed: () => _requestRedemption(dialogContext),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.success,
-              foregroundColor: AppColors.text,
-            ),
-            child: const Text('Einlösen anfragen'),
+            label: 'Einlösen anfragen',
           ),
         ],
       ),

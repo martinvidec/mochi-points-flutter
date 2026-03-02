@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../models/reward.dart';
 import '../../providers/reward_provider.dart';
 import '../../theme/app_colors.dart';
+import '../../widgets/app_button.dart';
 import '../../widgets/empty_state.dart';
 import '../../widgets/error_state.dart';
 import 'reward_edit_page.dart';
@@ -184,17 +185,13 @@ class _RewardManagementCard extends StatelessWidget {
         title: const Text('Belohnung löschen?'),
         content: Text('Möchtest du "${reward.name}" wirklich löschen?'),
         actions: [
-          TextButton(
+          AppButton.text(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Abbrechen'),
+            label: 'Abbrechen',
           ),
-          ElevatedButton(
+          AppButton.destructive(
             onPressed: () => Navigator.pop(context, true),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.error,
-              foregroundColor: AppColors.text,
-            ),
-            child: const Text('Löschen'),
+            label: 'Löschen',
           ),
         ],
       ),

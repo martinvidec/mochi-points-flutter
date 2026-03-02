@@ -7,6 +7,7 @@ import '../../providers/points_provider.dart';
 import '../../providers/quest_provider.dart';
 import '../../theme/app_colors.dart';
 import '../../models/enums.dart';
+import '../../widgets/app_button.dart';
 import '../../widgets/bottom_navigation.dart';
 import '../../widgets/hero_card.dart';
 import '../../widgets/points_display.dart';
@@ -358,21 +359,14 @@ class _ChildHeroHomePageState extends State<ChildHeroHomePage> {
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),
-          ElevatedButton.icon(
+          AppButton.primary(
             onPressed: () {
               setState(() {
                 _currentNavIndex = 1;
               });
             },
-            icon: const Icon(Icons.explore),
-            label: const Text('Quest Board'),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.teal,
-              foregroundColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-            ),
+            label: 'Quest Board',
+            icon: Icons.explore,
           ),
         ],
       ),

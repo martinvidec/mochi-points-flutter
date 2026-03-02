@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/quest.dart';
 import '../models/user.dart';
 import '../theme/app_colors.dart';
+import 'app_button.dart';
 
 class ApprovalCard extends StatelessWidget {
   final User child;
@@ -118,28 +119,20 @@ class ApprovalCard extends StatelessWidget {
             // Action buttons
             Row(
               children: [
-                Expanded(
-                  child: ElevatedButton.icon(
-                    onPressed: onReject,
-                    icon: const Icon(Icons.close),
-                    label: const Text('Ablehnen'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.error,
-                      foregroundColor: AppColors.text,
-                    ),
-                  ),
+                AppButton.destructive(
+                  onPressed: onReject,
+                  label: 'Ablehnen',
+                  icon: Icons.close,
+                  expanded: true,
                 ),
                 const SizedBox(width: 8),
-                Expanded(
-                  child: ElevatedButton.icon(
-                    onPressed: onApprove,
-                    icon: const Icon(Icons.check),
-                    label: const Text('Bestätigen'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.success,
-                      foregroundColor: AppColors.text,
-                    ),
-                  ),
+                AppButton.primary(
+                  onPressed: onApprove,
+                  label: 'Bestätigen',
+                  icon: Icons.check,
+                  expanded: true,
+                  backgroundColor: AppColors.success,
+                  foregroundColor: AppColors.text,
                 ),
               ],
             ),
