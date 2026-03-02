@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/quest.dart';
 import '../models/user.dart';
+import '../theme/app_colors.dart';
 
 class ApprovalCard extends StatelessWidget {
   final User child;
@@ -35,11 +36,11 @@ class ApprovalCard extends StatelessWidget {
             Row(
               children: [
                 CircleAvatar(
-                  backgroundColor: Colors.green.shade200,
+                  backgroundColor: AppColors.success.withAlpha(102),
                   child: Text(
                     child.name.substring(0, 1).toUpperCase(),
                     style: const TextStyle(
-                      color: Colors.white,
+                      color: AppColors.text,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -59,9 +60,9 @@ class ApprovalCard extends StatelessWidget {
                       if (instance.completedAt != null)
                         Text(
                           'Abgeschlossen: ${_formatDate(instance.completedAt!)}',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 12,
-                            color: Colors.grey.shade600,
+                            color: AppColors.textSecondary,
                           ),
                         ),
                     ],
@@ -99,11 +100,11 @@ class ApprovalCard extends StatelessWidget {
                       const SizedBox(height: 4),
                       Row(
                         children: [
-                          Icon(Icons.stars, size: 16, color: Colors.amber.shade700),
+                          Icon(Icons.stars, size: 16, color: AppColors.gold),
                           const SizedBox(width: 4),
                           Text('${quest.rewardPoints} Punkte'),
                           const SizedBox(width: 12),
-                          Icon(Icons.trending_up, size: 16, color: Colors.blue.shade700),
+                          Icon(Icons.trending_up, size: 16, color: AppColors.rarityRare),
                           const SizedBox(width: 4),
                           Text('${quest.rewardXP} XP'),
                         ],
@@ -123,8 +124,8 @@ class ApprovalCard extends StatelessWidget {
                     icon: const Icon(Icons.close),
                     label: const Text('Ablehnen'),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
-                      foregroundColor: Colors.white,
+                      backgroundColor: AppColors.error,
+                      foregroundColor: AppColors.text,
                     ),
                   ),
                 ),
@@ -135,8 +136,8 @@ class ApprovalCard extends StatelessWidget {
                     icon: const Icon(Icons.check),
                     label: const Text('Bestätigen'),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                      foregroundColor: Colors.white,
+                      backgroundColor: AppColors.success,
+                      foregroundColor: AppColors.text,
                     ),
                   ),
                 ),

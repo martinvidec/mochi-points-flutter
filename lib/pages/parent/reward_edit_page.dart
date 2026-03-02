@@ -108,7 +108,7 @@ class _RewardEditPageState extends State<RewardEditPage> {
                 'Tippe zum Ändern',
                 style: TextStyle(
                   fontSize: 12,
-                  color: Colors.grey.shade600,
+                  color: AppColors.textSecondary,
                 ),
               ),
             ),
@@ -256,7 +256,7 @@ class _RewardEditPageState extends State<RewardEditPage> {
                     decoration: BoxDecoration(
                       color: isSelected
                           ? Theme.of(context).colorScheme.primaryContainer
-                          : Colors.grey.shade200,
+                          : AppColors.textSecondary.withAlpha(51),
                       borderRadius: BorderRadius.circular(12),
                       border: isSelected
                           ? Border.all(

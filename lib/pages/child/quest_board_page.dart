@@ -123,7 +123,7 @@ class _QuestBoardPageState extends State<QuestBoardPage>
                     children: [
                       Icon(
                         Icons.play_circle_outline,
-                        color: Colors.orange.shade700,
+                        color: AppColors.warning,
                       ),
                       const SizedBox(width: 8),
                       const Text(
@@ -167,7 +167,7 @@ class _QuestBoardPageState extends State<QuestBoardPage>
                   children: [
                     Icon(
                       Icons.explore,
-                      color: Colors.blue.shade700,
+                      color: AppColors.rarityRare,
                     ),
                     const SizedBox(width: 8),
                     const Text(

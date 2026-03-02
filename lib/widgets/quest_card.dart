@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/quest.dart';
 import '../models/enums.dart';
+import '../theme/app_colors.dart';
 
 class QuestCard extends StatelessWidget {
   final Quest quest;
@@ -31,18 +32,18 @@ class QuestCard extends StatelessWidget {
   }
 
   Color _getStatusColor() {
-    if (instance == null) return Colors.blue;
+    if (instance == null) return AppColors.rarityRare;
     switch (instance!.status) {
       case QuestStatus.available:
-        return Colors.blue;
+        return AppColors.rarityRare;
       case QuestStatus.inProgress:
-        return Colors.orange;
+        return AppColors.warning;
       case QuestStatus.pendingApproval:
-        return Colors.purple;
+        return AppColors.rarityEpic;
       case QuestStatus.completed:
-        return Colors.green;
+        return AppColors.success;
       case QuestStatus.expired:
-        return Colors.grey;
+        return AppColors.textSecondary;
     }
   }
 
@@ -115,7 +116,7 @@ class QuestCard extends StatelessWidget {
                             _getRarityText(),
                             style: const TextStyle(
                               fontSize: 12,
-                              color: Colors.white,
+                              color: AppColors.text,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
@@ -137,7 +138,7 @@ class QuestCard extends StatelessWidget {
                       _getStatusText(),
                       style: const TextStyle(
                         fontSize: 12,
-                        color: Colors.white,
+                        color: AppColors.text,
                       ),
                     ),
                   ),
@@ -147,9 +148,9 @@ class QuestCard extends StatelessWidget {
                 const SizedBox(height: 12),
                 Text(
                   quest.description!,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 14,
-                    color: Colors.grey.shade600,
+                    color: AppColors.textSecondary,
                   ),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
@@ -162,7 +163,7 @@ class QuestCard extends StatelessWidget {
                   Icon(
                     Icons.stars,
                     size: 16,
-                    color: Colors.amber.shade700,
+                    color: AppColors.gold,
                   ),
                   const SizedBox(width: 4),
                   Text(
@@ -176,7 +177,7 @@ class QuestCard extends StatelessWidget {
                   Icon(
                     Icons.trending_up,
                     size: 16,
-                    color: Colors.blue.shade700,
+                    color: AppColors.rarityRare,
                   ),
                   const SizedBox(width: 4),
                   Text(
@@ -191,7 +192,7 @@ class QuestCard extends StatelessWidget {
                     Icon(
                       Icons.local_fire_department,
                       size: 16,
-                      color: Colors.orange.shade700,
+                      color: AppColors.warning,
                     ),
                     const SizedBox(width: 4),
                     Text(
@@ -213,18 +214,18 @@ class QuestCard extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
+                        const Text(
                           'Fortschritt',
                           style: TextStyle(
                             fontSize: 12,
-                            color: Colors.grey.shade600,
+                            color: AppColors.textSecondary,
                           ),
                         ),
                         Text(
                           '${instance!.progress}/${instance!.target}${quest.unit != null ? " ${quest.unit}" : ""}',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 12,
-                            color: Colors.grey.shade600,
+                            color: AppColors.textSecondary,
                           ),
                         ),
                       ],
@@ -232,7 +233,7 @@ class QuestCard extends StatelessWidget {
                     const SizedBox(height: 4),
                     LinearProgressIndicator(
                       value: instance!.progressPercent,
-                      backgroundColor: Colors.grey.shade200,
+                      backgroundColor: AppColors.textSecondary.withAlpha(51),
                       valueColor: AlwaysStoppedAnimation<Color>(quest.rarityColor),
                     ),
                   ],

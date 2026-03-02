@@ -169,7 +169,7 @@ class _PurchaseCard extends StatelessWidget {
                     _formatDate(purchase.purchasedAt),
                     style: TextStyle(
                       fontSize: 13,
-                      color: Colors.grey.shade600,
+                      color: AppColors.textSecondary,
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -183,8 +183,8 @@ class _PurchaseCard extends StatelessWidget {
               ElevatedButton(
                 onPressed: () => _showRedeemDialog(context),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
-                  foregroundColor: Colors.white,
+                  backgroundColor: AppColors.success,
+                  foregroundColor: AppColors.text,
                 ),
                 child: const Text('Einlösen'),
               ),
@@ -215,15 +215,15 @@ class _PurchaseCard extends StatelessWidget {
   Color _getStatusColor() {
     switch (purchase.status) {
       case PurchaseStatus.purchased:
-        return Colors.blue;
+        return AppColors.rarityRare;
       case PurchaseStatus.pendingRedemption:
-        return Colors.orange;
+        return AppColors.warning;
       case PurchaseStatus.redeemed:
-        return Colors.green;
+        return AppColors.success;
       case PurchaseStatus.expired:
-        return Colors.grey;
+        return AppColors.textSecondary;
       case PurchaseStatus.cancelled:
-        return Colors.red;
+        return AppColors.error;
     }
   }
 
@@ -264,7 +264,7 @@ class _PurchaseCard extends StatelessWidget {
             const Icon(
               Icons.family_restroom,
               size: 48,
-              color: Colors.orange,
+              color: AppColors.warning,
             ),
             const SizedBox(height: 16),
             const Text(
@@ -280,7 +280,7 @@ class _PurchaseCard extends StatelessWidget {
               'Ein Elternteil muss bestätigen, dass du "${reward?.name}" bekommst.',
               style: TextStyle(
                 fontSize: 14,
-                color: Colors.grey.shade600,
+                color: AppColors.textSecondary,
               ),
               textAlign: TextAlign.center,
             ),
@@ -294,8 +294,8 @@ class _PurchaseCard extends StatelessWidget {
           ElevatedButton(
             onPressed: () => _requestRedemption(dialogContext),
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.green,
-              foregroundColor: Colors.white,
+              backgroundColor: AppColors.success,
+              foregroundColor: AppColors.text,
             ),
             child: const Text('Einlösen anfragen'),
           ),

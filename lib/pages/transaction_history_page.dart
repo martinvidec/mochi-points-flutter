@@ -74,13 +74,13 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
                 _buildFilterChip(
                   label: 'Verdient',
                   filter: TransactionFilter.earned,
-                  color: Colors.green,
+                  color: AppColors.success,
                 ),
                 const SizedBox(width: 8),
                 _buildFilterChip(
                   label: 'Ausgegeben',
                   filter: TransactionFilter.spent,
-                  color: Colors.red,
+                  color: AppColors.error,
                 ),
               ],
             ),
@@ -129,7 +129,7 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
 
   Widget _buildTransactionItem(Transaction transaction) {
     final isPositive = transaction.amount > 0;
-    final amountColor = isPositive ? Colors.green : Colors.red;
+    final amountColor = isPositive ? AppColors.success : AppColors.error;
     final amountPrefix = isPositive ? '+' : '';
 
     return Card(
@@ -173,9 +173,9 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
                   const SizedBox(height: 4),
                   Text(
                     _formatDateTime(transaction.createdAt),
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 13,
-                      color: Colors.grey.shade600,
+                      color: AppColors.textSecondary,
                     ),
                   ),
                 ],
@@ -197,9 +197,9 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
                 const SizedBox(height: 4),
                 Text(
                   '= ${transaction.balanceAfter}',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 12,
-                    color: Colors.grey.shade500,
+                    color: AppColors.textSecondary,
                   ),
                 ),
               ],
@@ -239,15 +239,15 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
   Color _getTypeColor(TransactionType type) {
     switch (type) {
       case TransactionType.questComplete:
-        return Colors.green;
+        return AppColors.success;
       case TransactionType.purchase:
-        return Colors.orange;
+        return AppColors.warning;
       case TransactionType.bonus:
-        return Colors.purple;
+        return AppColors.rarityEpic;
       case TransactionType.adjustment:
-        return Colors.blue;
+        return AppColors.rarityRare;
       case TransactionType.refund:
-        return Colors.teal;
+        return AppColors.teal;
     }
   }
 

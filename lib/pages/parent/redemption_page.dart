@@ -167,7 +167,7 @@ class _RedemptionCard extends StatelessWidget {
                         'möchte einlösen:',
                         style: TextStyle(
                           fontSize: 12,
-                          color: Colors.grey.shade600,
+                          color: AppColors.textSecondary,
                         ),
                       ),
                     ],
@@ -185,7 +185,7 @@ class _RedemptionCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: Colors.grey.shade100,
+                color: AppColors.textSecondary.withAlpha(40),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Row(
@@ -221,7 +221,7 @@ class _RedemptionCard extends StatelessWidget {
                           'Gekauft am ${_formatDate(purchase.purchasedAt)}',
                           style: TextStyle(
                             fontSize: 12,
-                            color: Colors.grey.shade600,
+                            color: AppColors.textSecondary,
                           ),
                         ),
                       ],
@@ -240,8 +240,8 @@ class _RedemptionCard extends StatelessWidget {
                     child: OutlinedButton(
                       onPressed: () => _rejectRedemption(context),
                       style: OutlinedButton.styleFrom(
-                        foregroundColor: Colors.red,
-                        side: const BorderSide(color: Colors.red),
+                        foregroundColor: AppColors.error,
+                        side: const BorderSide(color: AppColors.error),
                       ),
                       child: const Text('Ablehnen'),
                     ),
@@ -251,8 +251,8 @@ class _RedemptionCard extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: () => _confirmRedemption(context),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
-                        foregroundColor: Colors.white,
+                        backgroundColor: AppColors.success,
+                        foregroundColor: AppColors.text,
                       ),
                       child: const Text('Bestätigen'),
                     ),
@@ -270,7 +270,7 @@ class _RedemptionCard extends StatelessWidget {
                     : 'Abgelehnt am ${_formatDate(purchase.redeemedAt!)}',
                 style: TextStyle(
                   fontSize: 12,
-                  color: Colors.grey.shade500,
+                  color: AppColors.textSecondary,
                 ),
               ),
             ],
@@ -282,7 +282,7 @@ class _RedemptionCard extends StatelessWidget {
 
   Widget _buildStatusBadge() {
     final isRedeemed = purchase.status == PurchaseStatus.redeemed;
-    final color = isRedeemed ? Colors.green : Colors.red;
+    final color = isRedeemed ? AppColors.success : AppColors.error;
     final text = isRedeemed ? 'Bestätigt' : 'Abgelehnt';
 
     return Container(
@@ -339,8 +339,8 @@ class _RedemptionCard extends StatelessWidget {
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red,
-              foregroundColor: Colors.white,
+              backgroundColor: AppColors.error,
+              foregroundColor: AppColors.text,
             ),
             child: const Text('Ablehnen'),
           ),

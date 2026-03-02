@@ -141,7 +141,7 @@ class QuestDetailPage extends StatelessWidget {
                     style: const TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                      color: AppColors.text,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -169,7 +169,7 @@ class QuestDetailPage extends StatelessWidget {
                         child: Text(
                           _getRarityText(),
                           style: const TextStyle(
-                            color: Colors.white,
+                            color: AppColors.text,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -181,13 +181,13 @@ class QuestDetailPage extends StatelessWidget {
                           vertical: 6,
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.blue.shade100,
+                          color: AppColors.rarityRare.withAlpha(51),
                           borderRadius: BorderRadius.circular(16),
                         ),
                         child: Text(
                           _getTypeText(),
-                          style: TextStyle(
-                            color: Colors.blue.shade700,
+                          style: const TextStyle(
+                            color: AppColors.rarityRare,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -222,7 +222,7 @@ class QuestDetailPage extends StatelessWidget {
                   const SizedBox(height: 12),
                   Row(
                     children: [
-                      Icon(Icons.stars, color: Colors.amber.shade700, size: 28),
+                      Icon(Icons.stars, color: AppColors.gold, size: 28),
                       const SizedBox(width: 8),
                       Text(
                         '${quest.rewardPoints} Punkte',
@@ -232,7 +232,7 @@ class QuestDetailPage extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: 24),
-                      Icon(Icons.trending_up, color: Colors.blue.shade700, size: 28),
+                      Icon(Icons.trending_up, color: AppColors.rarityRare, size: 28),
                       const SizedBox(width: 8),
                       Text(
                         '${quest.rewardXP} XP',
@@ -250,7 +250,7 @@ class QuestDetailPage extends StatelessWidget {
                       children: [
                         Icon(
                           Icons.calendar_today,
-                          color: quest.isExpired ? Colors.red : Colors.grey.shade700,
+                          color: quest.isExpired ? AppColors.error : AppColors.textSecondary,
                         ),
                         const SizedBox(width: 8),
                         Text(
@@ -259,7 +259,7 @@ class QuestDetailPage extends StatelessWidget {
                               : 'Frist: ${quest.deadline!.day}.${quest.deadline!.month}.${quest.deadline!.year}',
                           style: TextStyle(
                             fontSize: 16,
-                            color: quest.isExpired ? Colors.red : Colors.grey.shade700,
+                            color: quest.isExpired ? AppColors.error : AppColors.textSecondary,
                           ),
                         ),
                       ],
@@ -272,7 +272,7 @@ class QuestDetailPage extends StatelessWidget {
                       children: [
                         Icon(
                           Icons.local_fire_department,
-                          color: Colors.orange.shade700,
+                          color: AppColors.primaryEnd,
                           size: 28,
                         ),
                         const SizedBox(width: 8),
@@ -302,7 +302,7 @@ class QuestDetailPage extends StatelessWidget {
                         Expanded(
                           child: LinearProgressIndicator(
                             value: instance!.progressPercent,
-                            backgroundColor: Colors.grey.shade200,
+                            backgroundColor: AppColors.textSecondary.withAlpha(77),
                             valueColor: AlwaysStoppedAnimation<Color>(quest.rarityColor),
                             minHeight: 8,
                           ),
@@ -339,7 +339,7 @@ class QuestDetailPage extends StatelessWidget {
             style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.symmetric(vertical: 16),
               backgroundColor: quest.rarityColor,
-              foregroundColor: Colors.white,
+              foregroundColor: AppColors.text,
             ),
             child: const Text(
               'Quest annehmen',
@@ -379,8 +379,8 @@ class QuestDetailPage extends StatelessWidget {
                         onPressed: () => _completeQuest(context),
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 16),
-                          backgroundColor: Colors.green,
-                          foregroundColor: Colors.white,
+                          backgroundColor: AppColors.success,
+                          foregroundColor: AppColors.text,
                         ),
                         child: const Text(
                           'Als erledigt markieren',
@@ -402,8 +402,8 @@ class QuestDetailPage extends StatelessWidget {
                 onPressed: () => _completeQuest(context),
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),
-                  backgroundColor: Colors.green,
-                  foregroundColor: Colors.white,
+                  backgroundColor: AppColors.success,
+                  foregroundColor: AppColors.text,
                 ),
                 child: const Text(
                   'Als erledigt markieren',
@@ -436,20 +436,20 @@ class QuestDetailPage extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 16),
               decoration: BoxDecoration(
-                color: Colors.green.shade100,
+                color: AppColors.success.withAlpha(51),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.check_circle, color: Colors.green.shade700, size: 28),
+                  const Icon(Icons.check_circle, color: AppColors.success, size: 28),
                   const SizedBox(width: 8),
-                  Text(
+                  const Text(
                     'Abgeschlossen',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: Colors.green.shade700,
+                      color: AppColors.success,
                     ),
                   ),
                 ],

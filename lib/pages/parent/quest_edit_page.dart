@@ -173,7 +173,7 @@ class _QuestEditPageState extends State<QuestEditPage> {
                         border: Border.all(
                           color: _selectedIcon == icon
                               ? Theme.of(context).primaryColor
-                              : Colors.grey.shade300,
+                              : AppColors.textSecondary.withAlpha(77),
                           width: _selectedIcon == icon ? 3 : 1,
                         ),
                         borderRadius: BorderRadius.circular(8),
@@ -366,7 +366,7 @@ class _QuestEditPageState extends State<QuestEditPage> {
                     : const Text('Keine Deadline gesetzt'),
                 trailing: const Icon(Icons.calendar_today),
                 onTap: _selectDeadline,
-                tileColor: Colors.grey.shade100,
+                tileColor: AppColors.textSecondary.withAlpha(26),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
