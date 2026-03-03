@@ -95,7 +95,7 @@ class _QuestBoardPageState extends State<QuestBoardPage>
     final filteredQuests = _getFilteredQuests(availableQuests);
 
     return Scaffold(
-      backgroundColor: AppColors.backgroundStart,
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
         title: const Text('Quest Board'),
         bottom: TabBar(

@@ -9,6 +9,8 @@ import '../../theme/app_colors.dart';
 import '../../models/enums.dart';
 import '../../widgets/app_button.dart';
 import '../../widgets/bottom_navigation.dart';
+import '../../widgets/glass_container.dart';
+import '../../widgets/glass_scaffold.dart';
 import '../../widgets/hero_card.dart';
 import '../../widgets/points_display.dart';
 import '../../widgets/quest_card.dart';
@@ -30,8 +32,7 @@ class _ChildHeroHomePageState extends State<ChildHeroHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.backgroundStart,
+    return GlassScaffold(
       body: IndexedStack(
         index: _currentNavIndex,
         children: [
@@ -74,7 +75,7 @@ class _ChildHeroHomePageState extends State<ChildHeroHomePage> {
               slivers: [
                 // App Bar
                 SliverAppBar(
-                  backgroundColor: AppColors.backgroundStart,
+                  backgroundColor: Colors.transparent,
                   floating: true,
                   title: const Text(
                     'Mochi Hero',
@@ -202,19 +203,10 @@ class _ChildHeroHomePageState extends State<ChildHeroHomePage> {
   }
 
   Widget _buildNoHeroCard() {
-    return Container(
+    return GlassContainer(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFF2D4A3E), Color(0xFF1A3A2E)],
-        ),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: AppColors.teal.withAlpha(128),
-          width: 2,
-        ),
-      ),
+      tintColor: const Color(0xFF2D4A3E).withAlpha(128),
       child: Column(
         children: [
           const Icon(
@@ -246,20 +238,8 @@ class _ChildHeroHomePageState extends State<ChildHeroHomePage> {
   }
 
   Widget _buildPointsSection(int points, int weeklyEarned) {
-    return Container(
+    return GlassContainer(
       padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [AppColors.surface, AppColors.surfaceElevated],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: AppColors.gold.withAlpha(51),
-          width: 1,
-        ),
-      ),
       child: Row(
         children: [
           Expanded(
@@ -316,17 +296,9 @@ class _ChildHeroHomePageState extends State<ChildHeroHomePage> {
   }
 
   Widget _buildEmptyQuestsCard() {
-    return Container(
+    return GlassContainer(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: Colors.white.withAlpha(26),
-          width: 1,
-        ),
-      ),
       child: Column(
         children: [
           Icon(
@@ -527,12 +499,9 @@ class _ChildHeroHomePageState extends State<ChildHeroHomePage> {
     required VoidCallback onTap,
     bool isDestructive = false,
   }) {
-    return Container(
+    return GlassContainer(
       margin: const EdgeInsets.only(bottom: 8),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(12),
-      ),
+      borderRadius: 12,
       child: ListTile(
         leading: Icon(
           icon,

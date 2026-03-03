@@ -9,6 +9,7 @@ import '../../theme/app_colors.dart';
 import '../../widgets/app_button.dart';
 import '../../widgets/empty_state.dart';
 import '../../widgets/error_state.dart';
+import '../../widgets/glass_container.dart';
 
 class MyRewardsPage extends StatelessWidget {
   const MyRewardsPage({super.key});
@@ -18,7 +19,7 @@ class MyRewardsPage extends StatelessWidget {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        backgroundColor: AppColors.backgroundStart,
+        backgroundColor: Colors.transparent,
         appBar: AppBar(
           title: const Text('Meine Belohnungen'),
           centerTitle: true,
@@ -130,63 +131,61 @@ class _PurchaseCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return GlassContainer(
       margin: const EdgeInsets.only(bottom: 12),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Row(
-          children: [
-            // Icon
-            Container(
-              width: 56,
-              height: 56,
-              decoration: BoxDecoration(
-                color: _getStatusColor().withAlpha(30),
-                borderRadius: BorderRadius.circular(12),
+      padding: const EdgeInsets.all(16),
+      child: Row(
+        children: [
+          // Icon
+          Container(
+            width: 56,
+            height: 56,
+            decoration: BoxDecoration(
+              color: _getStatusColor().withAlpha(30),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Center(
+              child: Text(
+                reward?.icon ?? '🎁',
+                style: const TextStyle(fontSize: 28),
               ),
-              child: Center(
-                child: Text(
-                  reward?.icon ?? '🎁',
-                  style: const TextStyle(fontSize: 28),
+            ),
+          ),
+          const SizedBox(width: 16),
+
+          // Info
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  reward?.name ?? 'Unbekannte Belohnung',
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-            ),
-            const SizedBox(width: 16),
-
-            // Info
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    reward?.name ?? 'Unbekannte Belohnung',
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
+                const SizedBox(height: 4),
+                Text(
+                  _formatDate(purchase.purchasedAt),
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: AppColors.textSecondary,
                   ),
-                  const SizedBox(height: 4),
-                  Text(
-                    _formatDate(purchase.purchasedAt),
-                    style: TextStyle(
-                      fontSize: 13,
-                      color: AppColors.textSecondary,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  _buildStatusBadge(),
-                ],
-              ),
+                ),
+                const SizedBox(height: 8),
+                _buildStatusBadge(),
+              ],
             ),
+          ),
 
-            // Action button
-            if (showRedeemButton && purchase.status == PurchaseStatus.purchased)
-              AppButton.primary(
-                onPressed: () => _showRedeemDialog(context),
-                label: 'Einlösen',
-              ),
-          ],
-        ),
+          // Action button
+          if (showRedeemButton && purchase.status == PurchaseStatus.purchased)
+            AppButton.primary(
+              onPressed: () => _showRedeemDialog(context),
+              label: 'Einlösen',
+            ),
+        ],
       ),
     );
   }
