@@ -23,6 +23,7 @@ import 'shop_page.dart';
 import 'my_rewards_page.dart';
 import '../appearance_settings_page.dart';
 import '../help_support_page.dart';
+import 'hero_customization_page.dart';
 
 class ChildHeroHomePage extends StatefulWidget {
   const ChildHeroHomePage({super.key});
@@ -33,6 +34,29 @@ class ChildHeroHomePage extends StatefulWidget {
 
 class _ChildHeroHomePageState extends State<ChildHeroHomePage> {
   int _currentNavIndex = 0;
+  bool _initialized = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_initialized) {
+      _initialized = true;
+      _ensureHeroExists();
+    }
+  }
+
+  Future<void> _ensureHeroExists() async {
+    final authProvider = context.read<AuthProvider>();
+    final heroProvider = context.read<HeroProvider>();
+    final userId = authProvider.currentUser?.id;
+    final userName = authProvider.currentUser?.name;
+    if (userId == null || userName == null) return;
+
+    await heroProvider.loadData();
+    if (heroProvider.heroForUser(userId) == null) {
+      await heroProvider.initialize(userId, userName);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -119,7 +143,11 @@ class _ChildHeroHomePageState extends State<ChildHeroHomePage> {
                       ? HeroCard(
                           hero: hero,
                           onTap: () {
-                            // TODO: Navigate to hero detail/customization
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => HeroCustomizationPage(hero: hero),
+                              ),
+                            );
                           },
                         )
                       : _buildNoHeroCard(),
@@ -466,7 +494,15 @@ class _ChildHeroHomePageState extends State<ChildHeroHomePage> {
             title: 'Profil bearbeiten',
             subtitle: 'Name und Avatar anpassen',
             onTap: () {
-              // TODO: Navigate to profile edit
+              final userId = context.read<AuthProvider>().currentUser?.id;
+              if (userId == null) return;
+              final hero = context.read<HeroProvider>().heroForUser(userId);
+              if (hero == null) return;
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => HeroCustomizationPage(hero: hero),
+                ),
+              );
             },
           ),
           _buildProfileItem(
