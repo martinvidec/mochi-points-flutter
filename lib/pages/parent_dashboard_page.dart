@@ -14,6 +14,10 @@ import 'parent/quest_edit_page.dart';
 import 'parent/reward_management_page.dart';
 import 'parent/reward_edit_page.dart';
 import 'parent/approval_page.dart';
+import 'family_management_page.dart';
+import 'notification_settings_page.dart';
+import 'appearance_settings_page.dart';
+import 'help_support_page.dart';
 
 class ParentDashboardPage extends StatefulWidget {
   const ParentDashboardPage({super.key});
@@ -262,25 +266,50 @@ class _ParentDashboardPageState extends State<ParentDashboardPage> {
             icon: Icons.family_restroom,
             title: 'Familie verwalten',
             subtitle: 'Mitglieder hinzufügen oder entfernen',
-            onTap: () {},
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const FamilyManagementPage(),
+                ),
+              );
+            },
           ),
           _buildSettingsItem(
             icon: Icons.notifications_outlined,
             title: 'Benachrichtigungen',
             subtitle: 'Push-Benachrichtigungen konfigurieren',
-            onTap: () {},
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const NotificationSettingsPage(),
+                ),
+              );
+            },
           ),
           _buildSettingsItem(
             icon: Icons.palette_outlined,
             title: 'Erscheinungsbild',
             subtitle: 'Theme und Darstellung',
-            onTap: () {},
+            onTap: () async {
+              await Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const AppearanceSettingsPage(),
+                ),
+              );
+              if (mounted) setState(() {});
+            },
           ),
           _buildSettingsItem(
             icon: Icons.help_outline,
             title: 'Hilfe & Support',
             subtitle: 'FAQ und Kontakt',
-            onTap: () {},
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const HelpSupportPage(),
+                ),
+              );
+            },
           ),
           const SizedBox(height: 24),
           _buildSettingsItem(

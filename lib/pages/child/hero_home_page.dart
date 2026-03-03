@@ -21,6 +21,8 @@ import '../transaction_history_page.dart';
 import 'quest_board_page.dart';
 import 'shop_page.dart';
 import 'my_rewards_page.dart';
+import '../appearance_settings_page.dart';
+import '../help_support_page.dart';
 
 class ChildHeroHomePage extends StatefulWidget {
   const ChildHeroHomePage({super.key});
@@ -483,13 +485,26 @@ class _ChildHeroHomePageState extends State<ChildHeroHomePage> {
             icon: Icons.palette_outlined,
             title: 'Erscheinungsbild',
             subtitle: 'Theme und Darstellung',
-            onTap: () {},
+            onTap: () async {
+              await Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const AppearanceSettingsPage(),
+                ),
+              );
+              if (mounted) setState(() {});
+            },
           ),
           _buildProfileItem(
             icon: Icons.help_outline,
             title: 'Hilfe & Support',
             subtitle: 'FAQ und Kontakt',
-            onTap: () {},
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const HelpSupportPage(),
+                ),
+              );
+            },
           ),
           const SizedBox(height: 24),
           _buildProfileItem(

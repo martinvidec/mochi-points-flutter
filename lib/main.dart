@@ -9,13 +9,16 @@ import 'providers/challenge_provider.dart';
 import 'providers/reward_provider.dart';
 import 'providers/hero_provider.dart';
 import 'providers/achievement_provider.dart';
+import 'services/background_service.dart';
 import 'pages/splash_page.dart';
 import 'pages/login_page.dart';
 import 'pages/hero_home_page.dart';
 import 'pages/parent_dashboard_page.dart';
 import 'pages/setup/family_setup_page.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await BackgroundService().init();
   runApp(
     MultiProvider(
       providers: [
