@@ -10,6 +10,7 @@ import '../../widgets/empty_state.dart';
 import '../../widgets/error_state.dart';
 import '../../widgets/glass_container.dart';
 import '../../widgets/glass_scaffold.dart';
+import '../../widgets/glass_app_bar.dart';
 
 class RedemptionPage extends StatelessWidget {
   const RedemptionPage({super.key});
@@ -19,7 +20,7 @@ class RedemptionPage extends StatelessWidget {
     return DefaultTabController(
       length: 2,
       child: GlassScaffold(
-        appBar: AppBar(
+        appBar: GlassAppBar(
           title: const Text('Einlösungen'),
           centerTitle: true,
           bottom: const TabBar(

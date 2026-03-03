@@ -7,6 +7,7 @@ import '../../models/enums.dart';
 import '../../theme/app_colors.dart';
 import '../../widgets/empty_state.dart';
 import '../../widgets/quest_card.dart';
+import '../../widgets/glass_app_bar.dart';
 import '../quest_detail_page.dart';
 
 class QuestBoardPage extends StatefulWidget {
@@ -96,7 +97,7 @@ class _QuestBoardPageState extends State<QuestBoardPage>
 
     return Scaffold(
       backgroundColor: Colors.transparent,
-      appBar: AppBar(
+      appBar: GlassAppBar(
         title: const Text('Quest Board'),
         bottom: TabBar(
           controller: _tabController,

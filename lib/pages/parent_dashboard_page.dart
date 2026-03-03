@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
@@ -60,6 +62,21 @@ class _ParentDashboardPageState extends State<ParentDashboardPage> {
                     onPressed: () {},
                   ),
                 ],
+                flexibleSpace: ClipRect(
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: AppColors.surface.withAlpha(128),
+                        border: Border(
+                          bottom: BorderSide(
+                            color: Colors.white.withAlpha(26),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
               ),
               SliverPadding(
                 padding: const EdgeInsets.all(16),

@@ -11,6 +11,7 @@ import '../../widgets/empty_state.dart';
 import '../../widgets/error_state.dart';
 import '../../widgets/points_display.dart';
 import '../../widgets/reward_card.dart';
+import '../../widgets/glass_app_bar.dart';
 
 class ShopPage extends StatefulWidget {
   const ShopPage({super.key});
@@ -34,7 +35,7 @@ class _ShopPageState extends State<ShopPage> {
 
     return Scaffold(
       backgroundColor: Colors.transparent,
-      appBar: AppBar(
+      appBar: GlassAppBar(
         title: const Text('Shop'),
         centerTitle: true,
         actions: [

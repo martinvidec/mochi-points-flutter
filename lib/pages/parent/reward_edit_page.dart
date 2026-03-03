@@ -7,6 +7,7 @@ import '../../providers/auth_provider.dart';
 import '../../theme/app_colors.dart';
 import '../../widgets/error_state.dart';
 import '../../widgets/glass_scaffold.dart';
+import '../../widgets/glass_app_bar.dart';
 
 class RewardEditPage extends StatefulWidget {
   final Reward? reward;
@@ -67,7 +68,7 @@ class _RewardEditPageState extends State<RewardEditPage> {
   @override
   Widget build(BuildContext context) {
     return GlassScaffold(
-      appBar: AppBar(
+      appBar: GlassAppBar(
         title: Text(isEditing ? 'Belohnung bearbeiten' : 'Neue Belohnung'),
         centerTitle: true,
         actions: [

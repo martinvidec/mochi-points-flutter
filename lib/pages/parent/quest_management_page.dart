@@ -6,6 +6,7 @@ import '../../models/enums.dart';
 import '../../theme/app_colors.dart';
 import '../../widgets/empty_state.dart';
 import '../../widgets/glass_container.dart';
+import '../../widgets/glass_app_bar.dart';
 import 'quest_edit_page.dart';
 
 class QuestManagementPage extends StatefulWidget {
@@ -92,7 +93,7 @@ class _QuestManagementPageState extends State<QuestManagementPage> {
 
     return Scaffold(
       backgroundColor: Colors.transparent,
-      appBar: AppBar(
+      appBar: GlassAppBar(
         title: const Text('Quest Verwaltung'),
         actions: [
           PopupMenuButton<QuestType?>(
