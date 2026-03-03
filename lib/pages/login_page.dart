@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
 import '../widgets/app_button.dart';
+import '../widgets/error_state.dart';
 import '../widgets/glass_scaffold.dart';
+import '../widgets/pin_dialog.dart';
 import '../widgets/user_avatar_button.dart';
 
 class LoginPage extends StatefulWidget {
@@ -20,22 +22,38 @@ class _LoginPageState extends State<LoginPage> {
       _selectedUserId = userId;
     });
 
-    // TODO: Check if user has PIN and show PIN dialog
-
     final authProvider = context.read<AuthProvider>();
     final navigator = Navigator.of(context);
 
-    final success = await authProvider.login(userId);
+    // Check if user has a PIN set
+    String? enteredPin;
+    final user = authProvider.getUserById(userId);
+    if (user != null && user.hasPin) {
+      enteredPin = await PinDialog.show(context);
+      if (enteredPin == null) {
+        // User cancelled — deselect
+        if (mounted) setState(() => _selectedUserId = null);
+        return;
+      }
+    }
 
-    if (success && mounted) {
-      // Navigate to appropriate dashboard based on role
-      final user = authProvider.currentUser;
-      if (user != null) {
-        if (user.isParent) {
-          navigator.pushReplacementNamed('/parent-dashboard');
-        } else {
-          navigator.pushReplacementNamed('/hero-home');
-        }
+    final success = await authProvider.login(userId, pin: enteredPin);
+
+    if (!mounted) return;
+
+    if (!success) {
+      AppSnackbar.error(context, 'Falscher PIN');
+      setState(() => _selectedUserId = null);
+      return;
+    }
+
+    // Navigate to appropriate dashboard based on role
+    final loggedInUser = authProvider.currentUser;
+    if (loggedInUser != null) {
+      if (loggedInUser.isParent) {
+        navigator.pushReplacementNamed('/parent-dashboard');
+      } else {
+        navigator.pushReplacementNamed('/hero-home');
       }
     }
   }

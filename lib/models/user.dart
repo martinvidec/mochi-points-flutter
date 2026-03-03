@@ -7,6 +7,7 @@ class User {
   final String email;
   final UserRole role;
   final String? avatarUrl;
+  final String? pin;
   final DateTime createdAt;
 
   const User({
@@ -16,11 +17,13 @@ class User {
     required this.email,
     required this.role,
     this.avatarUrl,
+    this.pin,
     required this.createdAt,
   });
 
   bool get isParent => role == UserRole.parent;
   bool get isChild => role == UserRole.child;
+  bool get hasPin => pin != null && pin!.isNotEmpty;
 
   Map<String, dynamic> toJson() {
     return {
@@ -30,6 +33,7 @@ class User {
       'email': email,
       'role': role.name,
       'avatarUrl': avatarUrl,
+      'pin': pin,
       'createdAt': createdAt.toIso8601String(),
     };
   }
@@ -42,6 +46,7 @@ class User {
       email: json['email'] as String,
       role: UserRole.values.byName(json['role'] as String),
       avatarUrl: json['avatarUrl'] as String?,
+      pin: json['pin'] as String?,
       createdAt: DateTime.parse(json['createdAt'] as String),
     );
   }
@@ -53,6 +58,7 @@ class User {
     String? email,
     UserRole? role,
     String? avatarUrl,
+    String? pin,
     DateTime? createdAt,
   }) {
     return User(
@@ -62,6 +68,7 @@ class User {
       email: email ?? this.email,
       role: role ?? this.role,
       avatarUrl: avatarUrl ?? this.avatarUrl,
+      pin: pin ?? this.pin,
       createdAt: createdAt ?? this.createdAt,
     );
   }

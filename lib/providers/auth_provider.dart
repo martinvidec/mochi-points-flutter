@@ -64,7 +64,10 @@ class AuthProvider extends ChangeNotifier {
       final user = _familyMembers.where((u) => u.id == userId).firstOrNull;
       if (user == null) return false;
 
-      // TODO: Verify PIN if provided
+      // Verify PIN if user has one set
+      if (user.hasPin) {
+        if (pin == null || pin != user.pin) return false;
+      }
 
       _currentUser = user;
 
@@ -129,6 +132,7 @@ class AuthProvider extends ChangeNotifier {
         name: name,
         email: '', // TODO: Add email support
         role: role,
+        pin: pin,
         createdAt: DateTime.now(),
       );
 
