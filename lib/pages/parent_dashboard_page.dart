@@ -563,8 +563,8 @@ class _ParentDashboardPageState extends State<ParentDashboardPage> {
   }
 
   Widget _buildBottomNav() {
-    return Consumer<QuestProvider>(
-      builder: (context, questProvider, child) {
+    return Consumer2<QuestProvider, RewardProvider>(
+      builder: (context, questProvider, rewardProvider, child) {
         return BottomNavigation(
           currentIndex: _currentNavIndex,
           onTap: (index) {
@@ -574,6 +574,7 @@ class _ParentDashboardPageState extends State<ParentDashboardPage> {
           },
           role: UserRole.parent,
           pendingApprovals: questProvider.pendingApprovalCount,
+          pendingRewards: rewardProvider.pendingRedemptions.length,
         );
       },
     );
