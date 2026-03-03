@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
 import '../providers/notification_provider.dart';
+import '../providers/hero_provider.dart';
 import '../providers/points_provider.dart';
 import '../providers/quest_provider.dart';
 import '../providers/reward_provider.dart';
 import '../theme/app_colors.dart';
 import '../models/enums.dart';
+import '../models/hero.dart' as app;
 import '../widgets/bottom_navigation.dart';
 import '../widgets/glass_container.dart';
 import '../widgets/glass_scaffold.dart';
@@ -276,24 +278,128 @@ class _ParentDashboardPageState extends State<ParentDashboardPage> {
   }
 
   Widget _buildFamilyOverviewCard() {
-    return GlassContainer(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+    return Consumer3<AuthProvider, HeroProvider, PointsProvider>(
+      builder: (context, authProvider, heroProvider, pointsProvider, child) {
+        final children = authProvider.children;
+
+        return GlassContainer(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Familie',
+                style: TextStyle(
+                  color: AppColors.text,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 16),
+              if (children.isEmpty)
+                const Center(
+                  child: Text(
+                    'Noch keine Kinder hinzugefügt',
+                    style: TextStyle(color: AppColors.textSecondary),
+                  ),
+                )
+              else
+                ...children.map((child) {
+                  final hero = heroProvider.heroForUser(child.id);
+                  final balance = pointsProvider.balance(child.id);
+                  return _buildChildRow(child.name, hero, balance);
+                }),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildChildRow(String name, app.Hero? hero, int balance) {
+    final level = hero?.level ?? 1;
+    final streak = hero?.currentStreak ?? 0;
+    final xpProgress = hero?.xpProgress ?? 0.0;
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Row(
         children: [
-          const Text(
-            'Familie',
-            style: TextStyle(
-              color: AppColors.text,
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
+          CircleAvatar(
+            backgroundColor: AppColors.teal.withAlpha(51),
+            child: const Icon(Icons.emoji_events, color: AppColors.teal, size: 20),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  name,
+                  style: const TextStyle(
+                    color: AppColors.text,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Row(
+                  children: [
+                    Text(
+                      'Lvl $level',
+                      style: const TextStyle(
+                        color: AppColors.teal,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(4),
+                        child: LinearProgressIndicator(
+                          value: xpProgress,
+                          backgroundColor: AppColors.surface,
+                          valueColor: const AlwaysStoppedAnimation<Color>(AppColors.teal),
+                          minHeight: 6,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
-          const SizedBox(height: 16),
-          const Center(
-            child: Text(
-              'Familien-Übersicht kommt bald...',
-              style: TextStyle(color: AppColors.textSecondary),
+          const SizedBox(width: 12),
+          if (streak > 0)
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              decoration: BoxDecoration(
+                color: AppColors.primaryStart.withAlpha(51),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text('🔥', style: TextStyle(fontSize: 12)),
+                  const SizedBox(width: 2),
+                  Text(
+                    '$streak',
+                    style: const TextStyle(
+                      color: AppColors.primaryStart,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          const SizedBox(width: 8),
+          Text(
+            '$balance MP',
+            style: const TextStyle(
+              color: AppColors.gold,
+              fontSize: 13,
+              fontWeight: FontWeight.bold,
             ),
           ),
         ],
