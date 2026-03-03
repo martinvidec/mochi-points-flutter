@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
 import '../providers/notification_provider.dart';
+import '../providers/points_provider.dart';
 import '../providers/quest_provider.dart';
+import '../providers/reward_provider.dart';
 import '../theme/app_colors.dart';
 import '../models/enums.dart';
 import '../widgets/bottom_navigation.dart';
@@ -124,30 +126,58 @@ class _ParentDashboardPageState extends State<ParentDashboardPage> {
   }
 
   Widget _buildQuickStatsCard() {
-    return GlassContainer(
-      padding: const EdgeInsets.all(20),
-      tintColor: AppColors.primaryStart.withAlpha(100),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Diese Woche',
-            style: TextStyle(
-              color: Colors.white70,
-              fontSize: 14,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+    return Consumer3<QuestProvider, PointsProvider, AuthProvider>(
+      builder: (context, questProvider, pointsProvider, authProvider, child) {
+        // Count quests completed this week (across all children)
+        final now = DateTime.now();
+        final weekStart = now.subtract(Duration(days: now.weekday - 1));
+        final weekStartDate = DateTime(weekStart.year, weekStart.month, weekStart.day);
+
+        int weeklyQuests = 0;
+        for (final instances in questProvider.instances.values) {
+          weeklyQuests += instances.where((i) =>
+            i.status == QuestStatus.completed &&
+            i.approvedAt != null &&
+            i.approvedAt!.isAfter(weekStartDate),
+          ).length;
+        }
+
+        // Sum points earned this week across all children
+        final children = authProvider.children;
+        int weeklyPoints = 0;
+        for (final child in children) {
+          weeklyPoints += pointsProvider.weeklyEarned(child.id);
+        }
+
+        // Count pending reward redemptions
+        final pendingRewards = context.read<RewardProvider>().pendingRedemptions.length;
+
+        return GlassContainer(
+          padding: const EdgeInsets.all(20),
+          tintColor: AppColors.primaryStart.withAlpha(100),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildStatItem('Quests', '12', Icons.shield),
-              _buildStatItem('Punkte', '450', Icons.star),
-              _buildStatItem('Rewards', '3', Icons.card_giftcard),
+              const Text(
+                'Diese Woche',
+                style: TextStyle(
+                  color: Colors.white70,
+                  fontSize: 14,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  _buildStatItem('Quests', '$weeklyQuests', Icons.shield),
+                  _buildStatItem('Punkte', '$weeklyPoints', Icons.star),
+                  _buildStatItem('Rewards', '$pendingRewards', Icons.card_giftcard),
+                ],
+              ),
             ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 
