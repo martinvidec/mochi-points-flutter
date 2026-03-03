@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
+import '../providers/notification_provider.dart';
 import '../providers/quest_provider.dart';
 import '../theme/app_colors.dart';
 import '../models/enums.dart';
@@ -16,6 +17,7 @@ import 'parent/reward_edit_page.dart';
 import 'parent/approval_page.dart';
 import 'family_management_page.dart';
 import 'notification_settings_page.dart';
+import 'notifications_page.dart';
 import 'appearance_settings_page.dart';
 import 'help_support_page.dart';
 
@@ -64,10 +66,7 @@ class _ParentDashboardPageState extends State<ParentDashboardPage> {
                   ),
                 ),
                 actions: [
-                  IconButton(
-                    icon: const Icon(Icons.notifications_outlined, color: AppColors.text),
-                    onPressed: () {},
-                  ),
+                  _buildNotificationBell(),
                 ],
                 flexibleSpace: ClipRect(
                   child: BackdropFilter(
@@ -101,6 +100,26 @@ class _ParentDashboardPageState extends State<ParentDashboardPage> {
           );
         },
       ),
+    );
+  }
+
+  Widget _buildNotificationBell() {
+    final userId = context.watch<AuthProvider>().currentUser?.id ?? '';
+    final unreadCount = context.watch<NotificationProvider>().unreadCount(userId);
+
+    return IconButton(
+      icon: Badge(
+        isLabelVisible: unreadCount > 0,
+        label: Text('$unreadCount'),
+        child: const Icon(Icons.notifications_outlined, color: AppColors.text),
+      ),
+      onPressed: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => const NotificationsPage(),
+          ),
+        );
+      },
     );
   }
 

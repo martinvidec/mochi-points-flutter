@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'models/enums.dart';
+import 'models/notification.dart';
 import 'theme/app_theme.dart';
 import 'providers/auth_provider.dart';
 import 'providers/quest_provider.dart';
@@ -9,6 +10,7 @@ import 'providers/challenge_provider.dart';
 import 'providers/reward_provider.dart';
 import 'providers/hero_provider.dart';
 import 'providers/achievement_provider.dart';
+import 'providers/notification_provider.dart';
 import 'services/background_service.dart';
 import 'pages/splash_page.dart';
 import 'pages/login_page.dart';
@@ -29,6 +31,7 @@ void main() async {
         ChangeNotifierProvider(create: (context) => RewardProvider()),
         ChangeNotifierProvider(create: (context) => HeroProvider()),
         ChangeNotifierProvider(create: (context) => AchievementProvider()),
+        ChangeNotifierProvider(create: (context) => NotificationProvider()),
       ],
       child: const ProviderConnector(child: MochiPointsApp()),
     ),
@@ -60,9 +63,45 @@ class _ProviderConnectorState extends State<ProviderConnector> {
     final pointsProvider = context.read<PointsProvider>();
     final heroProvider = context.read<HeroProvider>();
     final rewardProvider = context.read<RewardProvider>();
+    final notificationProvider = context.read<NotificationProvider>();
 
     // Connect RewardProvider to PointsProvider for purchases
     rewardProvider.setPointsProvider(pointsProvider);
+
+    // Connect NotificationProvider to providers that generate notifications
+    questProvider.setNotificationProvider(notificationProvider);
+    rewardProvider.setNotificationProvider(notificationProvider);
+
+    // Hero callbacks → notifications
+    heroProvider.onLevelUp = (String userId, int oldLevel, int newLevel) {
+      notificationProvider.create(
+        userId: userId,
+        type: NotificationType.levelUp,
+        title: 'Level Up!',
+        message: 'Du bist jetzt Level $newLevel! Weiter so!',
+        icon: '🎉',
+      );
+    };
+
+    heroProvider.onStreakMilestone = (String userId, int milestone) {
+      notificationProvider.create(
+        userId: userId,
+        type: NotificationType.streakMilestone,
+        title: 'Streak Milestone!',
+        message: '$milestone Tage in Folge aktiv! 🔥',
+        icon: '🔥',
+      );
+    };
+
+    heroProvider.onStreakLost = (String userId, int previousStreak) {
+      notificationProvider.create(
+        userId: userId,
+        type: NotificationType.streakLost,
+        title: 'Streak verloren',
+        message: 'Deine $previousStreak-Tage-Streak ist vorbei. Starte neu!',
+        icon: '💔',
+      );
+    };
 
     // When a quest is approved, award points and XP
     questProvider.onQuestApproved = ({
@@ -107,6 +146,15 @@ class _ProviderConnectorState extends State<ProviderConnector> {
 
       // Award XP (no streak bonus on XP)
       heroProvider.addXP(childId, xp);
+
+      // Notification for child
+      notificationProvider.create(
+        userId: childId,
+        type: NotificationType.questApproved,
+        title: 'Quest genehmigt!',
+        message: '"$questName" wurde genehmigt. +$totalPoints MP!',
+        icon: '✅',
+      );
 
       // Log total for debugging
       debugPrint('Quest approved: $questName - $points MP + $bonusPoints Bonus = $totalPoints MP');

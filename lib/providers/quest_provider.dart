@@ -1,7 +1,9 @@
 import 'package:flutter/foundation.dart';
 import '../models/quest.dart';
 import '../models/enums.dart';
+import '../models/notification.dart';
 import '../services/storage_service.dart';
+import 'notification_provider.dart';
 
 /// Callback when a quest is approved with rewards
 typedef QuestApprovedCallback = void Function({
@@ -24,6 +26,12 @@ class QuestProvider extends ChangeNotifier {
 
   /// Callback triggered when a quest is approved (for awarding points/XP)
   QuestApprovedCallback? onQuestApproved;
+
+  NotificationProvider? _notificationProvider;
+
+  void setNotificationProvider(NotificationProvider provider) {
+    _notificationProvider = provider;
+  }
 
   // Getters
   List<Quest> availableQuests(String childId) {
@@ -192,6 +200,8 @@ class QuestProvider extends ChangeNotifier {
 
       if (instance == null || childId == null) return false;
 
+      final quest = _quests.where((q) => q.id == instance!.questId).firstOrNull;
+
       final updatedInstance = instance.copyWith(
         status: QuestStatus.pendingApproval,
         progress: instance.target,
@@ -203,6 +213,18 @@ class QuestProvider extends ChangeNotifier {
 
       await _saveInstances();
       notifyListeners();
+
+      // Notify parents that a quest is pending approval
+      if (quest != null) {
+        _notificationProvider?.create(
+          userId: quest.createdBy,
+          type: NotificationType.questCompleted,
+          title: 'Quest wartet auf Genehmigung',
+          message: '"${quest.name}" wurde abgeschlossen und wartet auf Bestätigung.',
+          icon: '⏳',
+        );
+      }
+
       return true;
     } catch (e) {
       debugPrint('QuestProvider.completeQuest error: $e');
@@ -277,6 +299,8 @@ class QuestProvider extends ChangeNotifier {
 
       if (instance == null || childId == null) return false;
 
+      final quest = _quests.where((q) => q.id == instance!.questId).firstOrNull;
+
       final updatedInstance = instance.copyWith(
         status: QuestStatus.inProgress,
         progress: 0,
@@ -287,6 +311,18 @@ class QuestProvider extends ChangeNotifier {
 
       await _saveInstances();
       notifyListeners();
+
+      // Notify child that quest was rejected
+      if (quest != null) {
+        _notificationProvider?.create(
+          userId: childId,
+          type: NotificationType.questRejected,
+          title: 'Quest abgelehnt',
+          message: '"${quest.name}" wurde nicht genehmigt.${reason != null ? ' Grund: $reason' : ''}',
+          icon: '❌',
+        );
+      }
+
       return true;
     } catch (e) {
       debugPrint('QuestProvider.rejectQuest error: $e');

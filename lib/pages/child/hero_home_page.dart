@@ -6,6 +6,7 @@ import '../../models/quest.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/hero_provider.dart';
 import '../../providers/points_provider.dart';
+import '../../providers/notification_provider.dart';
 import '../../providers/quest_provider.dart';
 import '../../providers/reward_provider.dart';
 import '../../theme/app_colors.dart';
@@ -24,6 +25,7 @@ import 'shop_page.dart';
 import 'my_rewards_page.dart';
 import '../appearance_settings_page.dart';
 import '../help_support_page.dart';
+import '../notifications_page.dart';
 import 'hero_customization_page.dart';
 
 class ChildHeroHomePage extends StatefulWidget {
@@ -114,12 +116,7 @@ class _ChildHeroHomePageState extends State<ChildHeroHomePage> {
                     ),
                   ),
                   actions: [
-                    IconButton(
-                      icon: const Icon(Icons.notifications_outlined, color: Colors.white70),
-                      onPressed: () {
-                        // TODO: Notifications
-                      },
-                    ),
+                    _buildNotificationBell(),
                   ],
                   flexibleSpace: ClipRect(
                     child: BackdropFilter(
@@ -247,6 +244,26 @@ class _ChildHeroHomePageState extends State<ChildHeroHomePage> {
           );
         },
       ),
+    );
+  }
+
+  Widget _buildNotificationBell() {
+    final userId = context.watch<AuthProvider>().currentUser?.id ?? '';
+    final unreadCount = context.watch<NotificationProvider>().unreadCount(userId);
+
+    return IconButton(
+      icon: Badge(
+        isLabelVisible: unreadCount > 0,
+        label: Text('$unreadCount'),
+        child: const Icon(Icons.notifications_outlined, color: Colors.white70),
+      ),
+      onPressed: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => const NotificationsPage(),
+          ),
+        );
+      },
     );
   }
 

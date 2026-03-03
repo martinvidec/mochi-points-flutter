@@ -2,7 +2,9 @@ import 'package:flutter/foundation.dart';
 import '../models/reward.dart';
 import '../models/purchase.dart';
 import '../models/enums.dart';
+import '../models/notification.dart';
 import '../services/storage_service.dart';
+import 'notification_provider.dart';
 import 'points_provider.dart';
 
 class RewardProvider extends ChangeNotifier {
@@ -10,6 +12,7 @@ class RewardProvider extends ChangeNotifier {
   Map<String, List<Purchase>> _purchases = {};
 
   PointsProvider? _pointsProvider;
+  NotificationProvider? _notificationProvider;
 
   List<Reward> get rewards => List.unmodifiable(_rewards);
   Map<String, List<Purchase>> get purchases => Map.unmodifiable(_purchases);
@@ -20,6 +23,10 @@ class RewardProvider extends ChangeNotifier {
   // Inject PointsProvider for point deduction
   void setPointsProvider(PointsProvider provider) {
     _pointsProvider = provider;
+  }
+
+  void setNotificationProvider(NotificationProvider provider) {
+    _notificationProvider = provider;
   }
 
   // Getters
@@ -183,6 +190,19 @@ class RewardProvider extends ChangeNotifier {
 
           await _savePurchases();
           notifyListeners();
+
+          // Notify parent about redemption request
+          final reward = getRewardById(purchase.rewardId);
+          if (reward != null) {
+            _notificationProvider?.create(
+              userId: reward.createdBy,
+              type: NotificationType.rewardRedeemed,
+              title: 'Einlösung angefragt',
+              message: '"${reward.name}" wartet auf Bestätigung.',
+              icon: '🎁',
+            );
+          }
+
           return true;
         }
       }
