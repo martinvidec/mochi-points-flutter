@@ -59,6 +59,10 @@ class _ProviderConnectorState extends State<ProviderConnector> {
     final questProvider = context.read<QuestProvider>();
     final pointsProvider = context.read<PointsProvider>();
     final heroProvider = context.read<HeroProvider>();
+    final rewardProvider = context.read<RewardProvider>();
+
+    // Connect RewardProvider to PointsProvider for purchases
+    rewardProvider.setPointsProvider(pointsProvider);
 
     // When a quest is approved, award points and XP
     questProvider.onQuestApproved = ({

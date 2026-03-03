@@ -7,6 +7,7 @@ import '../../providers/auth_provider.dart';
 import '../../providers/hero_provider.dart';
 import '../../providers/points_provider.dart';
 import '../../providers/quest_provider.dart';
+import '../../providers/reward_provider.dart';
 import '../../theme/app_colors.dart';
 import '../../models/enums.dart';
 import '../../widgets/app_button.dart';
@@ -612,8 +613,13 @@ class _ChildHeroHomePageState extends State<ChildHeroHomePage> {
   }
 
   int _getPendingRewardsCount() {
-    // TODO: Implement pending rewards count from provider
-    return 0;
+    final userId = context.read<AuthProvider>().currentUser?.id;
+    if (userId == null) return 0;
+    return context
+        .watch<RewardProvider>()
+        .userPurchases(userId)
+        .where((p) => p.status == PurchaseStatus.pendingRedemption)
+        .length;
   }
 
   void _onQuestTap(Quest quest, QuestInstance? instance) {
