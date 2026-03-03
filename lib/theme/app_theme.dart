@@ -144,8 +144,8 @@ class AppTheme {
         ),
       );
 
-  static CardThemeData get _cardTheme => const CardThemeData(
-        color: AppColors.surface,
+  static CardThemeData get _cardTheme => CardThemeData(
+        color: AppColors.surface.withAlpha(128),
         elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(16)),
@@ -199,7 +199,7 @@ class AppTheme {
 
   static InputDecorationTheme get _inputDecorationTheme => InputDecorationTheme(
         filled: true,
-        fillColor: AppColors.surfaceElevated,
+        fillColor: AppColors.surfaceElevated.withAlpha(100),
         contentPadding:
             const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         border: OutlineInputBorder(
@@ -235,7 +235,7 @@ class AppTheme {
       );
 
   static SnackBarThemeData get _snackBarTheme => SnackBarThemeData(
-        backgroundColor: AppColors.surfaceElevated,
+        backgroundColor: AppColors.surfaceElevated.withAlpha(200),
         contentTextStyle: const TextStyle(color: AppColors.text),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
@@ -270,7 +270,7 @@ class AppTheme {
       );
 
   static ChipThemeData get _chipTheme => ChipThemeData(
-        backgroundColor: AppColors.surfaceElevated,
+        backgroundColor: AppColors.surfaceElevated.withAlpha(100),
         selectedColor: AppColors.primaryStart,
         disabledColor: AppColors.surfaceElevated.withValues(alpha: 0.5),
         labelStyle: const TextStyle(

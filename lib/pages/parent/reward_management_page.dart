@@ -34,11 +34,6 @@ class RewardManagementPage extends StatelessWidget {
                 return _RewardManagementCard(reward: reward);
               },
             ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => _openRewardEditor(context, null),
-        icon: const Icon(Icons.add),
-        label: const Text('Neue Belohnung'),
-      ),
     );
   }
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_application_1/widgets/quest_card.dart';
+import 'package:flutter_application_1/widgets/glass_container.dart';
 import 'package:flutter_application_1/models/quest.dart';
 import 'package:flutter_application_1/models/enums.dart';
 
@@ -279,20 +280,20 @@ void main() {
         expect(tapped, true);
       });
 
-      testWidgets('renders inside a Card widget', (WidgetTester tester) async {
+      testWidgets('renders inside a GlassContainer', (WidgetTester tester) async {
         final quest = createTestQuest();
 
         await tester.pumpWidget(createTestWidget(quest));
 
-        expect(find.byType(Card), findsOneWidget);
+        expect(find.byType(GlassContainer), findsOneWidget);
       });
 
-      testWidgets('has InkWell for tap feedback', (WidgetTester tester) async {
+      testWidgets('has GestureDetector for tap handling', (WidgetTester tester) async {
         final quest = createTestQuest();
 
         await tester.pumpWidget(createTestWidget(quest));
 
-        expect(find.byType(InkWell), findsOneWidget);
+        expect(find.byType(GestureDetector), findsWidgets);
       });
     });
 

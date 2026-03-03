@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/challenge.dart';
+import '../theme/app_colors.dart';
 import '../widgets/error_state.dart';
 import '../widgets/glass_app_bar.dart';
 import '../widgets/glass_scaffold.dart';
@@ -50,6 +51,7 @@ class _ChallengeEditPageState extends State<ChallengeEditPage> {
             SizedBox(height: 16),
             DropdownButton<IconData>(
               value: _selectedIcon,
+              dropdownColor: AppColors.surface.withAlpha(230),
               onChanged: (IconData? newValue) {
                 if (newValue != null) {
                   setState(() {

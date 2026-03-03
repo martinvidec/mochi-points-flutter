@@ -3,6 +3,7 @@ import '../models/reward.dart';
 import '../models/enums.dart';
 import '../theme/app_colors.dart';
 import 'app_button.dart';
+import 'glass_container.dart';
 
 class RewardCard extends StatelessWidget {
   final Reward reward;
@@ -21,8 +22,8 @@ class RewardCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      clipBehavior: Clip.antiAlias,
+    return GlassContainer(
+      padding: EdgeInsets.zero,
       child: Stack(
         children: [
           // Main content

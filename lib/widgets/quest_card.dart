@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/quest.dart';
 import '../models/enums.dart';
 import '../theme/app_colors.dart';
+import 'glass_container.dart';
 
 class QuestCard extends StatelessWidget {
   final Quest quest;
@@ -62,14 +63,12 @@ class QuestCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
+    return GestureDetector(
+      onTap: onTap,
+      child: GlassContainer(
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
@@ -240,9 +239,9 @@ class QuestCard extends StatelessWidget {
                 ),
               ],
             ],
-          ),
         ),
       ),
     );
   }
 }
+

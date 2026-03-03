@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
+import '../widgets/glass_scaffold.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -41,8 +42,8 @@ class _SplashPageState extends State<SplashPage> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
+    return GlassScaffold(
+      body: const Center(
         child: CircularProgressIndicator(),
       ),
     );

@@ -3,6 +3,7 @@ import '../models/quest.dart';
 import '../models/user.dart';
 import '../theme/app_colors.dart';
 import 'app_button.dart';
+import 'glass_container.dart';
 
 class ApprovalCard extends StatelessWidget {
   final User child;
@@ -26,11 +27,10 @@ class ApprovalCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return GlassContainer(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Child info
@@ -137,7 +137,6 @@ class ApprovalCard extends StatelessWidget {
               ],
             ),
           ],
-        ),
       ),
     );
   }
