@@ -1,14 +1,17 @@
-import 'dart:math';
+import 'package:shared_preferences/shared_preferences.dart';
 
-/// Service that provides a random background image for the session.
+/// Service that provides a persistent background image selection.
 ///
-/// The selected image persists for the app session (singleton pattern).
+/// Defaults to the first background. The user's choice is saved to
+/// SharedPreferences and restored on next app start.
 class BackgroundService {
   static final BackgroundService _instance = BackgroundService._internal();
   factory BackgroundService() => _instance;
   BackgroundService._internal() {
-    _selectRandomBackground();
+    _currentBackground = _backgrounds[0];
   }
+
+  static const String _prefsKey = 'selected_background';
 
   static const List<String> _backgrounds = [
     'assets/rx451g_athlete_runner_mochis_competing_anime_style.png',
@@ -28,15 +31,23 @@ class BackgroundService {
   String get currentBackground => _currentBackground;
 
   /// All available background image paths.
-  static List<String> get availableBackgrounds => _backgrounds;
+  static List<String> get availableBackgrounds =>
+      List.unmodifiable(_backgrounds);
 
-  void _selectRandomBackground() {
-    final random = Random();
-    _currentBackground = _backgrounds[random.nextInt(_backgrounds.length)];
+  /// Load saved background preference from SharedPreferences.
+  Future<void> init() async {
+    final prefs = await SharedPreferences.getInstance();
+    final saved = prefs.getString(_prefsKey);
+    if (saved != null && _backgrounds.contains(saved)) {
+      _currentBackground = saved;
+    }
   }
 
-  /// Select a new random background (e.g. on pull-to-refresh or manual trigger).
-  void shuffle() {
-    _selectRandomBackground();
+  /// Set and persist a new background.
+  Future<void> setBackground(String path) async {
+    if (!_backgrounds.contains(path)) return;
+    _currentBackground = path;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_prefsKey, path);
   }
 }
