@@ -321,10 +321,7 @@ class _QuestCompleteAnimationState extends State<QuestCompleteAnimation>
             // Main content
             Center(
               child: AnimatedBuilder(
-                animation: Listenable.merge([
-                  _cardSlideAnimation,
-                  _cardScaleAnimation,
-                ]),
+                animation: _cardController,
                 builder: (context, child) {
                   return SlideTransition(
                     position: _cardSlideAnimation,

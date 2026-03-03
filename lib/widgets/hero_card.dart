@@ -84,16 +84,7 @@ class _HeroCardState extends State<HeroCard>
 
   /// Returns glow color based on hero level tier
   Color _getLevelTierGlow() {
-    final level = widget.hero.level;
-    if (level <= 10) {
-      return AppColors.teal;
-    } else if (level <= 25) {
-      return AppColors.rarityRare;
-    } else if (level <= 50) {
-      return AppColors.rarityEpic;
-    } else {
-      return AppColors.rarityLegendary;
-    }
+    return LevelService.colorForLevel(widget.hero.level);
   }
 
   /// Returns avatar background color based on appearance

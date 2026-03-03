@@ -24,9 +24,6 @@ class LevelUpAnimation extends StatefulWidget {
   /// The new level after leveling up.
   final int newLevel;
 
-  /// Optional hero name to display.
-  final String? heroName;
-
   /// Optional list of unlocked rewards/features.
   final List<String>? unlockedRewards;
 
@@ -37,7 +34,6 @@ class LevelUpAnimation extends StatefulWidget {
     super.key,
     required this.oldLevel,
     required this.newLevel,
-    this.heroName,
     this.unlockedRewards,
     required this.onComplete,
   });
@@ -50,7 +46,6 @@ class LevelUpAnimation extends StatefulWidget {
     required BuildContext context,
     required int oldLevel,
     required int newLevel,
-    String? heroName,
     List<String>? unlockedRewards,
   }) {
     return showGeneralDialog(
@@ -62,7 +57,6 @@ class LevelUpAnimation extends StatefulWidget {
         return LevelUpAnimation(
           oldLevel: oldLevel,
           newLevel: newLevel,
-          heroName: heroName,
           unlockedRewards: unlockedRewards,
           onComplete: () => Navigator.of(context).pop(),
         );
@@ -78,7 +72,6 @@ class _LevelUpAnimationState extends State<LevelUpAnimation>
   late AnimationController _levelUpTextController;
   late AnimationController _levelNumberController;
   late AnimationController _titleController;
-  late AnimationController _particleController;
   late AnimationController _rewardsController;
   late AnimationController _buttonController;
   late AnimationController _glowController;
@@ -173,12 +166,6 @@ class _LevelUpAnimationState extends State<LevelUpAnimation>
       CurvedAnimation(parent: _titleController, curve: Curves.easeOut),
     );
 
-    // Particle/glow animation (continuous)
-    _particleController = AnimationController(
-      duration: const Duration(milliseconds: 2000),
-      vsync: this,
-    );
-
     // Glow pulsing animation
     _glowController = AnimationController(
       duration: const Duration(milliseconds: 1500),
@@ -266,6 +253,7 @@ class _LevelUpAnimationState extends State<LevelUpAnimation>
     // 7. Button appears
     await Future.delayed(const Duration(milliseconds: _buttonDelay - _rewardsDelay));
     if (_isSkipped) return;
+    _glowController.stop();
     setState(() => _showButton = true);
     _buttonController.forward();
   }
@@ -284,7 +272,9 @@ class _LevelUpAnimationState extends State<LevelUpAnimation>
     _titleController.value = 1;
     _rewardsController.value = 1;
     _buttonController.value = 1;
-    _glowController.value = 1;
+    _glowController
+      ..value = 1
+      ..stop();
     _confettiController.play();
 
     setState(() {
@@ -304,20 +294,11 @@ class _LevelUpAnimationState extends State<LevelUpAnimation>
     _levelUpTextController.dispose();
     _levelNumberController.dispose();
     _titleController.dispose();
-    _particleController.dispose();
     _glowController.dispose();
     _rewardsController.dispose();
     _buttonController.dispose();
     _confettiController.dispose();
     super.dispose();
-  }
-
-  /// Get color based on level tier
-  Color _getLevelColor(int level) {
-    if (level <= 10) return AppColors.teal;
-    if (level <= 25) return AppColors.rarityRare;
-    if (level <= 50) return AppColors.rarityEpic;
-    return AppColors.rarityLegendary;
   }
 
   /// Check if title changed between old and new level
@@ -331,7 +312,7 @@ class _LevelUpAnimationState extends State<LevelUpAnimation>
 
   @override
   Widget build(BuildContext context) {
-    final newLevelColor = _getLevelColor(widget.newLevel);
+    final newLevelColor = LevelService.colorForLevel(widget.newLevel);
 
     return GestureDetector(
       onTap: _showButton ? _complete : _skipAnimation,
@@ -543,7 +524,7 @@ class _LevelUpAnimationState extends State<LevelUpAnimation>
 
   Widget _buildNewTitle(Color color) {
     return AnimatedBuilder(
-      animation: Listenable.merge([_titleSlideAnimation, _titleOpacityAnimation]),
+      animation: _titleController,
       builder: (context, child) {
         return Transform.translate(
           offset: Offset(0, _titleSlideAnimation.value),

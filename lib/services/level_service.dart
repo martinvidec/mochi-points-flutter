@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import '../theme/app_colors.dart';
+
 /// Service for level and XP calculations
 ///
 /// XP Formula: Each level requires 100 + (level-1) * 50 XP
@@ -7,6 +10,14 @@
 /// - etc.
 class LevelService {
   LevelService._();
+
+  /// Color associated with the level tier.
+  static Color colorForLevel(int level) {
+    if (level <= 10) return AppColors.teal;
+    if (level <= 25) return AppColors.rarityRare;
+    if (level <= 50) return AppColors.rarityEpic;
+    return AppColors.rarityLegendary;
+  }
 
   /// XP required to go from [level] to [level + 1]
   static int xpBetweenLevels(int level) {
