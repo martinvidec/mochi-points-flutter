@@ -47,16 +47,16 @@ class BottomNavigation extends StatelessWidget {
           activeIcon: Icons.shield,
           label: 'Quests',
         ),
-        const NavItem(
-          icon: Icons.storefront_outlined,
-          activeIcon: Icons.storefront,
-          label: 'Shop',
-        ),
         NavItem(
           icon: Icons.card_giftcard_outlined,
           activeIcon: Icons.card_giftcard,
           label: 'Rewards',
           badgeCount: pendingRewards > 0 ? pendingRewards : null,
+        ),
+        const NavItem(
+          icon: Icons.storefront_outlined,
+          activeIcon: Icons.storefront,
+          label: 'Shop',
         ),
         const NavItem(
           icon: Icons.person_outline,
@@ -88,9 +88,9 @@ class BottomNavigation extends StatelessWidget {
           badgeCount: pendingApprovals > 0 ? pendingApprovals : null,
         ),
         const NavItem(
-          icon: Icons.settings_outlined,
-          activeIcon: Icons.settings,
-          label: 'Settings',
+          icon: Icons.person_outline,
+          activeIcon: Icons.person,
+          label: 'Profil',
         ),
       ];
     }

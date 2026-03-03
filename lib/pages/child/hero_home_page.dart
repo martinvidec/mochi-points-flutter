@@ -37,9 +37,9 @@ class _ChildHeroHomePageState extends State<ChildHeroHomePage> {
         children: [
           _buildHomeTab(),
           _buildQuestsTab(),
-          _buildShopTab(),
           _buildRewardsTab(),
-          _buildStatsTab(),
+          _buildShopTab(),
+          _buildProfileTab(),
         ],
       ),
       bottomNavigationBar: _buildBottomNav(),
@@ -88,12 +88,6 @@ class _ChildHeroHomePageState extends State<ChildHeroHomePage> {
                       icon: const Icon(Icons.notifications_outlined, color: Colors.white70),
                       onPressed: () {
                         // TODO: Notifications
-                      },
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.settings_outlined, color: Colors.white70),
-                      onPressed: () {
-                        _showSettingsMenu(context);
                       },
                     ),
                   ],
@@ -396,7 +390,7 @@ class _ChildHeroHomePageState extends State<ChildHeroHomePage> {
             color: AppColors.gold,
             onTap: () {
               setState(() {
-                _currentNavIndex = 2;
+                _currentNavIndex = 3;
               });
             },
           ),
@@ -461,12 +455,108 @@ class _ChildHeroHomePageState extends State<ChildHeroHomePage> {
     return const MyRewardsPage();
   }
 
-  Widget _buildStatsTab() {
-    return const Center(
-      child: Text(
-        'Statistiken & Achievements\n(Kommt bald)',
-        textAlign: TextAlign.center,
-        style: TextStyle(color: Colors.white70),
+  Widget _buildProfileTab() {
+    return SafeArea(
+      child: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          const SizedBox(height: 20),
+          const Text(
+            'Profil',
+            style: TextStyle(
+              color: AppColors.text,
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 24),
+          _buildProfileItem(
+            icon: Icons.person,
+            title: 'Profil bearbeiten',
+            subtitle: 'Name und Avatar anpassen',
+            onTap: () {
+              // TODO: Navigate to profile edit
+            },
+          ),
+          _buildProfileItem(
+            icon: Icons.history,
+            title: 'Transaktionen',
+            subtitle: 'Punkte-Historie anzeigen',
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const TransactionHistoryPage(),
+                ),
+              );
+            },
+          ),
+          _buildProfileItem(
+            icon: Icons.palette_outlined,
+            title: 'Erscheinungsbild',
+            subtitle: 'Theme und Darstellung',
+            onTap: () {},
+          ),
+          _buildProfileItem(
+            icon: Icons.help_outline,
+            title: 'Hilfe & Support',
+            subtitle: 'FAQ und Kontakt',
+            onTap: () {},
+          ),
+          const SizedBox(height: 24),
+          _buildProfileItem(
+            icon: Icons.logout,
+            title: 'Abmelden',
+            subtitle: 'Aus dem Account ausloggen',
+            isDestructive: true,
+            onTap: () async {
+              await context.read<AuthProvider>().logout();
+              if (mounted) {
+                Navigator.of(context).pushReplacementNamed('/login');
+              }
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildProfileItem({
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required VoidCallback onTap,
+    bool isDestructive = false,
+  }) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 8),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: ListTile(
+        leading: Icon(
+          icon,
+          color: isDestructive ? AppColors.error : AppColors.textSecondary,
+        ),
+        title: Text(
+          title,
+          style: TextStyle(
+            color: isDestructive ? AppColors.error : AppColors.text,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        subtitle: Text(
+          subtitle,
+          style: const TextStyle(
+            color: AppColors.textSecondary,
+            fontSize: 12,
+          ),
+        ),
+        trailing: Icon(
+          Icons.chevron_right,
+          color: isDestructive ? AppColors.error : AppColors.textSecondary,
+        ),
+        onTap: onTap,
       ),
     );
   }
@@ -500,75 +590,4 @@ class _ChildHeroHomePageState extends State<ChildHeroHomePage> {
     );
   }
 
-  void _showSettingsMenu(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: AppColors.surface,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (context) {
-        return SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  width: 40,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: Colors.white24,
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                ),
-                const SizedBox(height: 24),
-                ListTile(
-                  leading: const Icon(Icons.person, color: Colors.white70),
-                  title: const Text(
-                    'Profil bearbeiten',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  onTap: () {
-                    Navigator.pop(context);
-                    // TODO: Navigate to profile edit
-                  },
-                ),
-                ListTile(
-                  leading: const Icon(Icons.history, color: Colors.white70),
-                  title: const Text(
-                    'Transaktionen',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  onTap: () {
-                    Navigator.pop(context);
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const TransactionHistoryPage(),
-                      ),
-                    );
-                  },
-                ),
-                const Divider(color: Colors.white24),
-                ListTile(
-                  leading: const Icon(Icons.logout, color: AppColors.primaryStart),
-                  title: const Text(
-                    'Abmelden',
-                    style: TextStyle(color: AppColors.primaryStart),
-                  ),
-                  onTap: () async {
-                    Navigator.pop(context);
-                    await context.read<AuthProvider>().logout();
-                    if (context.mounted) {
-                      Navigator.of(context).pushReplacementNamed('/login');
-                    }
-                  },
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
 }
