@@ -252,8 +252,8 @@ class AppTheme {
         elevation: 0,
       );
 
-  static DialogThemeData get _dialogTheme => const DialogThemeData(
-        backgroundColor: AppColors.surface,
+  static DialogThemeData get _dialogTheme => DialogThemeData(
+        backgroundColor: AppColors.surface.withAlpha(230),
         elevation: 8,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(20)),

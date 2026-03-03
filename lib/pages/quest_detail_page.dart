@@ -7,6 +7,9 @@ import '../providers/auth_provider.dart';
 import '../theme/app_colors.dart';
 import '../widgets/app_button.dart';
 import '../widgets/error_state.dart';
+import '../widgets/glass_app_bar.dart';
+import '../widgets/glass_container.dart';
+import '../widgets/glass_scaffold.dart';
 
 class QuestDetailPage extends StatelessWidget {
   final Quest quest;
@@ -98,28 +101,19 @@ class QuestDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.backgroundStart,
-      appBar: AppBar(
-        title: const Text('Quest Details'),
+    return GlassScaffold(
+      appBar: const GlassAppBar(
+        title: Text('Quest Details'),
       ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             // Hero Section
-            Container(
+            GlassContainer(
               padding: const EdgeInsets.all(32),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    quest.rarityColor,
-                    quest.rarityColor.withAlpha(128),
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-              ),
+              tintColor: quest.rarityColor.withAlpha(100),
+              borderRadius: 0,
               child: Column(
                 children: [
                   Container(

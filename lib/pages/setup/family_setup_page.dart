@@ -4,6 +4,8 @@ import '../../providers/auth_provider.dart';
 import '../../models/enums.dart';
 import '../../widgets/app_button.dart';
 import '../../widgets/error_state.dart';
+import '../../widgets/glass_app_bar.dart';
+import '../../widgets/glass_scaffold.dart';
 import 'add_member_page.dart';
 
 class FamilySetupPage extends StatefulWidget {
@@ -100,9 +102,9 @@ class _FamilySetupPageState extends State<FamilySetupPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Familie einrichten'),
+    return GlassScaffold(
+      appBar: const GlassAppBar(
+        title: Text('Familie einrichten'),
       ),
       body: SafeArea(
         child: Stepper(

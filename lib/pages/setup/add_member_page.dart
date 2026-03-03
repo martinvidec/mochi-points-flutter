@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../models/enums.dart';
 import '../../widgets/app_button.dart';
+import '../../widgets/glass_app_bar.dart';
+import '../../widgets/glass_scaffold.dart';
 
 class MemberData {
   final String name;
@@ -60,8 +62,8 @@ class _AddMemberPageState extends State<AddMemberPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
+    return GlassScaffold(
+      appBar: GlassAppBar(
         title: Text(widget.isFirstParent ? 'Elternteil erstellen' : 'Mitglied hinzufügen'),
       ),
       body: SafeArea(
