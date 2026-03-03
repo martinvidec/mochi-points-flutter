@@ -10,6 +10,7 @@ import '../../widgets/app_button.dart';
 import '../../widgets/empty_state.dart';
 import '../../widgets/error_state.dart';
 import '../../widgets/glass_container.dart';
+import '../../widgets/glass_app_bar.dart';
 
 class MyRewardsPage extends StatelessWidget {
   const MyRewardsPage({super.key});
@@ -20,7 +21,7 @@ class MyRewardsPage extends StatelessWidget {
       length: 2,
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        appBar: AppBar(
+        appBar: GlassAppBar(
           title: const Text('Meine Belohnungen'),
           centerTitle: true,
           bottom: const TabBar(

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import '../models/enums.dart';
 import '../theme/app_colors.dart';
@@ -98,37 +100,33 @@ class BottomNavigation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            AppColors.surface,
-            AppColors.surfaceElevated,
-          ],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withAlpha(77),
-            blurRadius: 10,
-            offset: const Offset(0, -2),
+    return ClipRect(
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
+        child: Container(
+          decoration: BoxDecoration(
+            color: AppColors.surface.withAlpha(153),
+            border: Border(
+              top: BorderSide(
+                color: Colors.white.withAlpha(38),
+              ),
+            ),
           ),
-        ],
-      ),
-      child: SafeArea(
-        top: false,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: List.generate(_items.length, (index) {
-              return _NavBarItem(
-                item: _items[index],
-                isSelected: currentIndex == index,
-                onTap: () => onTap(index),
-              );
-            }),
+          child: SafeArea(
+            top: false,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: List.generate(_items.length, (index) {
+                  return _NavBarItem(
+                    item: _items[index],
+                    isSelected: currentIndex == index,
+                    onTap: () => onTap(index),
+                  );
+                }),
+              ),
+            ),
           ),
         ),
       ),

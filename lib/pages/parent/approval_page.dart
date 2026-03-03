@@ -7,6 +7,7 @@ import '../../theme/app_colors.dart';
 import '../../widgets/approval_card.dart';
 import '../../widgets/empty_state.dart';
 import '../../widgets/error_state.dart';
+import '../../widgets/glass_app_bar.dart';
 
 class ApprovalPage extends StatefulWidget {
   const ApprovalPage({super.key});
@@ -122,7 +123,7 @@ class _ApprovalPageState extends State<ApprovalPage> {
 
     return Scaffold(
       backgroundColor: Colors.transparent,
-      appBar: AppBar(
+      appBar: GlassAppBar(
         title: const Text('Freigabe'),
       ),
       body: pendingInstances.isEmpty

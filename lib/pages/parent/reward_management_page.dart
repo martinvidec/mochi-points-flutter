@@ -7,6 +7,7 @@ import '../../widgets/app_button.dart';
 import '../../widgets/empty_state.dart';
 import '../../widgets/error_state.dart';
 import '../../widgets/glass_container.dart';
+import '../../widgets/glass_app_bar.dart';
 import 'reward_edit_page.dart';
 
 class RewardManagementPage extends StatelessWidget {
@@ -19,7 +20,7 @@ class RewardManagementPage extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Colors.transparent,
-      appBar: AppBar(
+      appBar: GlassAppBar(
         title: const Text('Belohnungen verwalten'),
         centerTitle: true,
       ),
