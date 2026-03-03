@@ -8,6 +8,8 @@ import '../../theme/app_colors.dart';
 import '../../widgets/app_button.dart';
 import '../../widgets/empty_state.dart';
 import '../../widgets/error_state.dart';
+import '../../widgets/glass_container.dart';
+import '../../widgets/glass_scaffold.dart';
 
 class RedemptionPage extends StatelessWidget {
   const RedemptionPage({super.key});
@@ -16,8 +18,7 @@ class RedemptionPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
-      child: Scaffold(
-        backgroundColor: AppColors.backgroundStart,
+      child: GlassScaffold(
         appBar: AppBar(
           title: const Text('Einlösungen'),
           centerTitle: true,
@@ -127,11 +128,10 @@ class _RedemptionCard extends StatelessWidget {
     // Get child name
     final childName = authProvider.getUserById(purchase.userId)?.name ?? 'Kind';
 
-    return Card(
+    return GlassContainer(
       margin: const EdgeInsets.only(bottom: 12),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
+      padding: const EdgeInsets.all(16),
+      child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Header: Child info + Reward
@@ -269,8 +269,7 @@ class _RedemptionCard extends StatelessWidget {
             ],
           ],
         ),
-      ),
-    );
+      );
   }
 
   Widget _buildStatusBadge() {

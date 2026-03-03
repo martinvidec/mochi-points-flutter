@@ -6,6 +6,7 @@ import '../../providers/quest_provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../theme/app_colors.dart';
 import '../../widgets/error_state.dart';
+import '../../widgets/glass_scaffold.dart';
 
 class QuestEditPage extends StatefulWidget {
   final Quest? quest;
@@ -136,8 +137,7 @@ class _QuestEditPageState extends State<QuestEditPage> {
   Widget build(BuildContext context) {
     final children = context.watch<AuthProvider>().children;
 
-    return Scaffold(
-      backgroundColor: AppColors.backgroundStart,
+    return GlassScaffold(
       appBar: AppBar(
         title: Text(widget.quest == null ? 'Quest erstellen' : 'Quest bearbeiten'),
         actions: [

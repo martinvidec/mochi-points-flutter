@@ -5,6 +5,7 @@ import '../../models/quest.dart';
 import '../../models/enums.dart';
 import '../../theme/app_colors.dart';
 import '../../widgets/empty_state.dart';
+import '../../widgets/glass_container.dart';
 import 'quest_edit_page.dart';
 
 class QuestManagementPage extends StatefulWidget {
@@ -90,7 +91,7 @@ class _QuestManagementPageState extends State<QuestManagementPage> {
     final filteredQuests = _getFilteredQuests(allQuests);
 
     return Scaffold(
-      backgroundColor: AppColors.backgroundStart,
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
         title: const Text('Quest Verwaltung'),
         actions: [
@@ -160,7 +161,7 @@ class _QuestManagementPageState extends State<QuestManagementPage> {
                   onDismissed: (direction) async {
                     await context.read<QuestProvider>().deleteQuest(quest.id);
                   },
-                  child: Card(
+                  child: GlassContainer(
                     margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     child: ListTile(
                       leading: Container(

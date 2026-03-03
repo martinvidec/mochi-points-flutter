@@ -121,7 +121,7 @@ class _ApprovalPageState extends State<ApprovalPage> {
     }
 
     return Scaffold(
-      backgroundColor: AppColors.backgroundStart,
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
         title: const Text('Freigabe'),
       ),
