@@ -30,7 +30,7 @@ class _ParentDashboardPageState extends State<ParentDashboardPage> {
           const QuestManagementPage(),
           const RewardManagementPage(),
           const ApprovalPage(),
-          _buildSettingsTab(),
+          _buildProfileTab(),
         ],
       ),
       bottomNavigationBar: _buildBottomNav(),
@@ -237,14 +237,14 @@ class _ParentDashboardPageState extends State<ParentDashboardPage> {
     );
   }
 
-  Widget _buildSettingsTab() {
+  Widget _buildProfileTab() {
     return SafeArea(
       child: ListView(
         padding: const EdgeInsets.all(16),
         children: [
           const SizedBox(height: 20),
           const Text(
-            'Einstellungen',
+            'Profil',
             style: TextStyle(
               color: AppColors.text,
               fontSize: 24,
