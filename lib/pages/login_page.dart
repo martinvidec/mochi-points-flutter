@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
 import '../widgets/app_button.dart';
+import '../widgets/glass_scaffold.dart';
 import '../widgets/user_avatar_button.dart';
 
 class LoginPage extends StatefulWidget {
@@ -41,7 +42,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return GlassScaffold(
       body: SafeArea(
         child: Consumer<AuthProvider>(
           builder: (context, authProvider, child) {

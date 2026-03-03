@@ -6,6 +6,9 @@ import '../providers/points_provider.dart';
 import '../providers/auth_provider.dart';
 import '../theme/app_colors.dart';
 import '../widgets/empty_state.dart';
+import '../widgets/glass_app_bar.dart';
+import '../widgets/glass_container.dart';
+import '../widgets/glass_scaffold.dart';
 import '../widgets/points_display.dart';
 
 enum TransactionFilter { all, earned, spent }
@@ -30,28 +33,17 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
 
     final filteredTransactions = _applyFilter(transactions);
 
-    return Scaffold(
-      backgroundColor: AppColors.backgroundStart,
-      appBar: AppBar(
-        title: const Text('Transaktionen'),
+    return GlassScaffold(
+      appBar: const GlassAppBar(
+        title: Text('Transaktionen'),
         centerTitle: true,
       ),
       body: Column(
         children: [
           // Balance header
-          Container(
-            width: double.infinity,
+          GlassContainer(
             padding: const EdgeInsets.all(24),
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surface,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withAlpha(25),
-                  blurRadius: 4,
-                  offset: const Offset(0, 2),
-                ),
-              ],
-            ),
+            borderRadius: 0,
             child: Center(
               child: PointsDisplay(
                 points: balance,
@@ -132,11 +124,10 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
     final amountColor = isPositive ? AppColors.success : AppColors.error;
     final amountPrefix = isPositive ? '+' : '';
 
-    return Card(
+    return GlassContainer(
       margin: const EdgeInsets.only(bottom: 8),
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Row(
+      padding: const EdgeInsets.all(12),
+      child: Row(
           children: [
             // Icon
             Container(
@@ -206,8 +197,7 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
             ),
           ],
         ),
-      ),
-    );
+      );
   }
 
   List<Transaction> _applyFilter(List<Transaction> transactions) {

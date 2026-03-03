@@ -7,6 +7,9 @@ import '../providers/auth_provider.dart';
 import '../theme/app_colors.dart';
 import '../widgets/achievement_badge.dart';
 import '../widgets/empty_state.dart';
+import '../widgets/glass_app_bar.dart';
+import '../widgets/glass_container.dart';
+import '../widgets/glass_scaffold.dart';
 
 class AchievementsPage extends StatefulWidget {
   const AchievementsPage({super.key});
@@ -48,9 +51,8 @@ class _AchievementsPageState extends State<AchievementsPage>
     final unlockedCount = achievementProvider.getUnlockedCount(heroId);
     final totalCount = achievementProvider.totalCount;
 
-    return Scaffold(
-      backgroundColor: AppColors.backgroundStart,
-      appBar: AppBar(
+    return GlassScaffold(
+      appBar: GlassAppBar(
         title: const Text('Achievements'),
         centerTitle: true,
         bottom: TabBar(
@@ -96,16 +98,9 @@ class _AchievementsPageState extends State<AchievementsPage>
   Widget _buildStatsHeader(int unlocked, int total) {
     final progress = total > 0 ? unlocked / total : 0.0;
 
-    return Container(
+    return GlassContainer(
       padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        border: Border(
-          bottom: BorderSide(
-            color: Colors.white.withAlpha(26),
-          ),
-        ),
-      ),
+      borderRadius: 0,
       child: Row(
         children: [
           // Trophy icon
@@ -255,7 +250,7 @@ class _AchievementsPageState extends State<AchievementsPage>
 
     showModalBottomSheet(
       context: context,
-      backgroundColor: AppColors.surface,
+      backgroundColor: AppColors.surface.withAlpha(200),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),

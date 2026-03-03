@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../models/challenge.dart';
 import '../widgets/error_state.dart';
+import '../widgets/glass_app_bar.dart';
+import '../widgets/glass_scaffold.dart';
 
 class ChallengeEditPage extends StatefulWidget {
   final Function(Challenge) onSave;
@@ -27,8 +29,8 @@ class _ChallengeEditPageState extends State<ChallengeEditPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
+    return GlassScaffold(
+      appBar: GlassAppBar(
         title: Text(widget.challenge == null ? 'Neue Challenge' : 'Challenge bearbeiten'),
       ),
       body: Padding(
