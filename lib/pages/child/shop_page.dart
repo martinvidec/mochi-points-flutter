@@ -33,7 +33,7 @@ class _ShopPageState extends State<ShopPage> {
     final rewards = _filterByCategory(rewardProvider.availableRewards);
 
     return Scaffold(
-      backgroundColor: AppColors.backgroundStart,
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
         title: const Text('Shop'),
         centerTitle: true,
