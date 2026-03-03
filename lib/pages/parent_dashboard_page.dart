@@ -210,44 +210,48 @@ class _ParentDashboardPageState extends State<ParentDashboardPage> {
       builder: (context, questProvider, child) {
         final pendingCount = questProvider.pendingApprovalCount;
 
-        return GlassContainer(
-          padding: const EdgeInsets.all(16),
-          child: Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: AppColors.teal.withAlpha(51),
-                  borderRadius: BorderRadius.circular(12),
+        return GestureDetector(
+          onTap: pendingCount > 0
+              ? () => setState(() => _currentNavIndex = 3)
+              : null,
+          child: GlassContainer(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: AppColors.teal.withAlpha(51),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Icon(
+                    Icons.check_circle_outline,
+                    color: AppColors.teal,
+                    size: 24,
+                  ),
                 ),
-                child: const Icon(
-                  Icons.check_circle_outline,
-                  color: AppColors.teal,
-                  size: 24,
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Ausstehende Genehmigungen',
-                      style: TextStyle(
-                        color: AppColors.text,
-                        fontWeight: FontWeight.w600,
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Ausstehende Genehmigungen',
+                        style: TextStyle(
+                          color: AppColors.text,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
-                    ),
-                    Text(
-                      '$pendingCount Quests warten auf Bestätigung',
-                      style: const TextStyle(
-                        color: AppColors.textSecondary,
-                        fontSize: 12,
+                      Text(
+                        '$pendingCount Quests warten auf Bestätigung',
+                        style: const TextStyle(
+                          color: AppColors.textSecondary,
+                          fontSize: 12,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
               if (pendingCount > 0)
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
@@ -264,6 +268,7 @@ class _ParentDashboardPageState extends State<ParentDashboardPage> {
                   ),
                 ),
             ],
+          ),
           ),
         );
       },
