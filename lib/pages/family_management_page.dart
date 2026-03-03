@@ -160,6 +160,7 @@ class FamilyManagementPage extends StatelessWidget {
 
   void _showAddMemberDialog(BuildContext context) {
     final nameController = TextEditingController();
+    final pinController = TextEditingController();
     UserRole selectedRole = UserRole.child;
 
     showDialog(
@@ -225,6 +226,31 @@ class FamilyManagementPage extends StatelessWidget {
                       }
                     },
                   ),
+                  const SizedBox(height: 16),
+                  TextField(
+                    controller: pinController,
+                    style: const TextStyle(color: AppColors.text),
+                    obscureText: true,
+                    keyboardType: TextInputType.number,
+                    maxLength: 4,
+                    decoration: InputDecoration(
+                      labelText: 'PIN (optional)',
+                      helperText: '4-stellig',
+                      helperStyle:
+                          const TextStyle(color: AppColors.textSecondary),
+                      labelStyle:
+                          const TextStyle(color: AppColors.textSecondary),
+                      counterStyle:
+                          const TextStyle(color: AppColors.textSecondary),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Colors.white.withAlpha(51)),
+                      ),
+                      focusedBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(color: AppColors.teal),
+                      ),
+                    ),
+                  ),
                 ],
               ),
               actions: [
@@ -239,9 +265,11 @@ class FamilyManagementPage extends StatelessWidget {
                   onPressed: () async {
                     final name = nameController.text.trim();
                     if (name.isEmpty) return;
+                    final pin = pinController.text.trim();
                     await context.read<AuthProvider>().addMember(
                           name,
                           selectedRole,
+                          pin: pin.length == 4 ? pin : null,
                         );
                     if (dialogContext.mounted) {
                       Navigator.of(dialogContext).pop();
