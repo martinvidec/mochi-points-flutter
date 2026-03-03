@@ -78,10 +78,11 @@ class BottomNavigation extends StatelessWidget {
           activeIcon: Icons.shield,
           label: 'Quests',
         ),
-        const NavItem(
+        NavItem(
           icon: Icons.card_giftcard_outlined,
           activeIcon: Icons.card_giftcard,
           label: 'Rewards',
+          badgeCount: pendingRewards > 0 ? pendingRewards : null,
         ),
         NavItem(
           icon: Icons.check_circle_outline,

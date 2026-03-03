@@ -8,6 +8,7 @@ import '../../widgets/empty_state.dart';
 import '../../widgets/error_state.dart';
 import '../../widgets/glass_container.dart';
 import '../../widgets/glass_app_bar.dart';
+import 'redemption_page.dart';
 import 'reward_edit_page.dart';
 
 class RewardManagementPage extends StatelessWidget {
@@ -24,16 +25,25 @@ class RewardManagementPage extends StatelessWidget {
         title: const Text('Belohnungen verwalten'),
         centerTitle: true,
       ),
-      body: rewards.isEmpty
-          ? EmptyState.rewards(onCreateReward: () => _openRewardEditor(context, null))
-          : ListView.builder(
-              padding: const EdgeInsets.all(16),
-              itemCount: rewards.length,
-              itemBuilder: (context, index) {
-                final reward = rewards[index];
-                return _RewardManagementCard(reward: reward);
-              },
-            ),
+      body: Column(
+        children: [
+          // Pending redemptions banner
+          _PendingRedemptionsBanner(),
+          // Rewards list
+          Expanded(
+            child: rewards.isEmpty
+                ? EmptyState.rewards(onCreateReward: () => _openRewardEditor(context, null))
+                : ListView.builder(
+                    padding: const EdgeInsets.all(16),
+                    itemCount: rewards.length,
+                    itemBuilder: (context, index) {
+                      final reward = rewards[index];
+                      return _RewardManagementCard(reward: reward);
+                    },
+                  ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -200,5 +210,86 @@ class _RewardManagementCard extends StatelessWidget {
     rewardProvider.deleteReward(reward.id);
 
     AppSnackbar.success(context, '${reward.name} gelöscht');
+  }
+}
+
+class _PendingRedemptionsBanner extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final pendingCount = context.watch<RewardProvider>().pendingRedemptions.length;
+
+    if (pendingCount == 0) return const SizedBox.shrink();
+
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (_) => const RedemptionPage()),
+        );
+      },
+      child: Container(
+        margin: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              AppColors.gold.withAlpha(40),
+              AppColors.gold.withAlpha(20),
+            ],
+          ),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: AppColors.gold.withAlpha(80)),
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: AppColors.gold.withAlpha(51),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: const Text('🎁', style: TextStyle(fontSize: 20)),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Einlösungen warten',
+                    style: TextStyle(
+                      color: AppColors.text,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  Text(
+                    '$pendingCount ${pendingCount == 1 ? 'Anfrage' : 'Anfragen'} offen',
+                    style: const TextStyle(
+                      color: AppColors.textSecondary,
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              decoration: BoxDecoration(
+                color: AppColors.gold,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Text(
+                '$pendingCount',
+                style: const TextStyle(
+                  color: Colors.black87,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            const SizedBox(width: 4),
+            const Icon(Icons.chevron_right, color: AppColors.textSecondary),
+          ],
+        ),
+      ),
+    );
   }
 }
