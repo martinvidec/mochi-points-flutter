@@ -5,6 +5,8 @@ import '../providers/quest_provider.dart';
 import '../theme/app_colors.dart';
 import '../models/enums.dart';
 import '../widgets/bottom_navigation.dart';
+import '../widgets/glass_container.dart';
+import '../widgets/glass_scaffold.dart';
 import 'parent/quest_management_page.dart';
 import 'parent/reward_management_page.dart';
 import 'parent/approval_page.dart';
@@ -21,8 +23,7 @@ class _ParentDashboardPageState extends State<ParentDashboardPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.backgroundStart,
+    return GlassScaffold(
       body: IndexedStack(
         index: _currentNavIndex,
         children: [
@@ -80,16 +81,9 @@ class _ParentDashboardPageState extends State<ParentDashboardPage> {
   }
 
   Widget _buildQuickStatsCard() {
-    return Container(
+    return GlassContainer(
       padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: AppColors.primaryGradient,
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(16),
-      ),
+      tintColor: AppColors.primaryStart.withAlpha(100),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -143,12 +137,8 @@ class _ParentDashboardPageState extends State<ParentDashboardPage> {
       builder: (context, questProvider, child) {
         final pendingCount = questProvider.pendingApprovalCount;
 
-        return Container(
+        return GlassContainer(
           padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: AppColors.surface,
-            borderRadius: BorderRadius.circular(16),
-          ),
           child: Row(
             children: [
               Container(
@@ -208,12 +198,8 @@ class _ParentDashboardPageState extends State<ParentDashboardPage> {
   }
 
   Widget _buildFamilyOverviewCard() {
-    return Container(
+    return GlassContainer(
       padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(16),
-      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -301,12 +287,9 @@ class _ParentDashboardPageState extends State<ParentDashboardPage> {
     required VoidCallback onTap,
     bool isDestructive = false,
   }) {
-    return Container(
+    return GlassContainer(
       margin: const EdgeInsets.only(bottom: 8),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(12),
-      ),
+      borderRadius: 12,
       child: ListTile(
         leading: Icon(
           icon,

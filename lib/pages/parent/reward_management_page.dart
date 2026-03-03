@@ -6,6 +6,7 @@ import '../../theme/app_colors.dart';
 import '../../widgets/app_button.dart';
 import '../../widgets/empty_state.dart';
 import '../../widgets/error_state.dart';
+import '../../widgets/glass_container.dart';
 import 'reward_edit_page.dart';
 
 class RewardManagementPage extends StatelessWidget {
@@ -17,7 +18,7 @@ class RewardManagementPage extends StatelessWidget {
     final rewards = rewardProvider.rewards;
 
     return Scaffold(
-      backgroundColor: AppColors.backgroundStart,
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
         title: const Text('Belohnungen verwalten'),
         centerTitle: true,
@@ -72,91 +73,90 @@ class _RewardManagementCard extends StatelessWidget {
         ),
         child: const Icon(Icons.delete, color: Colors.white),
       ),
-      child: Card(
+      child: GlassContainer(
         margin: const EdgeInsets.only(bottom: 12),
+        padding: const EdgeInsets.all(12),
+        borderRadius: 12,
         child: InkWell(
           onTap: () => _openEditor(context),
           borderRadius: BorderRadius.circular(12),
-          child: Padding(
-            padding: const EdgeInsets.all(12),
-            child: Row(
-              children: [
-                // Icon
-                Container(
-                  width: 48,
-                  height: 48,
-                  decoration: BoxDecoration(
-                    color: reward.isActive
-                        ? Theme.of(context).colorScheme.primaryContainer
-                        : AppColors.textSecondary.withAlpha(100),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Center(
-                    child: Text(
-                      reward.icon,
-                      style: TextStyle(
-                        fontSize: 24,
-                        color: reward.isActive ? null : AppColors.textSecondary,
-                      ),
+          child: Row(
+            children: [
+              // Icon
+              Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: reward.isActive
+                      ? Theme.of(context).colorScheme.primaryContainer
+                      : AppColors.textSecondary.withAlpha(100),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Center(
+                  child: Text(
+                    reward.icon,
+                    style: TextStyle(
+                      fontSize: 24,
+                      color: reward.isActive ? null : AppColors.textSecondary,
                     ),
                   ),
                 ),
-                const SizedBox(width: 12),
+              ),
+              const SizedBox(width: 12),
 
-                // Info
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        reward.name,
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: reward.isActive ? null : AppColors.textSecondary,
-                        ),
+              // Info
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      reward.name,
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: reward.isActive ? null : AppColors.textSecondary,
                       ),
-                      const SizedBox(height: 4),
-                      Row(
-                        children: [
-                          const Text('✨', style: TextStyle(fontSize: 12)),
+                    ),
+                    const SizedBox(height: 4),
+                    Row(
+                      children: [
+                        const Text('✨', style: TextStyle(fontSize: 12)),
+                        const SizedBox(width: 4),
+                        Text(
+                          '${reward.price} Punkte',
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: AppColors.textSecondary,
+                          ),
+                        ),
+                        if (reward.hasLimitedStock) ...[
+                          const SizedBox(width: 12),
+                          Icon(
+                            Icons.inventory_2_outlined,
+                            size: 14,
+                            color: AppColors.textSecondary,
+                          ),
                           const SizedBox(width: 4),
                           Text(
-                            '${reward.price} Punkte',
+                            '${reward.stock}',
                             style: TextStyle(
                               fontSize: 13,
                               color: AppColors.textSecondary,
                             ),
                           ),
-                          if (reward.hasLimitedStock) ...[
-                            const SizedBox(width: 12),
-                            Icon(
-                              Icons.inventory_2_outlined,
-                              size: 14,
-                              color: AppColors.textSecondary,
-                            ),
-                            const SizedBox(width: 4),
-                            Text(
-                              '${reward.stock}',
-                              style: TextStyle(
-                                fontSize: 13,
-                                color: AppColors.textSecondary,
-                              ),
-                            ),
-                          ],
                         ],
-                      ),
-                    ],
-                  ),
+                      ],
+                    ),
+                  ],
                 ),
+              ),
 
-                // Active toggle
-                Switch(
-                  value: reward.isActive,
-                  onChanged: (value) => _toggleActive(context, value),
-                ),
-              ],
-            ),
+              // Active toggle
+              Switch(
+                value: reward.isActive,
+                onChanged: (value) => _toggleActive(context, value),
+              ),
+            ],
           ),
         ),
       ),
