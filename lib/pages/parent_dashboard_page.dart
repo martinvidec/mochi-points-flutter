@@ -10,7 +10,9 @@ import '../widgets/bottom_navigation.dart';
 import '../widgets/glass_container.dart';
 import '../widgets/glass_scaffold.dart';
 import 'parent/quest_management_page.dart';
+import 'parent/quest_edit_page.dart';
 import 'parent/reward_management_page.dart';
+import 'parent/reward_edit_page.dart';
 import 'parent/approval_page.dart';
 
 class ParentDashboardPage extends StatefulWidget {
@@ -36,6 +38,7 @@ class _ParentDashboardPageState extends State<ParentDashboardPage> {
           _buildProfileTab(),
         ],
       ),
+      floatingActionButton: _buildFab(),
       bottomNavigationBar: _buildBottomNav(),
     );
   }
@@ -333,6 +336,41 @@ class _ParentDashboardPageState extends State<ParentDashboardPage> {
         onTap: onTap,
       ),
     );
+  }
+
+  Widget? _buildFab() {
+    switch (_currentNavIndex) {
+      case 1: // Quests tab
+        return FloatingActionButton(
+          heroTag: 'quest_fab',
+          onPressed: () async {
+            final result = await Navigator.of(context).push<bool>(
+              MaterialPageRoute(
+                builder: (context) => const QuestEditPage(),
+              ),
+            );
+            if (result == true && mounted) {
+              context.read<QuestProvider>().loadQuests();
+            }
+          },
+          child: const Icon(Icons.add),
+        );
+      case 2: // Rewards tab
+        return FloatingActionButton.extended(
+          heroTag: 'reward_fab',
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => const RewardEditPage(),
+              ),
+            );
+          },
+          icon: const Icon(Icons.add),
+          label: const Text('Neue Belohnung'),
+        );
+      default:
+        return null;
+    }
   }
 
   Widget _buildBottomNav() {

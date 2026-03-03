@@ -170,6 +170,7 @@ class _RewardEditPageState extends State<RewardEditPage> {
             // Category
             DropdownButtonFormField<RewardCategory>(
               initialValue: _selectedCategory,
+              dropdownColor: AppColors.surface.withAlpha(230),
               decoration: const InputDecoration(
                 labelText: 'Kategorie',
                 border: OutlineInputBorder(),

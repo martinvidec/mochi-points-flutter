@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../models/enums.dart';
+import '../../theme/app_colors.dart';
 import '../../widgets/app_button.dart';
 import '../../widgets/glass_app_bar.dart';
 import '../../widgets/glass_scaffold.dart';
@@ -97,7 +98,20 @@ class _AddMemberPageState extends State<AddMemberPage> {
                     ),
                   ),
                   const SizedBox(height: 8),
-                  SegmentedButton<UserRole>(
+                  Theme(
+                    data: Theme.of(context).copyWith(
+                      segmentedButtonTheme: SegmentedButtonThemeData(
+                        style: ButtonStyle(
+                          backgroundColor: WidgetStateProperty.resolveWith((states) {
+                            if (states.contains(WidgetState.selected)) {
+                              return AppColors.primaryStart.withAlpha(180);
+                            }
+                            return AppColors.surfaceElevated.withAlpha(100);
+                          }),
+                        ),
+                      ),
+                    ),
+                    child: SegmentedButton<UserRole>(
                     segments: const [
                       ButtonSegment(
                         value: UserRole.parent,
@@ -116,6 +130,7 @@ class _AddMemberPageState extends State<AddMemberPage> {
                         _selectedRole = newSelection.first;
                       });
                     },
+                  ),
                   ),
                   const SizedBox(height: 24),
                 ],

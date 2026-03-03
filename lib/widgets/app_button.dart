@@ -256,15 +256,7 @@ class _AppButtonState extends State<AppButton>
         border: widget.variant == AppButtonVariant.secondary
             ? Border.all(color: colors.border, width: 2)
             : null,
-        boxShadow: widget.variant == AppButtonVariant.primary && !isDisabled
-            ? [
-                BoxShadow(
-                  color: colors.background.withAlpha(77),
-                  blurRadius: 8,
-                  offset: const Offset(0, 4),
-                ),
-              ]
-            : null,
+        boxShadow: null,
       ),
       child: content,
     );
@@ -275,7 +267,7 @@ class _AppButtonState extends State<AppButton>
     switch (widget.variant) {
       case AppButtonVariant.primary:
         defaults = _ButtonColors(
-          background: AppColors.teal,
+          background: AppColors.teal.withAlpha(200),
           foreground: Colors.white,
           border: Colors.transparent,
         );
@@ -293,7 +285,7 @@ class _AppButtonState extends State<AppButton>
         );
       case AppButtonVariant.destructive:
         defaults = _ButtonColors(
-          background: AppColors.error,
+          background: AppColors.error.withAlpha(200),
           foreground: Colors.white,
           border: Colors.transparent,
         );

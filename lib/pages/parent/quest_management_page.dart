@@ -234,10 +234,6 @@ class _QuestManagementPageState extends State<QuestManagementPage> {
                 );
               },
             ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _createQuest,
-        child: const Icon(Icons.add),
-      ),
     );
   }
 }

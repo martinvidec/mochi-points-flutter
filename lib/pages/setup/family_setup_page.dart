@@ -5,6 +5,7 @@ import '../../models/enums.dart';
 import '../../widgets/app_button.dart';
 import '../../widgets/error_state.dart';
 import '../../widgets/glass_app_bar.dart';
+import '../../widgets/glass_container.dart';
 import '../../widgets/glass_scaffold.dart';
 import 'add_member_page.dart';
 
@@ -107,7 +108,9 @@ class _FamilySetupPageState extends State<FamilySetupPage> {
         title: Text('Familie einrichten'),
       ),
       body: SafeArea(
-        child: Stepper(
+        child: Theme(
+          data: Theme.of(context).copyWith(canvasColor: Colors.transparent),
+          child: Stepper(
           currentStep: _currentStep,
           onStepContinue: () {
             if (_currentStep == 0) {
@@ -170,7 +173,7 @@ class _FamilySetupPageState extends State<FamilySetupPage> {
                       expanded: true,
                     )
                   else
-                    Card(
+                    GlassContainer(
                       child: ListTile(
                         leading: const CircleAvatar(
                           child: Icon(Icons.person),
@@ -203,7 +206,7 @@ class _FamilySetupPageState extends State<FamilySetupPage> {
                   ..._members.asMap().entries.map((entry) {
                     final index = entry.key;
                     final member = entry.value;
-                    return Card(
+                    return GlassContainer(
                       child: ListTile(
                         leading: CircleAvatar(
                           child: Icon(
@@ -247,6 +250,7 @@ class _FamilySetupPageState extends State<FamilySetupPage> {
               ),
             );
           },
+        ),
         ),
       ),
     );
