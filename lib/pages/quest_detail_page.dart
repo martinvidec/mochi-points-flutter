@@ -106,6 +106,9 @@ class QuestDetailPage extends StatelessWidget {
         title: Text('Quest Details'),
       ),
       body: SingleChildScrollView(
+        padding: EdgeInsets.only(
+          top: MediaQuery.of(context).padding.top + kToolbarHeight,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [

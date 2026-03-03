@@ -35,7 +35,9 @@ class _ChallengeEditPageState extends State<ChallengeEditPage> {
         title: Text(widget.challenge == null ? 'Neue Challenge' : 'Challenge bearbeiten'),
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: EdgeInsets.fromLTRB(
+          16, MediaQuery.of(context).padding.top + kToolbarHeight + 16, 16, 16,
+        ),
         child: Column(
           children: [
             TextField(

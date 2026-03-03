@@ -8,6 +8,7 @@ import '../../theme/app_colors.dart';
 import '../../widgets/error_state.dart';
 import '../../widgets/glass_scaffold.dart';
 import '../../widgets/glass_app_bar.dart';
+import '../../widgets/glass_container.dart';
 
 class RewardEditPage extends StatefulWidget {
   final Reward? reward;
@@ -81,143 +82,164 @@ class _RewardEditPageState extends State<RewardEditPage> {
       body: Form(
         key: _formKey,
         child: ListView(
-          padding: const EdgeInsets.all(16),
+          padding: EdgeInsets.fromLTRB(
+            16, MediaQuery.of(context).padding.top + kToolbarHeight + 16, 16, 16,
+          ),
           children: [
             // Icon picker
-            Center(
-              child: GestureDetector(
-                onTap: _showIconPicker,
-                child: Container(
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primaryContainer,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Center(
-                    child: Text(
-                      _selectedIcon,
-                      style: const TextStyle(fontSize: 40),
+            GlassContainer(
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+              child: Column(
+                children: [
+                  GestureDetector(
+                    onTap: _showIconPicker,
+                    child: Container(
+                      width: 80,
+                      height: 80,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.primaryContainer,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Center(
+                        child: Text(
+                          _selectedIcon,
+                          style: const TextStyle(fontSize: 40),
+                        ),
+                      ),
                     ),
                   ),
-                ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Tippe zum Ändern',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: AppColors.textSecondary,
+                    ),
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: 8),
-            Center(
-              child: Text(
-                'Tippe zum Ändern',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: AppColors.textSecondary,
-                ),
-              ),
-            ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 12),
 
-            // Name
-            TextFormField(
-              controller: _nameController,
-              decoration: const InputDecoration(
-                labelText: 'Name *',
-                hintText: 'z.B. Extra Bildschirmzeit',
-                border: OutlineInputBorder(),
+            // Name & Description
+            GlassContainer(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  TextFormField(
+                    controller: _nameController,
+                    decoration: const InputDecoration(
+                      labelText: 'Name *',
+                      hintText: 'z.B. Extra Bildschirmzeit',
+                      border: OutlineInputBorder(),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return 'Name ist erforderlich';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  TextFormField(
+                    controller: _descriptionController,
+                    decoration: const InputDecoration(
+                      labelText: 'Beschreibung',
+                      hintText: 'Optional',
+                      border: OutlineInputBorder(),
+                    ),
+                    maxLines: 2,
+                  ),
+                ],
               ),
-              validator: (value) {
-                if (value == null || value.trim().isEmpty) {
-                  return 'Name ist erforderlich';
-                }
-                return null;
-              },
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 12),
 
-            // Description
-            TextFormField(
-              controller: _descriptionController,
-              decoration: const InputDecoration(
-                labelText: 'Beschreibung',
-                hintText: 'Optional',
-                border: OutlineInputBorder(),
+            // Price & Category
+            GlassContainer(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  TextFormField(
+                    controller: _priceController,
+                    decoration: const InputDecoration(
+                      labelText: 'Preis (Punkte) *',
+                      hintText: 'z.B. 50',
+                      border: OutlineInputBorder(),
+                      prefixText: '✨ ',
+                    ),
+                    keyboardType: TextInputType.number,
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return 'Preis ist erforderlich';
+                      }
+                      final price = int.tryParse(value);
+                      if (price == null || price <= 0) {
+                        return 'Bitte gib eine gültige Zahl ein';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  DropdownButtonFormField<RewardCategory>(
+                    initialValue: _selectedCategory,
+                    dropdownColor: AppColors.surface.withAlpha(230),
+                    decoration: const InputDecoration(
+                      labelText: 'Kategorie',
+                      border: OutlineInputBorder(),
+                    ),
+                    items: RewardCategory.values.map((category) {
+                      return DropdownMenuItem(
+                        value: category,
+                        child: Text(_getCategoryLabel(category)),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      if (value != null) {
+                        _selectedCategory = value;
+                      }
+                    },
+                  ),
+                ],
               ),
-              maxLines: 2,
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 12),
 
-            // Price
-            TextFormField(
-              controller: _priceController,
-              decoration: const InputDecoration(
-                labelText: 'Preis (Punkte) *',
-                hintText: 'z.B. 50',
-                border: OutlineInputBorder(),
-                prefixText: '✨ ',
+            // Stock & Active toggle
+            GlassContainer(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  TextFormField(
+                    controller: _stockController,
+                    decoration: const InputDecoration(
+                      labelText: 'Anzahl verfügbar',
+                      hintText: 'Leer = Unbegrenzt',
+                      border: OutlineInputBorder(),
+                    ),
+                    keyboardType: TextInputType.number,
+                    validator: (value) {
+                      if (value != null && value.isNotEmpty) {
+                        final stock = int.tryParse(value);
+                        if (stock == null || stock < 0) {
+                          return 'Bitte gib eine gültige Zahl ein';
+                        }
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  SwitchListTile(
+                    title: const Text('Aktiv'),
+                    subtitle: const Text('Inaktive Belohnungen werden nicht im Shop angezeigt'),
+                    value: _isActive,
+                    onChanged: (value) {
+                      setState(() => _isActive = value);
+                    },
+                    contentPadding: EdgeInsets.zero,
+                  ),
+                ],
               ),
-              keyboardType: TextInputType.number,
-              validator: (value) {
-                if (value == null || value.trim().isEmpty) {
-                  return 'Preis ist erforderlich';
-                }
-                final price = int.tryParse(value);
-                if (price == null || price <= 0) {
-                  return 'Bitte gib eine gültige Zahl ein';
-                }
-                return null;
-              },
-            ),
-            const SizedBox(height: 16),
-
-            // Category
-            DropdownButtonFormField<RewardCategory>(
-              initialValue: _selectedCategory,
-              dropdownColor: AppColors.surface.withAlpha(230),
-              decoration: const InputDecoration(
-                labelText: 'Kategorie',
-                border: OutlineInputBorder(),
-              ),
-              items: RewardCategory.values.map((category) {
-                return DropdownMenuItem(
-                  value: category,
-                  child: Text(_getCategoryLabel(category)),
-                );
-              }).toList(),
-              onChanged: (value) {
-                if (value != null) {
-                  _selectedCategory = value;
-                }
-              },
-            ),
-            const SizedBox(height: 16),
-
-            // Stock
-            TextFormField(
-              controller: _stockController,
-              decoration: const InputDecoration(
-                labelText: 'Anzahl verfügbar',
-                hintText: 'Leer = Unbegrenzt',
-                border: OutlineInputBorder(),
-              ),
-              keyboardType: TextInputType.number,
-              validator: (value) {
-                if (value != null && value.isNotEmpty) {
-                  final stock = int.tryParse(value);
-                  if (stock == null || stock < 0) {
-                    return 'Bitte gib eine gültige Zahl ein';
-                  }
-                }
-                return null;
-              },
-            ),
-            const SizedBox(height: 24),
-
-            // Active toggle
-            SwitchListTile(
-              title: const Text('Aktiv'),
-              subtitle: const Text('Inaktive Belohnungen werden nicht im Shop angezeigt'),
-              value: _isActive,
-              onChanged: (value) {
-                setState(() => _isActive = value);
-              },
             ),
           ],
         ),

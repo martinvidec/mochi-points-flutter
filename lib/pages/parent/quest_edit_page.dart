@@ -8,6 +8,7 @@ import '../../theme/app_colors.dart';
 import '../../widgets/error_state.dart';
 import '../../widgets/glass_scaffold.dart';
 import '../../widgets/glass_app_bar.dart';
+import '../../widgets/glass_container.dart';
 
 class QuestEditPage extends StatefulWidget {
   final Quest? quest;
@@ -151,236 +152,274 @@ class _QuestEditPageState extends State<QuestEditPage> {
       body: Form(
         key: _formKey,
         child: ListView(
-          padding: const EdgeInsets.all(16),
+          padding: EdgeInsets.fromLTRB(
+            16, MediaQuery.of(context).padding.top + kToolbarHeight + 16, 16, 16,
+          ),
           children: [
             // Icon Picker
-            const Text('Icon', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 8),
-            SizedBox(
-              height: 80,
-              child: GridView.builder(
-                scrollDirection: Axis.horizontal,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 1,
-                  mainAxisSpacing: 8,
-                ),
-                itemCount: _availableIcons.length,
-                itemBuilder: (context, index) {
-                  final icon = _availableIcons[index];
-                  return GestureDetector(
-                    onTap: () => setState(() => _selectedIcon = icon),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: _selectedIcon == icon
-                              ? Theme.of(context).primaryColor
-                              : AppColors.textSecondary.withAlpha(77),
-                          width: _selectedIcon == icon ? 3 : 1,
-                        ),
-                        borderRadius: BorderRadius.circular(8),
+            GlassContainer(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text('Icon', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 8),
+                  SizedBox(
+                    height: 80,
+                    child: GridView.builder(
+                      scrollDirection: Axis.horizontal,
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 1,
+                        mainAxisSpacing: 8,
                       ),
-                      child: Center(
-                        child: Text(icon, style: const TextStyle(fontSize: 32)),
-                      ),
+                      itemCount: _availableIcons.length,
+                      itemBuilder: (context, index) {
+                        final icon = _availableIcons[index];
+                        return GestureDetector(
+                          onTap: () => setState(() => _selectedIcon = icon),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: _selectedIcon == icon
+                                    ? Theme.of(context).primaryColor
+                                    : AppColors.textSecondary.withAlpha(77),
+                                width: _selectedIcon == icon ? 3 : 1,
+                              ),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Center(
+                              child: Text(icon, style: const TextStyle(fontSize: 32)),
+                            ),
+                          ),
+                        );
+                      },
                     ),
-                  );
-                },
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: 24),
-            // Name
-            TextFormField(
-              controller: _nameController,
-              decoration: const InputDecoration(
-                labelText: 'Name',
-                border: OutlineInputBorder(),
-              ),
-              validator: (value) {
-                if (value == null || value.trim().isEmpty) {
-                  return 'Bitte Name eingeben';
-                }
-                return null;
-              },
-            ),
-            const SizedBox(height: 16),
-            // Description
-            TextFormField(
-              controller: _descriptionController,
-              decoration: const InputDecoration(
-                labelText: 'Beschreibung (optional)',
-                border: OutlineInputBorder(),
-              ),
-              maxLines: 3,
-            ),
-            const SizedBox(height: 24),
-            // Type
-            const Text('Typ', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 8),
-            Wrap(
-              spacing: 8,
-              children: QuestType.values.map((type) {
-                String label;
-                switch (type) {
-                  case QuestType.daily:
-                    label = 'Daily';
-                    break;
-                  case QuestType.weekly:
-                    label = 'Weekly';
-                    break;
-                  case QuestType.epic:
-                    label = 'Epic';
-                    break;
-                  case QuestType.series:
-                    label = 'Series';
-                    break;
-                }
-                return ChoiceChip(
-                  label: Text(label),
-                  selected: _selectedType == type,
-                  onSelected: (selected) {
-                    setState(() {
-                      _selectedType = type;
-                      if (type != QuestType.epic) {
-                        _deadline = null;
+            const SizedBox(height: 12),
+            // Name & Description
+            GlassContainer(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  TextFormField(
+                    controller: _nameController,
+                    decoration: const InputDecoration(
+                      labelText: 'Name',
+                      border: OutlineInputBorder(),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return 'Bitte Name eingeben';
                       }
-                    });
-                  },
-                );
-              }).toList(),
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  TextFormField(
+                    controller: _descriptionController,
+                    decoration: const InputDecoration(
+                      labelText: 'Beschreibung (optional)',
+                      border: OutlineInputBorder(),
+                    ),
+                    maxLines: 3,
+                  ),
+                ],
+              ),
             ),
-            const SizedBox(height: 24),
-            // Rarity
-            const Text('Seltenheit', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 8),
-            Wrap(
-              spacing: 8,
-              children: QuestRarity.values.map((rarity) {
-                String label;
-                Color color;
-                switch (rarity) {
-                  case QuestRarity.common:
-                    label = 'Gewöhnlich';
-                    color = AppColors.rarityCommon;
-                    break;
-                  case QuestRarity.rare:
-                    label = 'Selten';
-                    color = AppColors.rarityRare;
-                    break;
-                  case QuestRarity.epic:
-                    label = 'Episch';
-                    color = AppColors.rarityEpic;
-                    break;
-                  case QuestRarity.legendary:
-                    label = 'Legendär';
-                    color = AppColors.rarityLegendary;
-                    break;
-                }
-                return ChoiceChip(
-                  label: Text(label),
-                  selected: _selectedRarity == rarity,
-                  selectedColor: color,
-                  onSelected: (selected) {
-                    setState(() => _selectedRarity = rarity);
-                  },
-                );
-              }).toList(),
+            const SizedBox(height: 12),
+            // Type & Rarity
+            GlassContainer(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text('Typ', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 8),
+                  Wrap(
+                    spacing: 8,
+                    children: QuestType.values.map((type) {
+                      String label;
+                      switch (type) {
+                        case QuestType.daily:
+                          label = 'Daily';
+                          break;
+                        case QuestType.weekly:
+                          label = 'Weekly';
+                          break;
+                        case QuestType.epic:
+                          label = 'Epic';
+                          break;
+                        case QuestType.series:
+                          label = 'Series';
+                          break;
+                      }
+                      return ChoiceChip(
+                        label: Text(label),
+                        selected: _selectedType == type,
+                        onSelected: (selected) {
+                          setState(() {
+                            _selectedType = type;
+                            if (type != QuestType.epic) {
+                              _deadline = null;
+                            }
+                          });
+                        },
+                      );
+                    }).toList(),
+                  ),
+                  const SizedBox(height: 16),
+                  const Text('Seltenheit', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 8),
+                  Wrap(
+                    spacing: 8,
+                    children: QuestRarity.values.map((rarity) {
+                      String label;
+                      Color color;
+                      switch (rarity) {
+                        case QuestRarity.common:
+                          label = 'Gewöhnlich';
+                          color = AppColors.rarityCommon;
+                          break;
+                        case QuestRarity.rare:
+                          label = 'Selten';
+                          color = AppColors.rarityRare;
+                          break;
+                        case QuestRarity.epic:
+                          label = 'Episch';
+                          color = AppColors.rarityEpic;
+                          break;
+                        case QuestRarity.legendary:
+                          label = 'Legendär';
+                          color = AppColors.rarityLegendary;
+                          break;
+                      }
+                      return ChoiceChip(
+                        label: Text(label),
+                        selected: _selectedRarity == rarity,
+                        selectedColor: color,
+                        onSelected: (selected) {
+                          setState(() => _selectedRarity = rarity);
+                        },
+                      );
+                    }).toList(),
+                  ),
+                ],
+              ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 12),
             // Points and XP
-            Row(
-              children: [
-                Expanded(
-                  child: TextFormField(
-                    controller: _pointsController,
-                    decoration: const InputDecoration(
-                      labelText: 'Punkte',
-                      border: OutlineInputBorder(),
-                    ),
-                    keyboardType: TextInputType.number,
-                    validator: (value) {
-                      final points = int.tryParse(value ?? '');
-                      if (points == null || points <= 0) {
-                        return 'Muss > 0 sein';
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: TextFormField(
-                    controller: _xpController,
-                    decoration: const InputDecoration(
-                      labelText: 'XP',
-                      border: OutlineInputBorder(),
-                    ),
-                    keyboardType: TextInputType.number,
-                    validator: (value) {
-                      final xp = int.tryParse(value ?? '');
-                      if (xp == null || xp <= 0) {
-                        return 'Muss > 0 sein';
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 24),
-            // Assign to children
-            const Text('Zuweisen an', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 8),
-            Wrap(
-              spacing: 8,
-              children: [
-                ChoiceChip(
-                  label: const Text('Alle Kinder'),
-                  selected: _assignedTo.isEmpty,
-                  onSelected: (selected) {
-                    setState(() => _assignedTo = []);
-                  },
-                ),
-                ...children.map((child) {
-                  return FilterChip(
-                    label: Text(child.name),
-                    selected: _assignedTo.contains(child.id),
-                    onSelected: (selected) {
-                      setState(() {
-                        if (selected) {
-                          _assignedTo.add(child.id);
-                        } else {
-                          _assignedTo.remove(child.id);
+            GlassContainer(
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      controller: _pointsController,
+                      decoration: const InputDecoration(
+                        labelText: 'Punkte',
+                        border: OutlineInputBorder(),
+                      ),
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        final points = int.tryParse(value ?? '');
+                        if (points == null || points <= 0) {
+                          return 'Muss > 0 sein';
                         }
-                      });
-                    },
-                  );
-                }),
-              ],
+                        return null;
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: TextFormField(
+                      controller: _xpController,
+                      decoration: const InputDecoration(
+                        labelText: 'XP',
+                        border: OutlineInputBorder(),
+                      ),
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        final xp = int.tryParse(value ?? '');
+                        if (xp == null || xp <= 0) {
+                          return 'Muss > 0 sein';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 12),
+            // Assign to children
+            GlassContainer(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text('Zuweisen an', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 8),
+                  Wrap(
+                    spacing: 8,
+                    children: [
+                      ChoiceChip(
+                        label: const Text('Alle Kinder'),
+                        selected: _assignedTo.isEmpty,
+                        onSelected: (selected) {
+                          setState(() => _assignedTo = []);
+                        },
+                      ),
+                      ...children.map((child) {
+                        return FilterChip(
+                          label: Text(child.name),
+                          selected: _assignedTo.contains(child.id),
+                          onSelected: (selected) {
+                            setState(() {
+                              if (selected) {
+                                _assignedTo.add(child.id);
+                              } else {
+                                _assignedTo.remove(child.id);
+                              }
+                            });
+                          },
+                        );
+                      }),
+                    ],
+                  ),
+                ],
+              ),
             ),
             // Deadline for Epic quests
             if (_selectedType == QuestType.epic) ...[
-              const SizedBox(height: 24),
-              ListTile(
-                title: const Text('Deadline'),
-                subtitle: _deadline != null
-                    ? Text('${_deadline!.day}.${_deadline!.month}.${_deadline!.year}')
-                    : const Text('Keine Deadline gesetzt'),
-                trailing: const Icon(Icons.calendar_today),
-                onTap: _selectDeadline,
-                tileColor: AppColors.textSecondary.withAlpha(26),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+              const SizedBox(height: 12),
+              GlassContainer(
+                child: ListTile(
+                  title: const Text('Deadline'),
+                  subtitle: _deadline != null
+                      ? Text('${_deadline!.day}.${_deadline!.month}.${_deadline!.year}')
+                      : const Text('Keine Deadline gesetzt'),
+                  trailing: const Icon(Icons.calendar_today),
+                  onTap: _selectDeadline,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
                 ),
               ),
             ],
             // Unit for Series quests
             if (_selectedType == QuestType.series) ...[
-              const SizedBox(height: 24),
-              TextFormField(
-                controller: _unitController,
-                decoration: const InputDecoration(
-                  labelText: 'Einheit (z.B. km, Minuten, Stück)',
-                  border: OutlineInputBorder(),
+              const SizedBox(height: 12),
+              GlassContainer(
+                padding: const EdgeInsets.all(16),
+                child: TextFormField(
+                  controller: _unitController,
+                  decoration: const InputDecoration(
+                    labelText: 'Einheit (z.B. km, Minuten, Stück)',
+                    border: OutlineInputBorder(),
+                  ),
                 ),
               ),
             ],
