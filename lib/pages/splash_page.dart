@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
+import '../providers/notification_provider.dart';
 import '../widgets/glass_scaffold.dart';
 
 class SplashPage extends StatefulWidget {
@@ -19,7 +20,9 @@ class _SplashPageState extends State<SplashPage> {
 
   Future<void> _initialize() async {
     final authProvider = context.read<AuthProvider>();
+    final notificationProvider = context.read<NotificationProvider>();
     await authProvider.initialize();
+    await notificationProvider.loadData();
 
     if (!mounted) return;
 
