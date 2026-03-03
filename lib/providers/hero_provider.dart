@@ -291,6 +291,26 @@ class HeroProvider extends ChangeNotifier {
     }
   }
 
+  // Update hero name and/or appearance
+  Future<bool> updateHero(String userId, {String? name, HeroAppearance? appearance}) async {
+    try {
+      final hero = _heroes[userId];
+      if (hero == null) return false;
+
+      _heroes[userId] = hero.copyWith(
+        name: name,
+        appearance: appearance,
+      );
+
+      await _saveHeroes();
+      notifyListeners();
+      return true;
+    } catch (e) {
+      debugPrint('HeroProvider.updateHero error: $e');
+      return false;
+    }
+  }
+
   // Update appearance
   Future<bool> updateAppearance(String userId, HeroAppearance appearance) async {
     try {
