@@ -9,7 +9,6 @@ void main() {
   Widget createTestWidget({
     int oldLevel = 5,
     int newLevel = 6,
-    String? heroName,
     List<String>? unlockedRewards,
     VoidCallback? onComplete,
   }) {
@@ -17,7 +16,6 @@ void main() {
       home: LevelUpAnimation(
         oldLevel: oldLevel,
         newLevel: newLevel,
-        heroName: heroName,
         unlockedRewards: unlockedRewards,
         onComplete: onComplete ?? () {},
       ),
