@@ -7,12 +7,12 @@ A gamified family rewards app where parents create challenges and children earn 
 <p align="center">
   <img src="docs/screenshots/04_login.png" alt="Login" width="200"/>
   <img src="docs/screenshots/05_hero_home.png" alt="Hero Home" width="200"/>
-  <img src="docs/screenshots/06_quest_board.png" alt="Quest Board" width="200"/>
+  <img src="docs/screenshots/01_parent_dashboard.png" alt="Parent Dashboard" width="200"/>
 </p>
 <p align="center">
-  <img src="docs/screenshots/07_shop.png" alt="Shop" width="200"/>
-  <img src="docs/screenshots/01_parent_dashboard.png" alt="Parent Dashboard" width="200"/>
-  <img src="docs/screenshots/02_quest_management.png" alt="Quest Management" width="200"/>
+  <img src="docs/screenshots/03_quest_create.png" alt="Quest erstellen" width="200"/>
+  <img src="docs/screenshots/06_reward_create.png" alt="Belohnung erstellen" width="200"/>
+  <img src="docs/screenshots/02_child_profile.png" alt="Kind Profil" width="200"/>
 </p>
 
 ## Core Concept
