@@ -85,8 +85,15 @@ flutter analyze
 # Build for release
 flutter build apk        # Android
 flutter build ios        # iOS
-flutter build web        # Web
+flutter build web --no-tree-shake-icons   # Web (IMPORTANT: always use --no-tree-shake-icons!)
 ```
+
+### Web Build - Wichtig
+**NIEMALS `flutter build web` ohne `--no-tree-shake-icons` ausführen!**
+Flutter's Tree-Shaking entfernt aggressiv Icons aus der Font-Datei (99%+ Reduktion).
+Da die App Icons teilweise dynamisch lädt, werden diese nicht erkannt und entfernt.
+- Debug-Modus (`flutter run -d chrome`) ist davon nicht betroffen
+- Für lokales Testen des Web-Builds: `python3 -m http.server 8765 --directory build/web`
 
 ## Architecture Overview
 
