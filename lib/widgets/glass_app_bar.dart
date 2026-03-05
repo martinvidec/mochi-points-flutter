@@ -47,7 +47,7 @@ class GlassAppBar extends StatelessWidget implements PreferredSizeWidget {
           filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
           child: Container(
             decoration: BoxDecoration(
-              color: AppColors.surface.withAlpha(128),
+              color: AppColors.surface.withAlpha(77),
               border: Border(
                 bottom: BorderSide(
                   color: Colors.white.withAlpha(26),

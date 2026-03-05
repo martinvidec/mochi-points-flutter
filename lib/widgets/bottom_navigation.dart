@@ -106,7 +106,7 @@ class BottomNavigation extends StatelessWidget {
         filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
         child: Container(
           decoration: BoxDecoration(
-            color: AppColors.surface.withAlpha(153),
+            color: AppColors.surface.withAlpha(100),
             border: Border(
               top: BorderSide(
                 color: Colors.white.withAlpha(38),

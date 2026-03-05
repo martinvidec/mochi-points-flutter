@@ -48,8 +48,8 @@ class GlassScaffold extends StatelessWidget {
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
+                    Colors.black.withAlpha(26),
                     Colors.black.withAlpha(77),
-                    Colors.black.withAlpha(166),
                   ],
                 ),
               ),
