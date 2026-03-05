@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/reward.dart';
 import '../models/enums.dart';
 import '../theme/app_colors.dart';
+import '../theme/app_icons.dart';
 import 'app_button.dart';
 import 'glass_container.dart';
 
@@ -42,10 +43,7 @@ class RewardCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: Center(
-                      child: Text(
-                        reward.icon,
-                        style: const TextStyle(fontSize: 28),
-                      ),
+                      child: Icon(AppIcons.get(reward.icon), size: 28, color: Colors.white),
                     ),
                   ),
                 ),

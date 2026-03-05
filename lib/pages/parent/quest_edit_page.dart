@@ -5,6 +5,7 @@ import '../../models/enums.dart';
 import '../../providers/quest_provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../theme/app_colors.dart';
+import '../../theme/app_icons.dart';
 import '../../widgets/error_state.dart';
 import '../../widgets/glass_scaffold.dart';
 import '../../widgets/glass_app_bar.dart';
@@ -27,16 +28,13 @@ class _QuestEditPageState extends State<QuestEditPage> {
   final _xpController = TextEditingController();
   final _unitController = TextEditingController();
 
-  String _selectedIcon = '📝';
+  String _selectedIcon = 'edit';
   QuestType _selectedType = QuestType.daily;
   QuestRarity _selectedRarity = QuestRarity.common;
   List<String> _assignedTo = [];
   DateTime? _deadline;
 
-  final List<String> _availableIcons = [
-    '📝', '🧹', '🍽️', '🛏️', '📚', '🎯', '🏃', '🎨',
-    '🎵', '🌱', '🐕', '🚗', '💪', '🧘', '🍎', '💧',
-  ];
+  final List<String> _availableIcons = AppIcons.questIcons;
 
   @override
   void initState() {
@@ -188,7 +186,7 @@ class _QuestEditPageState extends State<QuestEditPage> {
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Center(
-                              child: Text(icon, style: const TextStyle(fontSize: 32)),
+                              child: Icon(AppIcons.get(icon), size: 32, color: Colors.white),
                             ),
                           ),
                         );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 import '../models/achievement.dart';
+import '../theme/app_icons.dart';
 
 enum AchievementBadgeSize { small, medium, large }
 
@@ -280,12 +281,13 @@ class _AchievementBadgeState extends State<AchievementBadge>
     final bool showSecretIcon =
         _isLocked && widget.achievement.isSecret;
 
-    return Text(
-      showSecretIcon ? '?' : widget.achievement.icon,
-      style: TextStyle(
-        fontSize: _iconSize,
-        color: _isLocked ? Colors.grey.shade500 : null,
-      ),
+    if (showSecretIcon) {
+      return Icon(Icons.help_outline, size: _iconSize, color: Colors.grey.shade500);
+    }
+    return Icon(
+      AppIcons.get(widget.achievement.icon),
+      size: _iconSize,
+      color: _isLocked ? Colors.grey.shade500 : Colors.white,
     );
   }
 

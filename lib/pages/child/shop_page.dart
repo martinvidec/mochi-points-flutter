@@ -6,6 +6,7 @@ import '../../providers/reward_provider.dart';
 import '../../providers/points_provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../theme/app_colors.dart';
+import '../../theme/app_icons.dart';
 import '../../widgets/app_button.dart';
 import '../../widgets/empty_state.dart';
 import '../../widgets/error_state.dart';
@@ -123,7 +124,7 @@ class _ShopPageState extends State<ShopPage> {
         backgroundColor: AppColors.surface,
         title: Row(
           children: [
-            Text(reward.icon, style: const TextStyle(fontSize: 24)),
+            Icon(AppIcons.get(reward.icon), size: 24, color: Colors.white),
             const SizedBox(width: 12),
             Expanded(
               child: Text(

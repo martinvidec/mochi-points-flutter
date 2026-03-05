@@ -4,6 +4,7 @@ import '../../providers/quest_provider.dart';
 import '../../models/quest.dart';
 import '../../models/enums.dart';
 import '../../theme/app_colors.dart';
+import '../../theme/app_icons.dart';
 import '../../widgets/empty_state.dart';
 import '../../widgets/glass_container.dart';
 import '../../widgets/glass_app_bar.dart';
@@ -173,7 +174,7 @@ class _QuestManagementPageState extends State<QuestManagementPage> {
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Center(
-                          child: Text(quest.icon, style: const TextStyle(fontSize: 24)),
+                          child: Icon(AppIcons.get(quest.icon), size: 24, color: Colors.white),
                         ),
                       ),
                       title: Text(

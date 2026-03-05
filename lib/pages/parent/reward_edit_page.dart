@@ -5,6 +5,7 @@ import '../../models/enums.dart';
 import '../../providers/reward_provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../theme/app_colors.dart';
+import '../../theme/app_icons.dart';
 import '../../widgets/error_state.dart';
 import '../../widgets/glass_scaffold.dart';
 import '../../widgets/glass_app_bar.dart';
@@ -26,17 +27,13 @@ class _RewardEditPageState extends State<RewardEditPage> {
   late TextEditingController _priceController;
   late TextEditingController _stockController;
 
-  String _selectedIcon = '🎁';
+  String _selectedIcon = 'gift';
   RewardCategory _selectedCategory = RewardCategory.item;
   bool _isActive = true;
 
   bool get isEditing => widget.reward != null;
 
-  static const List<String> _availableIcons = [
-    '🎁', '🎮', '🍕', '🍦', '🎬', '📱', '🎨', '🎵',
-    '⚽', '🏀', '🎯', '🎪', '🎢', '🏊', '🚴', '⭐',
-    '💎', '🎈', '🎉', '🎊', '🏆', '👑', '🦸', '🌟',
-  ];
+  static const List<String> _availableIcons = AppIcons.rewardIcons;
 
   @override
   void initState() {
@@ -101,10 +98,7 @@ class _RewardEditPageState extends State<RewardEditPage> {
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Center(
-                        child: Text(
-                          _selectedIcon,
-                          style: const TextStyle(fontSize: 40),
-                        ),
+                        child: Icon(AppIcons.get(_selectedIcon), size: 40, color: Colors.white),
                       ),
                     ),
                   ),
@@ -290,7 +284,7 @@ class _RewardEditPageState extends State<RewardEditPage> {
                           : null,
                     ),
                     child: Center(
-                      child: Text(icon, style: const TextStyle(fontSize: 24)),
+                      child: Icon(AppIcons.get(icon), size: 24, color: Colors.white),
                     ),
                   ),
                 );

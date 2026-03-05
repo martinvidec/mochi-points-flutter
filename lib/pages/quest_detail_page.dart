@@ -5,6 +5,7 @@ import '../models/enums.dart';
 import '../providers/quest_provider.dart';
 import '../providers/auth_provider.dart';
 import '../theme/app_colors.dart';
+import '../theme/app_icons.dart';
 import '../widgets/app_button.dart';
 import '../widgets/error_state.dart';
 import '../widgets/glass_app_bar.dart';
@@ -127,10 +128,7 @@ class QuestDetailPage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Center(
-                      child: Text(
-                        quest.icon,
-                        style: const TextStyle(fontSize: 60),
-                      ),
+                      child: Icon(AppIcons.get(quest.icon), size: 60, color: Colors.white),
                     ),
                   ),
                   const SizedBox(height: 16),
