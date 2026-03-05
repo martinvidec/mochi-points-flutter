@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:math' as math;
 import '../models/achievement.dart';
 import '../theme/app_colors.dart';
+import '../theme/app_icons.dart';
 
 /// Shows a celebratory dialog when an achievement is unlocked
 class AchievementUnlockDialog extends StatefulWidget {
@@ -123,16 +124,16 @@ class _AchievementUnlockDialogState extends State<AchievementUnlockDialog>
   }
 
   void _setupRewardAnimations() {
-    final rewards = <(String, String)>[];
+    final rewards = <(IconData, String)>[];
 
-    rewards.add(('⚡', '+${widget.achievement.rewardXP} XP'));
+    rewards.add((Icons.bolt, '+${widget.achievement.rewardXP} XP'));
 
     if (widget.achievement.rewardPoints != null) {
-      rewards.add(('✨', '+${widget.achievement.rewardPoints} Points'));
+      rewards.add((Icons.auto_awesome, '+${widget.achievement.rewardPoints} Points'));
     }
 
     if (widget.achievement.rewardItem != null) {
-      rewards.add(('🎁', widget.achievement.rewardItem!));
+      rewards.add((Icons.card_giftcard, widget.achievement.rewardItem!));
     }
 
     for (int i = 0; i < rewards.length; i++) {
@@ -370,10 +371,7 @@ class _AchievementUnlockDialogState extends State<AchievementUnlockDialog>
         ],
       ),
       child: Center(
-        child: Text(
-          widget.achievement.icon,
-          style: const TextStyle(fontSize: 56),
-        ),
+        child: Icon(AppIcons.get(widget.achievement.icon), size: 56, color: Colors.white),
       ),
     );
   }
@@ -404,9 +402,10 @@ class _AchievementUnlockDialogState extends State<AchievementUnlockDialog>
                   ),
                   child: Column(
                     children: [
-                      Text(
+                      Icon(
                         reward.icon,
-                        style: const TextStyle(fontSize: 28),
+                        size: 28,
+                        color: Colors.white,
                       ),
                       const SizedBox(height: 4),
                       Text(
@@ -430,7 +429,7 @@ class _AchievementUnlockDialogState extends State<AchievementUnlockDialog>
 }
 
 class _RewardAnimation {
-  final String icon;
+  final IconData icon;
   final String text;
   final Animation<double> animation;
 

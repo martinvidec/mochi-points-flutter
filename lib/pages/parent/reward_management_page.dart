@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../models/reward.dart';
 import '../../providers/reward_provider.dart';
 import '../../theme/app_colors.dart';
+import '../../theme/app_icons.dart';
 import '../../widgets/app_button.dart';
 import '../../widgets/empty_state.dart';
 import '../../widgets/error_state.dart';
@@ -99,12 +100,10 @@ class _RewardManagementCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Center(
-                  child: Text(
-                    reward.icon,
-                    style: TextStyle(
-                      fontSize: 24,
-                      color: reward.isActive ? null : AppColors.textSecondary,
-                    ),
+                  child: Icon(
+                    AppIcons.get(reward.icon),
+                    size: 24,
+                    color: reward.isActive ? Colors.white : AppColors.textSecondary,
                   ),
                 ),
               ),
@@ -247,7 +246,7 @@ class _PendingRedemptionsBanner extends StatelessWidget {
                 color: AppColors.gold.withAlpha(51),
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: const Text('🎁', style: TextStyle(fontSize: 20)),
+              child: const Icon(Icons.card_giftcard, size: 20, color: Colors.white),
             ),
             const SizedBox(width: 12),
             Expanded(

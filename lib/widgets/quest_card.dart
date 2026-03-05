@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/quest.dart';
 import '../models/enums.dart';
 import '../theme/app_colors.dart';
+import '../theme/app_icons.dart';
 import 'glass_container.dart';
 
 class QuestCard extends StatelessWidget {
@@ -82,10 +83,7 @@ class QuestCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Center(
-                      child: Text(
-                        quest.icon,
-                        style: const TextStyle(fontSize: 24),
-                      ),
+                      child: Icon(AppIcons.get(quest.icon), size: 24, color: Colors.white),
                     ),
                   ),
                   const SizedBox(width: 12),

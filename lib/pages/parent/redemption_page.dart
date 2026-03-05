@@ -5,6 +5,7 @@ import '../../models/enums.dart';
 import '../../providers/reward_provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../theme/app_colors.dart';
+import '../../theme/app_icons.dart';
 import '../../widgets/app_button.dart';
 import '../../widgets/empty_state.dart';
 import '../../widgets/error_state.dart';
@@ -200,10 +201,7 @@ class _RedemptionCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Center(
-                      child: Text(
-                        reward?.icon ?? '🎁',
-                        style: const TextStyle(fontSize: 24),
-                      ),
+                      child: Icon(AppIcons.get(reward?.icon ?? 'gift'), size: 24, color: Colors.white),
                     ),
                   ),
                   const SizedBox(width: 12),

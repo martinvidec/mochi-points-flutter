@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:confetti/confetti.dart';
 import '../models/quest.dart';
 import '../theme/app_colors.dart';
+import '../theme/app_icons.dart';
 import 'xp_progress_bar.dart';
 
 /// A full-screen animation overlay displayed when a quest is completed.
@@ -453,10 +454,7 @@ class _QuestCompleteAnimationState extends State<QuestCompleteAnimation>
             ),
           ),
           child: Center(
-            child: Text(
-              widget.quest.icon,
-              style: const TextStyle(fontSize: 36),
-            ),
+            child: Icon(AppIcons.get(widget.quest.icon), size: 36, color: Colors.white),
           ),
         ),
 
