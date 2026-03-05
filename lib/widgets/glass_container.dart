@@ -37,7 +37,7 @@ class GlassContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tint = tintColor ?? AppColors.surface.withAlpha(128);
+    final tint = tintColor ?? AppColors.surface.withAlpha(77);
     final radius = BorderRadius.circular(borderRadius);
 
     return Container(
