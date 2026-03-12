@@ -116,7 +116,7 @@ class _AchievementsPageState extends State<AchievementsPage>
               borderRadius: BorderRadius.circular(12),
             ),
             child: const Center(
-              child: Text('🏆', style: TextStyle(fontSize: 24)),
+              child: Icon(Icons.emoji_events, size: 24, color: Colors.white),
             ),
           ),
           const SizedBox(width: 16),
@@ -409,20 +409,20 @@ class _AchievementsPageState extends State<AchievementsPage>
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          _buildRewardItem('⚡', '${achievement.rewardXP} XP'),
+          _buildRewardItem(Icons.bolt, '${achievement.rewardXP} XP'),
           if (achievement.rewardPoints != null)
-            _buildRewardItem('✨', '${achievement.rewardPoints} Points'),
+            _buildRewardItem(Icons.auto_awesome, '${achievement.rewardPoints} Points'),
           if (achievement.rewardItem != null)
-            _buildRewardItem('🎁', achievement.rewardItem!),
+            _buildRewardItem(Icons.card_giftcard, achievement.rewardItem!),
         ],
       ),
     );
   }
 
-  Widget _buildRewardItem(String icon, String text) {
+  Widget _buildRewardItem(IconData icon, String text) {
     return Column(
       children: [
-        Text(icon, style: const TextStyle(fontSize: 24)),
+        Icon(icon, size: 24, color: AppColors.gold),
         const SizedBox(height: 4),
         Text(
           text,

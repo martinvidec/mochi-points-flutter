@@ -160,7 +160,7 @@ class _RewardEditPageState extends State<RewardEditPage> {
                       labelText: 'Preis (Punkte) *',
                       hintText: 'z.B. 50',
                       border: OutlineInputBorder(),
-                      prefixText: '✨ ',
+                      prefixIcon: Icon(Icons.auto_awesome, size: 20, color: AppColors.gold),
                     ),
                     keyboardType: TextInputType.number,
                     validator: (value) {
@@ -183,9 +183,17 @@ class _RewardEditPageState extends State<RewardEditPage> {
                       border: OutlineInputBorder(),
                     ),
                     items: RewardCategory.values.map((category) {
+                      final data = _categoryData[category]!;
                       return DropdownMenuItem(
                         value: category,
-                        child: Text(_getCategoryLabel(category)),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(data.$1, size: 18, color: Colors.white70),
+                            const SizedBox(width: 8),
+                            Text(data.$2),
+                          ],
+                        ),
                       );
                     }).toList(),
                     onChanged: (value) {
@@ -297,18 +305,13 @@ class _RewardEditPageState extends State<RewardEditPage> {
     );
   }
 
-  String _getCategoryLabel(RewardCategory category) {
-    switch (category) {
-      case RewardCategory.experience:
-        return '🎉 Erlebnis';
-      case RewardCategory.item:
-        return '🎁 Sache';
-      case RewardCategory.privilege:
-        return '⭐ Privileg';
-      case RewardCategory.custom:
-        return '✨ Spezial';
-    }
-  }
+  static const Map<RewardCategory, (IconData, String)> _categoryData = {
+    RewardCategory.experience: (Icons.celebration, 'Erlebnis'),
+    RewardCategory.item: (Icons.card_giftcard, 'Sache'),
+    RewardCategory.privilege: (Icons.star, 'Privileg'),
+    RewardCategory.custom: (Icons.auto_awesome, 'Spezial'),
+  };
+
 
   Future<void> _saveReward() async {
     if (!_formKey.currentState!.validate()) return;
