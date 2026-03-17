@@ -59,13 +59,13 @@ class _ShopPageState extends State<ShopPage> {
               children: [
                 _buildCategoryChip(null, 'Alle'),
                 const SizedBox(width: 8),
-                _buildCategoryChip(RewardCategory.experience, '🎉 Erlebnisse'),
+                _buildCategoryChip(RewardCategory.experience, 'Erlebnisse', Icons.celebration),
                 const SizedBox(width: 8),
-                _buildCategoryChip(RewardCategory.item, '🎁 Sachen'),
+                _buildCategoryChip(RewardCategory.item, 'Sachen', Icons.card_giftcard),
                 const SizedBox(width: 8),
-                _buildCategoryChip(RewardCategory.privilege, '⭐ Privilegien'),
+                _buildCategoryChip(RewardCategory.privilege, 'Privilegien', Icons.star),
                 const SizedBox(width: 8),
-                _buildCategoryChip(RewardCategory.custom, '✨ Spezial'),
+                _buildCategoryChip(RewardCategory.custom, 'Spezial', Icons.auto_awesome),
               ],
             ),
           ),
@@ -98,11 +98,20 @@ class _ShopPageState extends State<ShopPage> {
     );
   }
 
-  Widget _buildCategoryChip(RewardCategory? category, String label) {
+  Widget _buildCategoryChip(RewardCategory? category, String label, [IconData? icon]) {
     final isSelected = _selectedCategory == category;
 
     return FilterChip(
-      label: Text(label),
+      label: icon != null
+          ? Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(icon, size: 16),
+                const SizedBox(width: 4),
+                Text(label),
+              ],
+            )
+          : Text(label),
       selected: isSelected,
       onSelected: (selected) {
         setState(() {
@@ -149,7 +158,7 @@ class _ShopPageState extends State<ShopPage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text('✨', style: TextStyle(fontSize: 20)),
+                  Icon(Icons.auto_awesome, size: 20, color: AppColors.gold),
                   const SizedBox(width: 8),
                   Text(
                     '${reward.price} Punkte',
