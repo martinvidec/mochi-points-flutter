@@ -1,9 +1,14 @@
 import { defineConfig, devices } from '@playwright/test';
 
-// Base URL for the Flutter Web app. CI overrides to whatever the workflow
-// serves (typically http://127.0.0.1:8080 against a built + static-served
-// build/web). Local runs fall back to the webServer below.
-const BASE_URL = process.env.E2E_BASE_URL ?? 'http://localhost:8080';
+// Base URL for the Flutter Web app.
+// - In CI the workflow builds `build/web`, serves it statically and sets
+//   `E2E_BASE_URL=http://127.0.0.1:8080`, so the runner talks to that server
+//   instead of spinning up its own.
+// - Locally the default is `http://127.0.0.1:8080` and the `webServer` block
+//   below starts `flutter run -d web-server` for you on first test.
+// - You can also point the runner at any other server (e.g. `python3 -m
+//   http.server` against a pre-built `build/web`) via the same env var.
+const BASE_URL = process.env.E2E_BASE_URL ?? 'http://127.0.0.1:8080';
 
 export default defineConfig({
   testDir: './tests/specs',

@@ -1,11 +1,11 @@
 /**
  * Shared-Preferences-Seeding für Playwright-Tests.
  *
- * Die App persistiert via `shared_preferences`, was auf Flutter Web in
- * `window.localStorage` mit Prefix `flutter.<key>` schreibt. Indem wir
- * VOR dem Flutter-Boot (via `page.addInitScript`) localStorage setzen,
- * starten wir jeden Test mit einem deterministischen Repo-Zustand, ohne
- * UI-Klicks für Setup.
+ * Die App persistiert via `shared_preferences` (Version 2.5.x / _web 2.4.3),
+ * was auf Flutter Web in `window.localStorage` mit Prefix `flutter.<key>`
+ * schreibt. Indem wir VOR dem Flutter-Boot (via `page.addInitScript`)
+ * localStorage setzen, starten wir jeden Test mit einem deterministischen
+ * Zustand ohne UI-Klicks für Setup.
  *
  * Die hier bereitgestellten Fixture-Builder spiegeln die im
  * `docs/tests/playwright/README.md` definierten Namen:
@@ -15,11 +15,25 @@
  *   - familyWithQuestAndReward
  *   - childWithApprovedQuest
  *
- * Wichtig: shared_preferences_web serialisiert primitive Typen direkt.
- * Strings werden mit Prefix `string:` versehen, Bools/Ints ebenfalls.
- * Unser StorageService schreibt die Daten aber selbst als JSON-Strings
- * über `prefs.setString(...)` → deshalb bekommen die Keys hier alle den
- * `string:`-Prefix.
+ * # Wire-Format (empirisch verifiziert)
+ *
+ * `shared_preferences_web` speichert jeden Wert als JSON-codierten String.
+ * Da unser `StorageService` intern bereits JSON schreibt (alle Collections
+ * via `prefs.setString(key, jsonEncode(...))`), ergibt sich ein doppeltes
+ * JSON-Encoding:
+ *
+ *   localStorage['flutter.family']
+ *     = JSON.stringify(JSON.stringify({ id: '...', name: '...' }))
+ *     = '"{\"id\":\"...\",\"name\":\"...\"}"'
+ *
+ * Für primitive Strings (wie `last_user_id`) wird direkt der String in JSON
+ * verpackt:
+ *
+ *   localStorage['flutter.last_user_id']
+ *     = JSON.stringify('user-luca-001')
+ *     = '"user-luca-001"'
+ *
+ * Das `set()`-Helper unten kapselt beide Fälle.
  */
 
 import type { Page } from '@playwright/test';
@@ -69,6 +83,7 @@ function buildFamily() {
   return {
     id: IDS.family,
     name: 'Test-Familie',
+    inviteCode: null,
     createdAt: nowIso(),
   };
 }
@@ -80,6 +95,7 @@ function buildParent(id: string, name: string, pin: string | null = null) {
     name,
     email: '',
     role: 'parent',
+    avatarUrl: null,
     pin,
     createdAt: nowIso(),
   };
@@ -92,6 +108,7 @@ function buildChild(id: string, name: string, pin: string | null = null) {
     name,
     email: '',
     role: 'child',
+    avatarUrl: null,
     pin,
     createdAt: nowIso(),
   };
@@ -159,11 +176,10 @@ function buildRewards() {
       name: '30 min Tablet',
       description: 'Extra Tablet-Zeit',
       icon: 'tablet',
-      category: 'privilege',
       price: 50,
+      category: 'privilege',
       stock: null,
       isActive: true,
-      expiresAt: null,
       createdAt: nowIso(),
     },
     {
@@ -173,11 +189,10 @@ function buildRewards() {
       name: 'Eis',
       description: 'Ein Eis deiner Wahl',
       icon: 'icecream',
-      category: 'item',
       price: 20,
+      category: 'item',
       stock: 2,
       isActive: true,
-      expiresAt: null,
       createdAt: nowIso(),
     },
     {
@@ -187,11 +202,10 @@ function buildRewards() {
       name: 'Premium-Item',
       description: 'Sehr teurer Reward (Negativtest)',
       icon: 'star',
-      category: 'item',
       price: 1000,
+      category: 'item',
       stock: null,
       isActive: true,
-      expiresAt: null,
       createdAt: nowIso(),
     },
   ];
@@ -226,37 +240,43 @@ export interface SeedPayload {
 /**
  * Schreibt die Seed-Daten in `localStorage`, BEVOR die Flutter-Engine bootet.
  * Muss vor dem ersten `page.goto(...)` aufgerufen werden.
+ *
+ * Alle Werte werden als doppelt-JSON-codierte Strings abgelegt, um das
+ * Verhalten von `shared_preferences_web` zu spiegeln (siehe Datei-Header).
  */
 export async function applySeed(page: Page, payload: SeedPayload): Promise<void> {
   await page.addInitScript((args: { prefix: string; keys: typeof KEYS; data: SeedPayload }) => {
     const { prefix, keys, data } = args;
 
-    const set = (key: string, value: unknown) => {
-      // shared_preferences_web stored JSON-encoded strings as plain strings
-      // without extra prefix — aber das Web-Plugin wrappt Strings mit `string:`.
-      // Weil unser StorageService die Daten bereits als JSON-String übergibt,
-      // schreiben wir `string:<json>` in localStorage.
-      const serialized = typeof value === 'string' ? value : JSON.stringify(value);
-      window.localStorage.setItem(prefix + key, 'string:' + serialized);
+    // Für Collections: Objekt/Array → JSON → als String → erneut JSON.
+    const setObject = (key: string, value: unknown) => {
+      const innerJson = JSON.stringify(value);
+      window.localStorage.setItem(prefix + key, JSON.stringify(innerJson));
     };
 
-    if (data.family) set(keys.family, JSON.stringify(data.family));
-    if (data.familyMembers) set(keys.familyMembers, JSON.stringify(data.familyMembers));
+    // Für Strings (z. B. last_user_id): der String ist bereits der innere
+    // Wert. shared_preferences verpackt ihn einmal mit JSON.stringify.
+    const setString = (key: string, value: string) => {
+      window.localStorage.setItem(prefix + key, JSON.stringify(value));
+    };
+
+    if (data.family) setObject(keys.family, data.family);
+    if (data.familyMembers) setObject(keys.familyMembers, data.familyMembers);
     if (data.lastUserId !== undefined) {
       if (data.lastUserId === null) {
         window.localStorage.removeItem(prefix + keys.lastUserId);
       } else {
-        set(keys.lastUserId, data.lastUserId);
+        setString(keys.lastUserId, data.lastUserId);
       }
     }
-    if (data.quests) set(keys.quests, JSON.stringify(data.quests));
-    if (data.questInstances) set(keys.questInstances, JSON.stringify(data.questInstances));
-    if (data.pointsAccounts) set(keys.pointsAccounts, JSON.stringify(data.pointsAccounts));
-    if (data.transactions) set(keys.transactions, JSON.stringify(data.transactions));
-    if (data.rewards) set(keys.rewards, JSON.stringify(data.rewards));
-    if (data.purchases) set(keys.purchases, JSON.stringify(data.purchases));
-    if (data.heroes) set(keys.heroes, JSON.stringify(data.heroes));
-    if (data.notifications) set(keys.notifications, JSON.stringify(data.notifications));
+    if (data.quests) setObject(keys.quests, data.quests);
+    if (data.questInstances) setObject(keys.questInstances, data.questInstances);
+    if (data.pointsAccounts) setObject(keys.pointsAccounts, data.pointsAccounts);
+    if (data.transactions) setObject(keys.transactions, data.transactions);
+    if (data.rewards) setObject(keys.rewards, data.rewards);
+    if (data.purchases) setObject(keys.purchases, data.purchases);
+    if (data.heroes) setObject(keys.heroes, data.heroes);
+    if (data.notifications) setObject(keys.notifications, data.notifications);
   }, { prefix: PREFIX, keys: KEYS, data: payload });
 }
 
@@ -337,6 +357,7 @@ export function seedChildWithApprovedQuest(): SeedPayload {
         status: 'completed',
         progress: 1,
         target: 1,
+        currentStreak: 0,
         startedAt: today,
         completedAt: today,
         approvedAt: today,

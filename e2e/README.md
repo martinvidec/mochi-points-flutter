@@ -27,6 +27,16 @@ e2e/
 - Flutter 3.41.2+ (siehe `../CLAUDE.md`)
 - Chromium-Browser für Playwright (wird per `npx playwright install` bezogen)
 
+## Abhängigkeiten
+
+Dieses Projekt pinnt bewusst **nur** `@playwright/test` als dev-Dependency.
+`@playwright/cli` (das interaktive Exploration-Tool) wird auf Abruf via
+`npx @playwright/cli@latest <command>` verwendet. Grund: `@playwright/cli@0.1.6`
+bringt ein top-level `playwright@1.60.0-alpha-*` mit, das einen eigenen
+Test-Runner enthält. Wenn beides in `node_modules` liegt, bekommt Playwright
+zwei Runner-Kopien und bricht mit „Two different versions of @playwright/test"
+ab. Siehe Commit-History, falls sich daran einmal etwas ändert.
+
 ## Lokale Ausführung
 
 ### Schneller Weg — `make e2e` vom Repo-Root
