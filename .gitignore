@@ -41,3 +41,13 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Claude Code project-local state (skills, tmp, settings)
+.claude/
+
+# Playwright E2E artifacts (test project lives in e2e/)
+e2e/node_modules/
+e2e/playwright-report/
+e2e/test-results/
+e2e/.playwright/
+e2e/blob-report/
