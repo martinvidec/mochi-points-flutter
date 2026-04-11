@@ -8,8 +8,19 @@
 
 Der erste Start der App ohne Familie muss einen komplett UI-gesteuerten
 Onboarding-Flow erlauben: Familie benennen → ersten Elternteil anlegen →
-optional weitere Mitglieder → Abschluss, danach befindet sich der User im
-passenden Dashboard.
+optional weitere Mitglieder → Abschluss, danach befindet sich der User auf
+der LoginPage.
+
+## UI-Hinweise (empirisch verifiziert am 2026-04-11)
+
+Die Page ist ein `Stepper` mit 3 Schritten:
+1. **„1 Familienname"** — textbox „Familienname", Button „Weiter"
+2. **„2 Elternteil erstellen"** — Button „Elternteil erstellen" öffnet eine
+   Sub-Page (`AddMemberPage`) mit textbox „Name", textbox „PIN (optional)",
+   Button „Speichern". Danach Button „Weiter".
+3. **„3 Weitere Mitglieder"** — Button „Mitglied hinzufügen" + Button „Fertig".
+
+Ein Klick auf „Fertig" speichert und navigiert zu `/login`.
 
 ## Preconditions / Fixtures
 
@@ -26,12 +37,16 @@ And:   Erster Parent „Mama" wird hinzugefügt (PIN 1234)
 And:   Ein Child „Luca" wird hinzugefügt (ohne PIN)
 And:   „Fertig" wird geklickt
 Then:  Familie wird persistiert
-And:   Parent „Mama" ist automatisch eingeloggt → Parent-Dashboard
+And:   App routet auf die LoginPage — der Parent wird NICHT automatisch
+       eingeloggt (verifiziert 2026-04-11 via playwright-cli)
 ```
 **Assertions:**
-- `await expect(page.getByRole('heading', { name: /hallo,\s*mama/i })).toBeVisible()`
+- `await expect(page.getByRole('heading', { name: /wer bist du/i })).toBeVisible()`
+- Avatar für „Mama" ist sichtbar und klickbar
 - Reload der Page landet nicht mehr im Family-Setup
-- `localStorage` enthält Keys `family` und `family_members`
+- `localStorage` enthält Keys `flutter.family` und `flutter.family_members`
+  (doppelt-JSON-codierter Payload — siehe `e2e/tests/fixtures/seed.ts`)
+- `localStorage['flutter.last_user_id']` ist **nicht** gesetzt
 
 ### TC-002.2 — Pflichtfelder-Validierung
 ```
