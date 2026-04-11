@@ -234,6 +234,42 @@ const Curve smooth = Curves.easeInOut;
 - Keep widgets small and focused
 - Use meaningful variable names (German UI, English code)
 
+### E2E Tests (Playwright)
+
+The Flutter Web target is covered by a Playwright suite under `e2e/`.
+Specs live in `docs/tests/playwright/PW-*.md` and are translated 1:1
+into `e2e/tests/specs/PW-*.spec.ts` files, one PR per issue.
+
+**Before you touch any Playwright-labelled issue:**
+
+1. **Read `docs/tests/playwright/FINDINGS.md` first.** It catalogs every
+   non-obvious Flutter-Web-quirk, Semantics-Tree label, seed-format
+   detail, dependency trap and workflow tip that has surfaced so far.
+   Ignoring it costs hours of trial-and-error; reading it is ~10 minutes.
+2. Follow the explore-before-write workflow documented there (W-1):
+   run the app, drive it interactively with
+   `npx --yes -p @playwright/cli playwright-cli`, snapshot the real
+   semantics tree, then crystallize the findings into the spec file.
+3. Use the shared helpers (`flutterFill`, `flutterText`,
+   `clickUnlabeledButton`, `openFlutterApp`) and seed builders
+   (`seedFamilyWithChild` et al.) from `e2e/tests/fixtures/`. Do not
+   re-implement any of them per spec.
+
+**When you uncover a new non-obvious finding — update `FINDINGS.md` in
+the same PR.** This is part of the Definition of Done for every
+Playwright PR, not optional. The catalog is a force multiplier: PW-003
+went green on the first try because everything PW-001/PW-002 had
+discovered was already in the doc. If we stop maintaining it, that
+advantage disappears and everyone re-learns the same quirks.
+
+**Local run loop** (fastest): pre-build `flutter build web
+--no-tree-shake-icons`, serve with `python3 -m http.server 8766
+--directory build/web`, then run
+`CI=true E2E_BASE_URL=http://127.0.0.1:8766 npx playwright test` from
+`e2e/`. The Makefile target `make e2e` handles the full auto-start
+path for one-shot runs; see `e2e/README.md` for hot-reload and
+debugging modes.
+
 ## Current Status
 
 **Phase**: MVP Development
@@ -245,3 +281,10 @@ const Curve smooth = Curves.easeInOut;
 - `/docs/MVP_CONCEPT.md` - Full product specification with gamification features
 - `/docs/UI_DESIGN.md` - Design system, components, animations
 - `/docs/DATA_MODEL.md` - Data models, relationships, Dart code
+- `/docs/IST_ANALYSE.md` - Process-oriented snapshot of the current app,
+  swimlanes per main process, implementation gaps
+- `/docs/tests/playwright/` - Playwright E2E specs (PW-001..PW-016)
+  - `README.md` - Spec index, test-stack decisions, shared fixtures
+  - `FINDINGS.md` - **Required reading before any Playwright PR**;
+    catalog of Flutter-Web quirks, UI labels, seed conventions. Must be
+    kept up-to-date whenever a new non-obvious finding surfaces.

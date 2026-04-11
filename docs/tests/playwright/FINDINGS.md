@@ -1,7 +1,7 @@
 # Playwright + Flutter Web: Findings
 
 Stand: 2026-04-12
-Quellen: PR #181 (Bootstrap), #182 (PW-001), #183 (PW-002)
+Quellen: PR #181 (Bootstrap), #182 (PW-001), #183 (PW-002), #185 (PW-003)
 
 Dieses Dokument ist ein **lebender Katalog** aller nicht-offensichtlichen
 Erkenntnisse, die bei der Arbeit an der E2E-Test-Suite unter `e2e/` aufgefallen
@@ -9,6 +9,31 @@ sind. Wenn du eine neue PW-NNN-Spec implementierst, lies dieses Dokument
 **bevor** du Zeit mit Trial-and-Error verbrennst — mit großer Wahrscheinlichkeit
 hat jemand das Problem schon einmal gelöst. Wenn du ein neues Finding machst,
 hänge es unten an mit Datum + PR-Referenz.
+
+> ### ⚠️ Maintenance-Pflicht
+>
+> Diese Datei muss bei **jedem** Playwright-PR gepflegt werden, in dem ein
+> nicht-offensichtliches Detail auftaucht — egal ob es ein neuer App-Bug,
+> ein Semantics-Quirk, ein Label-Pattern, eine Dep-Überraschung oder ein
+> Workflow-Kniff ist. Aufnahme in `FINDINGS.md` ist Teil der Definition of
+> Done für jede `feature/<N>-pw-NNN-*`-Branch, **nicht** optional.
+>
+> **Warum so hart?** PW-003 ist beim ersten Versuch grün geworden, weil die
+> Findings aus #181/#182/#183 vollständig katalogisiert waren (W-1
+> Explore-before-Write, F-11 „Approve" statt „Genehmigungen", F-13
+> „Wer bist du?" ist kein heading, F-7 Double-JSON-Seed-Format …). Das
+> spart real Zeit. Ohne Pflege verfällt der Katalog und alle müssen
+> wieder Trial-and-Error machen.
+>
+> **Wie?** Ein neues Finding → neue Sub-Sektion mit ID (`F-17`, `B-5`,
+> `W-6` usw., fortlaufend), Datum, PR-Referenz. Bei Änderungen an einem
+> bestehenden Finding: die ursprüngliche ID behalten, Quelle um den PR
+> ergänzen. Die **Quellen-Zeile oben** im Header immer mit dem neuen PR
+> erweitern.
+>
+> Die CLAUDE.md-Session-Instructions verweisen ebenfalls auf diesen
+> Workflow (§ „E2E Tests (Playwright)") — beides muss konsistent
+> bleiben.
 
 Gliederung:
 
@@ -427,6 +452,67 @@ Pattern: `Familie <ChildName> Lvl <N> <balance> MP <streak>`.
 
 Quelle: PR #181 Seed-Verify + PW-001 PR #182.
 
+### F-17 · PIN-Dialog ist ein Custom-Numeric-Keypad, kein Text-Input
+
+Beim Tap auf einen Avatar mit PIN öffnet sich **kein** Text-Input-Dialog,
+sondern ein selbst gebauter numerischer Keypad-Dialog. Strukturiert als:
+
+```
+generic: "PIN eingeben"      ← generic text node, nicht heading
+button "1" … button "9"      ← ein Button pro Ziffer
+button "0"
+button                        ← unlabeled (Backspace/Delete)
+button "Abbrechen"
+```
+
+Wichtige Konsequenzen für Tests:
+
+- Ziffern via `getByRole('button', { name: '1', exact: true })` ansprechen.
+  `exact: true` ist Pflicht, sonst matched „1" auch „10 MP", „100 XP" usw.
+- **Kein OK-Button**: nach der vierten Ziffer submitet der Dialog automatisch.
+  Nicht versuchen, einen Submit-Klick nachzuschieben.
+- Bei **falscher PIN** schließt der Dialog ebenfalls, User landet zurück auf
+  `/login`, eine Snackbar „Falscher PIN" wird eingeblendet. Die Snackbar ist
+  — wie jede andere — doppelt gerendert (siehe F-3), also via
+  `flutterText(page, /falscher pin/i)` matchen.
+- **Abbrechen** schließt den Dialog ohne Snackbar und ohne Persistenz.
+- „PIN eingeben" ist ein generischer Text-Knoten, nicht ein heading —
+  Assertion via `flutterText(page, /pin eingeben/i)`.
+
+Referenz-Helper (aktuell lokal in `PW-003-login-user-switching.spec.ts`,
+wird nach `fixtures/flutter.ts` gezogen, sobald ein zweiter Test das braucht):
+
+```typescript
+async function enterPin(page: Page, pin: string): Promise<void> {
+  for (const digit of pin) {
+    await page.getByRole('button', { name: digit, exact: true }).click();
+  }
+}
+```
+
+Quelle: PW-003 PR #185.
+
+### F-18 · Logout ist direkt — keine Bestätigungs-Modale
+
+Sowohl im Parent- als auch im Child-Profil-Tab führt ein Klick auf
+„Abmelden" **sofort** zur LoginPage. Kein Confirm-Dialog, kein Snackbar-
+Undo, nichts dazwischen. Der Button hat in beiden Rollen denselben
+accessible name:
+
+```
+role="button" name="Abmelden Aus dem Account ausloggen"
+```
+
+Match per Regex: `{ name: /abmelden.*ausloggen/i }`.
+
+Der Profil-Tab enthält pro Rolle unterschiedliche **andere** Buttons
+(Parent: „Familie verwalten", „Benachrichtigungen", „Erscheinungsbild",
+„Hilfe & Support"; Child: „Profil bearbeiten", „Transaktionen",
+„Erscheinungsbild", „Hilfe & Support") — aber Abmelden sieht überall gleich
+aus.
+
+Quelle: PW-003 PR #185.
+
 ---
 
 ## App-Bugs gefunden während Testing
@@ -628,16 +714,41 @@ const page = await seededPage({
 Nur wenn dieselbe Variante in mehreren Specs auftaucht, lohnt sich ein eigener
 Builder in `seed.ts`.
 
+### W-6 · Diese Datei ist ein Force-Multiplier — pflegen, pflegen, pflegen
+
+PW-001 und PW-002 haben zusammen ca. 6 Iterationen gebraucht, bis die
+Helpers (`flutterFill`, `flutterText`, `clickUnlabeledButton`), das
+Seed-Format und die Locator-Entscheidungen stimmten. **PW-003 lief beim
+ersten Versuch grün.** Der einzige Unterschied: alle relevanten Findings
+waren bis dahin katalogisiert und PW-003 konnte sie direkt wiederverwenden.
+
+Die Datei hat einen messbaren ROI — aber nur, wenn jeder neue Finding
+auch sofort reingeschrieben wird. Wenn du einen Quirk findest und ihn
+„später" dokumentieren willst, vergisst du es. Schreib ihn **im selben
+PR** rein, in dem du ihn entdeckt hast. Die Maintenance-Regel im Header
+oben ist absichtlich strikt.
+
+Quelle: Retro-Beobachtung nach PW-003 PR #185.
+
 ---
 
 ## Offene Punkte / nächste Updates
 
-- **PW-003 (Login & Benutzerwechsel, #167)** — noch nicht implementiert. Hot
-  candidate für neue Findings: PIN-Dialog-Locator, Snackbar für „Falscher PIN",
-  Abbrechen-Verhalten im PIN-Dialog.
-- **Streak-/Time-Simulation** — PW-014 braucht Clock-Injection über
-  `page.addInitScript`. Noch nicht erprobt, wird beim Implementieren ergänzt.
-- **Notifications-Glocke** — wie badget die Zahl, welche Rolle? PW-015.
+Nächste Kandidaten für neue Findings (werden beim Implementieren der
+jeweiligen Spec erwartet):
+
+- **PW-014 Streak** — Time/Clock-Simulation via `page.addInitScript` oder
+  `page.clock.install`. Noch nicht erprobt.
+- **PW-015 Notifications** — Badge-Zähler an der Glocke, Read-State-Assertion,
+  User-Isolation der Inbox.
+- **PW-011/12 Transactions + Progression** — hier greift die IST-Analyse-§5.2-
+  Lücke (PointsProvider.loadData nicht beim Bootstrap gerufen), die Tests
+  müssen vermutlich raw localStorage prüfen, wie `seed-verify.spec.ts` es
+  für childWithApprovedQuest schon vormacht.
+- **PW-007 Approval + Level-Up** — die Level-Up-Animation muss ohne hard sleep
+  abgehandelt werden. Vermutlich via `waitForSelector` auf einen Dialog +
+  dessen Verschwinden.
 
 Wenn du ein neues Finding machst, hänge es oben in der passenden Sektion
-an und aktualisiere die Zusammenfassung oben (Datum + Quelle).
+an, aktualisiere die Quellen-Zeile ganz oben im Header und — falls sich
+am Workflow etwas ändert — die entsprechende W-*-Sektion.
