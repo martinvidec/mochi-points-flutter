@@ -7,6 +7,12 @@ Akteure *Eltern / Kind / System* beschreibt. Jede Spec hier deckt einen dieser
 Prozesse (oder einen klar umrissenen Teil) ab und ist Grundlage für genau eine
 Playwright-Test-Datei.
 
+> **Vor dem Schreiben einer neuen PW-NNN-Spec**: lies
+> [`FINDINGS.md`](FINDINGS.md). Dort sind alle Flutter-Web-spezifischen
+> Stolpersteine, Helper-APIs, Seed-Konventionen und UI-Label-Eigenheiten
+> gesammelt, die während der bisherigen Spec-Implementierungen aufgefallen
+> sind. Das spart garantiert Zeit.
+
 ## Ziel
 
 - **Eine Spec ⇔ eine Test-Datei ⇔ ein GitHub-Issue** (Label `playwright`).
