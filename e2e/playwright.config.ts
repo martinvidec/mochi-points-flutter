@@ -39,17 +39,34 @@ export default defineConfig({
 
   // In CI the workflow builds + serves build/web itself and sets
   // E2E_BASE_URL, so we don't spin up a webServer there.
+  //
+  // Locally we mirror the CI path: build the app once with
+  // `flutter build web`, then serve the static output with `npx serve`.
+  // This is deterministic — the server only starts answering on port 8080
+  // when the full JS bundle is on disk.
+  //
+  // We deliberately do NOT use `flutter run -d web-server` here. That
+  // command streams compilation output over a debug socket and starts
+  // responding with 200 to `/` *before* the JS bundle is ready, which
+  // lets Playwright think the server is up and fires test workers into
+  // a half-built page — resulting in `flt-semantics-placeholder`
+  // timeouts on the first batch of tests. See commit history for the
+  // investigation.
+  //
+  // If you want hot reload while iterating on tests, start
+  // `flutter run -d web-server --web-port 8081` yourself in a separate
+  // terminal and run the suite with
+  // `E2E_BASE_URL=http://127.0.0.1:8081 npm test`.
   webServer: process.env.CI
     ? undefined
     : {
-        // `flutter run -d web-server` is hot-reloadable and good for
-        // local test development.
         command:
-          'flutter run -d web-server --web-port 8080 --web-hostname 127.0.0.1',
+          'flutter build web --no-tree-shake-icons && npx --yes serve -s ../build/web -l 8080',
         url: BASE_URL,
         reuseExistingServer: true,
-        // First run downloads the web SDK — be generous.
-        timeout: 180_000,
+        // First run compiles the Flutter Web bundle from scratch and
+        // may also download the Flutter Web SDK — be generous.
+        timeout: 300_000,
         stdout: 'pipe',
         stderr: 'pipe',
       },

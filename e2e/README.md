@@ -47,8 +47,21 @@ make e2e
 
 Der Makefile-Target installiert Dependencies (`npm install`), lädt Chromium
 für Playwright (`npx playwright install chromium`) und startet den Runner.
-Der Runner startet dank `webServer`-Konfiguration automatisch
-`flutter run -d web-server` auf Port 8080, falls noch nichts läuft.
+Der Runner ruft dank `webServer`-Konfiguration einmalig
+`flutter build web --no-tree-shake-icons` auf und startet dann
+`npx serve -s ../build/web -l 8080` auf Port 8080, falls noch nichts läuft.
+Beim ersten Lauf kann das 60-90 s dauern (Flutter Web SDK + Build);
+danach ist der Build inkrementell.
+
+### Hot-Reload beim Test-Schreiben
+
+Wenn du iterativ Tests gegen eine laufende Dev-Instanz schreiben willst,
+starte `flutter run -d web-server --web-port 8081` in einem zweiten
+Terminal und rufe die Suite mit
+`E2E_BASE_URL=http://127.0.0.1:8081 npm test` auf. Wichtig: beim ersten
+Aufruf nach dem `flutter run`-Start kann es sein, dass einzelne Tests
+aussetzen, bis der Dev-Server die JS-Bundles kompiliert hat — dann einfach
+nochmal laufen lassen.
 
 ### Manueller Weg
 
