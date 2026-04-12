@@ -1,7 +1,7 @@
 # Playwright + Flutter Web: Findings
 
 Stand: 2026-04-12
-Quellen: PR #181 (Bootstrap), #182 (PW-001), #183 (PW-002), #185 (PW-003), #TBD (PW-004), #TBD (PW-005), #TBD (PW-006)
+Quellen: PR #181 (Bootstrap), #182 (PW-001), #183 (PW-002), #185 (PW-003), #TBD (PW-004), #TBD (PW-005), #TBD (PW-006), #TBD (PW-007)
 
 Dieses Dokument ist ein **lebender Katalog** aller nicht-offensichtlichen
 Erkenntnisse, die bei der Arbeit an der E2E-Test-Suite unter `e2e/` aufgefallen
@@ -713,6 +713,93 @@ await expect(page.getByRole('tab', { name: 'Alle' }))
 
 Quelle: PW-006 PR #TBD.
 
+### F-29 · Approval-Card rendert als Group mit kombiniertem Namen
+
+Die ApprovalCard für Pending-Quests rendert als `group` mit einem
+kombinierten accessible name, der Child-Name, Timestamp, Quest-Name
+und Rewards zusammenfasst:
+
+```
+group "Luca L Luca Abgeschlossen: 12.4.2026 14:22 Zimmer aufräumen 10 Punkte 50 XP":
+  button "Ablehnen"
+  button "Bestätigen"
+```
+
+Einzeltexte sind **NICHT** als separate Text-Knoten verfügbar. Um eine
+Pending Quest zu assertieren, matche den Group:
+
+```typescript
+await expect(
+  page.getByRole('group', { name: /zimmer aufräumen/i }),
+).toBeVisible();
+```
+
+Quelle: PW-007 PR #TBD.
+
+### F-30 · Approve-Tab-Badge ist in den accessible name eingebaut
+
+Wenn Pending-Quests existieren, zeigt der Approve-Tab einen Badge-Zähler.
+Dieser Zähler ist in den accessible name des Buttons eingebaut:
+
+- Ohne Pending: `button "Approve"`
+- Mit Pending: `button "1 Approve"`, `button "2 Approve"`, …
+
+Assertion-Pattern: `{ name: /approve/i }` matcht beide. Für den exakten
+Zähler: `{ name: /1\s*approve/i }`.
+
+Quelle: PW-007 PR #TBD.
+
+### F-31 · Level-Up-Animation ist ein Canvas-Overlay, nicht in Semantics
+
+Die `LevelUpAnimation` (via `showGeneralDialog`) rendert als Canvas-
+Overlay mit animiertem Text, Partikeln und Level-Counter. Der Text
+„LEVEL UP!" ist **nicht zuverlässig im Semantics-Tree** verfügbar.
+
+**Fix für Tests**: Level-Up via localStorage verifizieren, nicht per UI:
+
+```typescript
+await page.getByRole('button', { name: 'Bestätigen' }).click();
+await expect(flutterText(page, /quest bestätigt/i)).toBeVisible();
+
+// Optional: dismiss the animation if Weiter button appears
+const weiterButton = page.getByRole('button', { name: /weiter/i });
+try {
+  await weiterButton.waitFor({ state: 'visible', timeout: 5000 });
+  await weiterButton.click();
+} catch {
+  await page.mouse.click(400, 400); // tap to dismiss
+}
+
+// Verify via localStorage
+const heroes = JSON.parse(JSON.parse(
+  await page.evaluate(() => localStorage.getItem('flutter.heroes'))!
+));
+expect(heroes[0].level).toBe(2);
+```
+
+Quelle: PW-007 PR #TBD.
+
+### F-32 · Rejection-Dialog: zwei „Ablehnen"-Buttons nach Dialog-Open
+
+Nach Klick auf „Ablehnen" in der ApprovalCard öffnet sich ein Dialog
+mit optionalem Grund-Feld und „Abbrechen"/„Ablehnen"-Buttons. Jetzt
+existieren **zwei** Buttons mit Namen „Ablehnen":
+
+1. Der Card-Button (hinter dem Dialog)
+2. Der Dialog-Confirm-Button
+
+Fix: `getByRole('button', { name: 'Ablehnen' }).last()` — der Dialog-
+Button ist immer der letzte in DOM-Order.
+
+```typescript
+await page.getByRole('button', { name: 'Ablehnen' }).click(); // opens dialog
+// … fill reason optional …
+const ablehnenButtons = page.getByRole('button', { name: 'Ablehnen' });
+await ablehnenButtons.last().click(); // confirms rejection
+```
+
+Quelle: PW-007 PR #TBD.
+
 ---
 
 ## App-Bugs gefunden während Testing
@@ -789,6 +876,31 @@ IconButton(
 ```
 
 Quelle: PW-005.
+
+### B-7 · `HeroProvider.loadData()` wird nicht im Parent-Flow gerufen
+
+Verwandt mit B-3: `HeroProvider.loadData()` wird **nur** in
+`lib/pages/child/hero_home_page.dart:58` aufgerufen — beim Child-Login.
+Im Parent-Flow (SplashPage → ParentDashboard → ApprovalPage) wird er
+**nie** gerufen.
+
+**Konsequenz**: Wenn der Parent eine Quest approved, wird die Kette
+`onQuestApproved → heroProvider.addXP(childId, xp)` ausgeführt, aber
+`_heroes[childId]` ist `null`, weshalb `addXP()` silently `false`
+zurückgibt. Ergebnisse:
+
+- ✅ Punkte werden vergeben (PointsProvider tolerant gegenüber leerem State)
+- ❌ XP werden **nicht** vergeben
+- ❌ Level-Up triggert **nie** im echten Parent-Flow
+- ❌ Streak wird nicht aktualisiert
+
+**Workaround in Tests** (siehe PW-007 TC-007.6): Start als Child (lädt
+hero data), dann logout+login als Parent, dann approve. Aufwändig.
+
+**Echter Fix**: `heroProvider.loadData()` in SplashPage._initialize
+aufrufen, analog zu `notificationProvider.loadData()`.
+
+Quelle: PW-007 PR #TBD.
 
 ---
 
