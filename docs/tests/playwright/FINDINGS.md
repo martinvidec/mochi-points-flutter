@@ -1,7 +1,7 @@
 # Playwright + Flutter Web: Findings
 
 Stand: 2026-04-12
-Quellen: PR #181 (Bootstrap), #182 (PW-001), #183 (PW-002), #185 (PW-003), #TBD (PW-004)
+Quellen: PR #181 (Bootstrap), #182 (PW-001), #183 (PW-002), #185 (PW-003), #TBD (PW-004), #TBD (PW-005)
 
 Dieses Dokument ist ein **lebender Katalog** aller nicht-offensichtlichen
 Erkenntnisse, die bei der Arbeit an der E2E-Test-Suite unter `e2e/` aufgefallen
@@ -552,6 +552,108 @@ weil der FAB der einzige unlabeled Button auf der Seite ist.
 
 Quelle: PW-004 PR #TBD.
 
+### F-21 · ChoiceChips rendern als `checkbox`, nicht `button`
+
+Flutters `ChoiceChip` und `FilterChip` werden in der Semantics-Tree als
+`role="checkbox"` gerendert, nicht als `button`. Selected-State wird über
+das `checked`-Attribut signalisiert.
+
+```typescript
+// Quest-Typ auswählen (ChoiceChip)
+await page.getByRole('checkbox', { name: 'Epic' }).click();
+await expect(
+  page.getByRole('checkbox', { name: 'Epic' }),
+).toBeChecked();
+
+// Rarity (ChoiceChip)
+await page.getByRole('checkbox', { name: 'Legendär' }).click();
+
+// Kind-Zuweisung (FilterChip)
+await page.getByRole('checkbox', { name: 'Luca' }).click();
+```
+
+Quelle: PW-005 PR #TBD.
+
+### F-22 · Quest-Card hat kombinierten Accessible Name
+
+Die Quest-Karte auf der QuestManagementPage rendert als Button mit einem
+kombinierten accessible name:
+
+```
+role="button" name="Zimmer aufräumen Gewöhnlich Daily 10 Punkte • 100 XP"
+```
+
+Pattern: `<Name> <Rarity> <Type> <Points> Punkte • <XP> XP`.
+
+Assertion-Empfehlung: Regex auf Name + Teilinfos, z. B.:
+
+```typescript
+await expect(
+  page.getByRole('button', { name: /zimmer aufräumen.*20 punkte/i }),
+).toBeVisible();
+```
+
+Quelle: PW-005 PR #TBD.
+
+### F-23 · Unlabeled AppBar-Actions: CSS-Sibling-Selector statt `clickUnlabeledButton`
+
+Die QuestEditPage hat einen Save-Button (Icons.check) in der AppBar ohne
+Tooltip/Semantics-Label. Die naheliegenden Workarounds funktionieren
+**nicht zuverlässig**:
+
+- `heading.locator('..')` → flt-semantics-DOM-Nesting stimmt nicht mit
+  dem Semantic-Tree überein, Parent-Scope enthält manchmal keine Buttons.
+- `clickUnlabeledButton(body)` → icon picker buttons können in der DOM-
+  Reihenfolge vor dem Save-Button kommen.
+- `evaluate + dispatchEvent('click')` → der synthetische Click geht nicht
+  durch Flutters Event-Pipeline, löst manchmal die falsche Aktion aus
+  (z. B. öffnet Popup-Menu statt Save).
+
+**Zuverlässiger Fix**: Das Heading rendert als `<h2>`, der Save-Button ist
+das nächste `<flt-semantics role="button">`-Sibling. CSS adjacent-sibling
+Selector + Playwrights `.click()`:
+
+```typescript
+await page.locator('h2 + flt-semantics[role="button"]').click();
+```
+
+**Empfohlener App-Fix**: `tooltip: 'Quest speichern'` auf dem IconButton.
+
+Quelle: PW-005 PR #TBD.
+
+### F-24 · `toHaveValue()` funktioniert nicht für pre-filled TextFormFields
+
+Wenn ein `TextFormField` mit einem initialen Controller-Wert (z. B.
+`TextEditingController(text: '10')`) erstellt wird, ist der Wert im
+Canvas sichtbar, aber das versteckte `<input>`-Element hat `value=""`.
+`expect(field).toHaveValue('10')` schlägt fehl.
+
+**Workaround**: Nicht `toHaveValue()` für pre-filled Fields assertieren.
+Stattdessen den Wert nach der Aktion via localStorage prüfen.
+
+Verwandt mit F-2 (Flutter-Input-Quirk).
+
+Quelle: PW-005 PR #TBD.
+
+### F-25 · Dismissible-Swipe funktioniert mit Mouse-Drag
+
+Flutters `Dismissible` Widget (Swipe-to-Delete) funktioniert in
+Playwright via Mouse-Move-Sequenz:
+
+```typescript
+const box = await element.boundingBox();
+await page.mouse.move(box.x + box.width - 20, box.y + box.height / 2);
+await page.mouse.down();
+await page.mouse.move(box.x - 100, box.y + box.height / 2, { steps: 10 });
+await page.mouse.up();
+```
+
+- `steps: 10` ist wichtig, damit Flutter die Drag-Geste erkennt.
+- Drag-Richtung: rechts → links (`endToStart`).
+- Nach dem Swipe erscheint der Bestätigungs-Dialog.
+
+Quelle: PW-005 PR #TBD.
+
 ---
 
 ## App-Bugs gefunden während Testing
@@ -610,6 +712,25 @@ FloatingActionButton(
 
 Quelle: PW-004.
 
+### B-6 · QuestEditPage Save-Button hat kein Tooltip / Semantics-Label
+
+Der IconButton (Icons.check) in `lib/pages/parent/quest_edit_page.dart:144`
+hat weder `tooltip` noch `Semantics(label: ...)`. Tests müssen den
+CSS-Sibling-Selector `h2 + flt-semantics[role="button"]` verwenden
+(siehe F-23).
+
+**Empfohlener Fix**:
+
+```dart
+IconButton(
+  icon: const Icon(Icons.check),
+  tooltip: 'Quest speichern',  // ← hinzufügen
+  onPressed: _save,
+),
+```
+
+Quelle: PW-005.
+
 ---
 
 ## Spec-Korrekturen
@@ -639,6 +760,25 @@ fängt den Bug.
 Alternative Strategie: Tests beschreiben Ist-Verhalten mit einem `test.fail()`
 oder Kommentar-Marker bis der App-Fix kommt. Für PW-003 wird das beim
 Implementieren entschieden.
+
+### S-3 · PW-005 Spec-Abweichungen
+
+Drei Testfälle in der PW-005-Spec stimmten nicht mit dem App-Verhalten
+überein und wurden im Test angepasst:
+
+1. **TC-005.2** sagt „Typ Weekly, Rarity Epic, Deadline (in 7 Tagen)".
+   Deadline-Feld erscheint aber nur für **Typ Epic**. Test verwendet
+   Typ=Epic statt Weekly.
+
+2. **TC-005.3** erwartet `targetCount 5` im Formular. Das Feld existiert
+   im Model (`Quest.targetCount`), wird aber **nicht in der UI** exponiert.
+   Nur das Unit-Feld ist für Series-Quests verfügbar. Test prüft nur Unit.
+
+3. **TC-005.5** (Deaktivieren) ist **nicht implementiert** — es gibt keinen
+   isActive-Toggle in der QuestEditPage (im Gegensatz zur RewardEditPage,
+   die einen SwitchListTile „Aktiv" hat). Test ist `test.skip()`.
+
+Quelle: PW-005 PR #TBD.
 
 ---
 
