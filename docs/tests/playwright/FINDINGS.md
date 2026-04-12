@@ -1,7 +1,7 @@
 # Playwright + Flutter Web: Findings
 
 Stand: 2026-04-12
-Quellen: PR #181 (Bootstrap), #182 (PW-001), #183 (PW-002), #185 (PW-003), #TBD (PW-004), #TBD (PW-005), #TBD (PW-006), #TBD (PW-007), #TBD (PW-008)
+Quellen: PR #181 (Bootstrap), #182 (PW-001), #183 (PW-002), #185 (PW-003), #TBD (PW-004), #TBD (PW-005), #TBD (PW-006), #TBD (PW-007), #TBD (PW-008), #TBD (PW-009)
 
 Dieses Dokument ist ein **lebender Katalog** aller nicht-offensichtlichen
 Erkenntnisse, die bei der Arbeit an der E2E-Test-Suite unter `e2e/` aufgefallen
@@ -893,6 +893,51 @@ Verwandt mit F-25 (Dismissible-Swipe). Die Regel: immer in einem
 
 Quelle: PW-008 PR #TBD.
 
+### F-38 · Child-RewardCard ist ein einzelner Button (kein Group)
+
+Im Child-Shop (`lib/pages/child/shop_page.dart`) rendert die RewardCard
+**anders** als in der ParentManagementPage:
+
+- **Parent** (F-33): `group "Name ✨ price Punkte"` mit Switch innen
+- **Child**: `button "Name ✨ price Kaufen"` — die ganze Card ist
+  EIN klickbarer Button, keine innere Struktur
+
+Bei unzureichendem Guthaben ändert sich der Action-Suffix von „Kaufen"
+zu „Noch X Punkte" (Lock-Overlay). Bei ausverkauften Stock-Rewards wäre
+es „Ausverkauft".
+
+**Locator-Pattern**:
+
+```typescript
+// Normal
+page.getByRole('button', { name: /tablet.*kaufen/i });
+// Insufficient balance
+page.getByRole('button', { name: /premium.*noch \d+ punkte/i });
+```
+
+Zum Öffnen des Purchase-Dialogs: einfach den Button klicken.
+
+Quelle: PW-009 PR #TBD.
+
+### F-39 · Purchase-Dialog: zwei „Kaufen"-Buttons nach Dialog-Open
+
+Ähnlich F-32 (Rejection-Dialog): Nach Klick auf den Reward-Card-Button
+öffnet sich ein Purchase-Confirmation-Dialog. Jetzt gibt es zwei
+Elemente mit „Kaufen" im Namen:
+
+1. Der Reward-Card-Button (hinter dem Dialog): `button "Name ✨ 5 Kaufen"`
+2. Der Dialog-Confirm-Button: `button "Kaufen"` (exact)
+
+Fix: `{ name: 'Kaufen', exact: true }` matcht NUR den Dialog-Button
+(der Card-Button hat zusätzliche Worte im Namen).
+
+```typescript
+await rewardCardButton.click(); // opens dialog
+await page.getByRole('button', { name: 'Kaufen', exact: true }).click();
+```
+
+Quelle: PW-009 PR #TBD.
+
 ---
 
 ## App-Bugs gefunden während Testing
@@ -994,6 +1039,35 @@ hero data), dann logout+login als Parent, dann approve. Aufwändig.
 aufrufen, analog zu `notificationProvider.loadData()`.
 
 Quelle: PW-007 PR #TBD.
+
+### B-8 · `RewardProvider.loadData()` wird nirgendwo gerufen
+
+Analog zu B-3 und B-7: Kein Aufruf von `rewardProvider.loadData()` im
+ganzen App-Code. Gesehen in:
+
+- `lib/pages/splash_page.dart` — lädt nur auth + notifications
+- `lib/pages/child/hero_home_page.dart` — lädt nur heroes
+- `lib/pages/child/shop_page.dart` — lädt **nichts**
+- `lib/pages/child/my_rewards_page.dart` — lädt **nichts**
+- `lib/pages/parent/reward_management_page.dart` — lädt **nichts**
+
+**Konsequenzen**:
+
+- Geseeded Rewards sind nicht sichtbar (Shop zeigt „Keine Belohnungen")
+- Geseedde Purchases sind nicht sichtbar
+- Pending-Redemption-Badge auf Parent-Dashboard zeigt 0
+- Nach App-Restart: erst beim nächsten `createReward()` werden die Daten
+  wieder (aus dem in-Memory-State) in storage geschrieben — dabei wird
+  alles außer dem eben erstellten Reward gelöscht!
+
+**Test-Workaround** (siehe PW-009): Rewards in derselben Session via
+Parent-UI erstellen, dann als Child einloggen. Provider-Singletons
+persistieren in-Memory-State über Logout/Login hinweg.
+
+**Echter Fix**: `rewardProvider.loadData()` in `SplashPage._initialize`
+aufrufen, zusammen mit heroProvider + pointsProvider + questProvider.
+
+Quelle: PW-009 PR #TBD.
 
 ---
 

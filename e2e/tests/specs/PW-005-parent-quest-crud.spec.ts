@@ -243,11 +243,17 @@ test.describe('PW-005 Parent: Quest CRUD', () => {
       page.getByRole('heading', { name: /quest bearbeiten/i }),
     ).toBeVisible();
 
-    // Change points from 10 to 20
+    // Change points from 10 to 20.
+    // Use the F-36 Backspace-loop pattern (select-all is unreliable on
+    // Flutter textboxes).
     const pointsField = page.getByRole('textbox', { name: 'Punkte' });
     await pointsField.click();
-    await page.keyboard.press('Meta+a');
-    await page.keyboard.type('20', { delay: 30 });
+    await pointsField.evaluate(() => new Promise((r) => setTimeout(r, 150)));
+    await page.keyboard.press('End');
+    for (let i = 0; i < 6; i++) {
+      await page.keyboard.press('Backspace');
+    }
+    await pointsField.pressSequentially('20', { delay: 30 });
 
     await clickSaveButton(page);
 
