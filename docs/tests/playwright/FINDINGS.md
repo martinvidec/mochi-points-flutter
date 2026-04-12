@@ -1,7 +1,7 @@
 # Playwright + Flutter Web: Findings
 
 Stand: 2026-04-12
-Quellen: PR #181 (Bootstrap), #182 (PW-001), #183 (PW-002), #185 (PW-003), #TBD (PW-004), #TBD (PW-005)
+Quellen: PR #181 (Bootstrap), #182 (PW-001), #183 (PW-002), #185 (PW-003), #TBD (PW-004), #TBD (PW-005), #TBD (PW-006)
 
 Dieses Dokument ist ein **lebender Katalog** aller nicht-offensichtlichen
 Erkenntnisse, die bei der Arbeit an der E2E-Test-Suite unter `e2e/` aufgefallen
@@ -653,6 +653,65 @@ await page.mouse.up();
 - Nach dem Swipe erscheint der Bestätigungs-Dialog.
 
 Quelle: PW-005 PR #TBD.
+
+### F-26 · Child-Nav „Quests" kollidiert mit „Alle Quests"-Button
+
+Im Child-View (Hero-Home) gibt es auf der Home-Seite einen Button
+`"Alle Quests"` **und** den Bottom-Nav-Button `"Quests"`. Ein
+`getByRole('button', { name: 'Quests' })` matched beide (F-3-ähnlich).
+
+**Fix**: `{ name: 'Quests', exact: true }` für den Bottom-Nav-Button:
+
+```typescript
+await page.getByRole('button', { name: 'Quests', exact: true }).click();
+```
+
+Quelle: PW-006 PR #TBD.
+
+### F-27 · Child-Quest-Card enthält Status-Label
+
+Die Quest-Karte im Child-View enthält einen Status-Text im accessible name:
+
+| Status | Label |
+|--------|-------|
+| Nicht angenommen | `"Verfügbar"` |
+| In Arbeit | `"In Bearbeitung"` |
+| Erledigt / Pending | Karte verschwindet |
+
+Pattern: `<Name> <Rarity> <Status> <Description> <Points> Punkte <XP> XP`
+
+```typescript
+// Verfügbar
+page.getByRole('button', { name: /zimmer aufräumen.*verfügbar/i })
+// In Bearbeitung
+page.getByRole('button', { name: /zimmer aufräumen.*in bearbeitung/i })
+```
+
+Quelle: PW-006 PR #TBD.
+
+### F-28 · Quest-Board-Filter-Tabs sind `role="tab"`
+
+Im Child-Quest-Board werden die Filter-Tabs als echte ARIA-Tabs gerendert
+(nicht als Buttons oder Checkboxes):
+
+```
+tablist:
+  tab "Alle" [selected]
+  tab "Daily"
+  tab "Weekly"
+  tab "Epic"
+  tab "Series"
+```
+
+Selected-State über `aria-selected="true"`.
+
+```typescript
+await page.getByRole('tab', { name: 'Daily' }).click();
+await expect(page.getByRole('tab', { name: 'Alle' }))
+  .toHaveAttribute('aria-selected', 'true');
+```
+
+Quelle: PW-006 PR #TBD.
 
 ---
 
