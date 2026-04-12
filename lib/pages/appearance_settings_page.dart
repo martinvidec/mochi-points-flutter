@@ -23,7 +23,7 @@ class _AppearanceSettingsPageState extends State<AppearanceSettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final backgrounds = BackgroundService.availableBackgrounds;
+    final backgrounds = BackgroundService().availableBackgrounds;
 
     return GlassScaffold(
       appBar: const GlassAppBar(

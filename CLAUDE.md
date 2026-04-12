@@ -95,6 +95,16 @@ Da die App Icons teilweise dynamisch lädt, werden diese nicht erkannt und entfe
 - Debug-Modus (`flutter run -d chrome`) ist davon nicht betroffen
 - Für lokales Testen des Web-Builds: `python3 -m http.server 8765 --directory build/web`
 
+### Neue Hintergrundbilder hinzufügen
+Bilddatei (`.png` / `.jpg` / `.jpeg` / `.webp`) einfach in
+`assets/backgrounds/` ablegen — kein Eintrag in `pubspec.yaml` oder Dart-Code
+nötig. `BackgroundService` entdeckt die Datei beim nächsten App-Start automatisch
+via `AssetManifest` und zeigt sie im Picker (*Erscheinungsbild → Hintergrund*).
+
+Hot-Reload reicht **nicht**: neue Assets werden erst bei einem Full-Restart
+(`R` im `flutter run`-Terminal) oder bei einem Neu-Build gebundelt. Details:
+`docs/BACKGROUND_AUTO_DISCOVERY.md`.
+
 ## Architecture Overview
 
 ### Tech Stack
