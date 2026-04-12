@@ -1,7 +1,7 @@
 # Playwright + Flutter Web: Findings
 
 Stand: 2026-04-12
-Quellen: PR #181 (Bootstrap), #182 (PW-001), #183 (PW-002), #185 (PW-003), #TBD (PW-004), #TBD (PW-005), #TBD (PW-006), #TBD (PW-007)
+Quellen: PR #181 (Bootstrap), #182 (PW-001), #183 (PW-002), #185 (PW-003), #TBD (PW-004), #TBD (PW-005), #TBD (PW-006), #TBD (PW-007), #TBD (PW-008)
 
 Dieses Dokument ist ein **lebender Katalog** aller nicht-offensichtlichen
 Erkenntnisse, die bei der Arbeit an der E2E-Test-Suite unter `e2e/` aufgefallen
@@ -799,6 +799,99 @@ await ablehnenButtons.last().click(); // confirms rejection
 ```
 
 Quelle: PW-007 PR #TBD.
+
+### F-33 · Reward-Card rendert als Group mit kombiniertem Namen
+
+Die Reward-Cards in der RewardManagementPage rendern als `group` mit
+kombiniertem accessible name (ähnlich F-22 für Quests und F-29 für
+ApprovalCards):
+
+```
+group "30 min Tablet ✨ 50 Punkte":
+  switch [checked]       ← isActive-Toggle
+```
+
+Pattern: `<Name> ✨ <Price> Punkte` (Stock wird nicht in den Namen
+aufgenommen, auch wenn `hasLimitedStock`).
+
+**Card-Click zum Editieren**: `getByRole('group', { name: /name/i }).click()`
+(nicht `getByText(name)` — Text ist Teil des Group-Namens).
+
+Quelle: PW-008 PR #TBD.
+
+### F-34 · DropdownButtonFormField-Button: Name enthält Label-Prefix
+
+Der Button, der den DropdownButtonFormField öffnet, hat einen accessible
+name im Format `"<labelText> <currentValue>"`:
+
+- Kategorie-Dropdown mit Label „Kategorie" und Wert „Sache":
+  `button "Kategorie Sache"`
+- Ohne Label (wie AddMemberDialog F-19): einfach der Wert, z. B.
+  `button "Kind"`
+
+Assertion-Pattern: `{ name: /kategorie.*sache/i }` matcht zuverlässig.
+
+Quelle: PW-008 PR #TBD.
+
+### F-35 · Switch-Widget rendert als `role="switch"`, nicht `checkbox`
+
+Flutters `Switch` und `SwitchListTile` rendern in der Semantics-Tree als
+`role="switch"` (nicht `checkbox` wie ChoiceChip/FilterChip, siehe F-21).
+
+```typescript
+await page.getByRole('switch').first().click();
+await expect(page.getByRole('switch')).toBeChecked();
+```
+
+Der accessible name ist die Kombination aus `title` + `subtitle`:
+`switch "Aktiv Inaktive Belohnungen werden nicht im Shop angezeigt"`.
+
+Quelle: PW-008 PR #TBD.
+
+### F-36 · TextFormField clearen: Backspace-Loop statt Select-All
+
+Select-All-Shortcuts (`Ctrl+A` / `Meta+A`) und Triple-Click funktionieren
+**nicht zuverlässig** auf Flutter-Web-Textboxen. Das versteckte `<input>`
+reagiert nicht konsistent auf diese Operationen.
+
+**Robuster Clear-and-Type-Pattern** (z. B. für Edit-Flow):
+
+```typescript
+await field.click();
+await field.evaluate(() => new Promise((r) => setTimeout(r, 150))); // F-2
+await page.keyboard.press('End');
+// Backspace mehrmals (safe margin) — kein Shift-Select
+for (let i = 0; i < 6; i++) {
+  await page.keyboard.press('Backspace');
+}
+await field.pressSequentially('75', { delay: 30 });
+```
+
+Empirisch getestet: Triple-Click + Delete lässt oft den alten Wert stehen;
+`Meta+A` / `Control+A` scheinen den Hidden-Input nicht zu erreichen.
+
+Quelle: PW-008 PR #TBD.
+
+### F-37 · Dismissible-Swipe: Start-Position muss außerhalb anklickbarer Widgets liegen
+
+Wenn die Reward-Card einen Switch-Toggle auf der rechten Seite hat, und
+man von `box.x + box.width - 20` (nahe rechtem Rand) swipet, landet der
+`mousedown` auf dem Switch und **toggelt ihn** statt den Dismiss-Swipe
+zu starten.
+
+**Fix**: Swipe-Start in die Mitte des Cards setzen:
+
+```typescript
+await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+await page.mouse.down();
+await page.mouse.move(box.x - 100, box.y + box.height / 2, { steps: 10 });
+await page.mouse.up();
+```
+
+Verwandt mit F-25 (Dismissible-Swipe). Die Regel: immer in einem
+„neutralen" Bereich des Cards beginnen, nicht auf Action-Widgets.
+
+Quelle: PW-008 PR #TBD.
 
 ---
 
