@@ -67,15 +67,11 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/rx451g_athlete_runner_mochis_competing_anime_style.png
-    - assets/rx451g_olympic_athlete_mochis_posing_anime_style.png
-    - assets/rx451g_olympic_karate_mochis_competing_anime_style.png
-    - assets/rx451g_olympic_karate_mochis_competing_anime_style_2.png
-    - assets/rx451g_olympic_swimmer_mochis_competing_anime_style_2.png
-    - assets/rx451g_olympic_swimmer_mochis_competing_anime_style_3.png
-    - assets/rx451g_some_football_gaming_character_resembling_a_mochi_2.png
-    - assets/rx451g_some_soccer_gaming_character_resembling_a_mochi_2.png
-    - assets/rx451g_some_volleyball_gaming_character_resembling_a_mochi_0.png
+    # Drop new background images in assets/backgrounds/ — they are picked up
+    # automatically at runtime by BackgroundService via AssetManifest.
+    # Supported file extensions: .png, .jpg, .jpeg, .webp.
+    # See docs/BACKGROUND_AUTO_DISCOVERY.md for the full workflow.
+    - assets/backgrounds/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
