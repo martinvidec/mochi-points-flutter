@@ -1,7 +1,7 @@
 # Playwright + Flutter Web: Findings
 
 Stand: 2026-04-12
-Quellen: PR #181 (Bootstrap), #182 (PW-001), #183 (PW-002), #185 (PW-003)
+Quellen: PR #181 (Bootstrap), #182 (PW-001), #183 (PW-002), #185 (PW-003), #TBD (PW-004)
 
 Dieses Dokument ist ein **lebender Katalog** aller nicht-offensichtlichen
 Erkenntnisse, die bei der Arbeit an der E2E-Test-Suite unter `e2e/` aufgefallen
@@ -513,6 +513,45 @@ aus.
 
 Quelle: PW-003 PR #185.
 
+### F-19 · DropdownButtonFormField rendert Items als `menuitem`, nicht `option`
+
+Flutters `DropdownButtonFormField` erzeugt beim Öffnen ein Popup mit:
+
+```
+role="menu" name="Popup menu"
+  └─ group
+       └─ menuitem "Kind" [active]
+       └─ menuitem "Elternteil"
+```
+
+Die Items haben die Rolle **`menuitem`**, NICHT `option` (wie man es bei
+einem nativen `<select>` erwarten würde). Der Trigger-Button hat den
+aktuellen Auswahltext als accessible name.
+
+**Interaction-Pattern:**
+
+```typescript
+// Dropdown öffnen: Button mit dem aktuellen Wert klicken
+await page.getByRole('button', { name: /kind/i }).click();
+// Item auswählen: menuitem, nicht option
+await page.getByRole('menuitem', { name: 'Elternteil' }).click();
+```
+
+Quelle: PW-004 PR #TBD.
+
+### F-20 · FamilyManagementPage FAB ist ein Unlabeled Button
+
+Der FloatingActionButton auf der FamilyManagementPage (`Icons.person_add`)
+hat weder `tooltip` noch `Semantics(label: ...)`. Er erscheint als Button
+mit leerem `textContent`, wie der Remove-Button in B-2.
+
+**Workaround**: `clickUnlabeledButton(page.locator('body'))` — funktioniert,
+weil der FAB der einzige unlabeled Button auf der Seite ist.
+
+**Empfohlener App-Fix**: `tooltip: 'Mitglied hinzufügen'` auf dem FAB setzen.
+
+Quelle: PW-004 PR #TBD.
+
 ---
 
 ## App-Bugs gefunden während Testing
@@ -543,6 +582,7 @@ trailing: IconButton(
 
 ### B-3 · `PointsProvider.loadData()` wird nicht beim Bootstrap gerufen
 
+
 Siehe F-9. Ausführlich in `docs/IST_ANALYSE.md` §5.2.
 
 ### B-4 · `FamilySetup._finishSetup` loggt den ersten Parent nicht auto-ein
@@ -550,6 +590,25 @@ Siehe F-9. Ausführlich in `docs/IST_ANALYSE.md` §5.2.
 Nach Familien-Setup wird zu `/login` navigiert, nicht zum Dashboard. Siehe
 die Spec-Korrektur S-1 unten. Das ist möglicherweise **gewollt** (User soll
 einmal aktiv den PIN bestätigen), gehört aber dokumentiert.
+
+### B-5 · FamilyManagementPage FAB hat kein Tooltip / Semantics-Label
+
+Der FloatingActionButton in `lib/pages/family_management_page.dart:20-24`
+(`Icons.person_add`) hat weder `tooltip` noch `Semantics(label: ...)`-Wrapper.
+Tests müssen mit `clickUnlabeledButton` arbeiten (siehe F-20).
+
+**Empfohlener Fix**:
+
+```dart
+FloatingActionButton(
+  heroTag: 'family_add_fab',
+  tooltip: 'Mitglied hinzufügen',  // ← hinzufügen
+  onPressed: () => _showAddMemberDialog(context),
+  child: const Icon(Icons.person_add),
+),
+```
+
+Quelle: PW-004.
 
 ---
 
