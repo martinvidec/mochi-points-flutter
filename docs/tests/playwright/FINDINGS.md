@@ -1,7 +1,7 @@
 # Playwright + Flutter Web: Findings
 
 Stand: 2026-04-12
-Quellen: PR #181 (Bootstrap), #182 (PW-001), #183 (PW-002), #185 (PW-003), #TBD (PW-004), #TBD (PW-005), #TBD (PW-006), #TBD (PW-007), #TBD (PW-008), #TBD (PW-009)
+Quellen: PR #181 (Bootstrap), #182 (PW-001), #183 (PW-002), #185 (PW-003), #TBD (PW-004), #TBD (PW-005), #TBD (PW-006), #TBD (PW-007), #TBD (PW-008), #TBD (PW-009), #TBD (PW-010)
 
 Dieses Dokument ist ein **lebender Katalog** aller nicht-offensichtlichen
 Erkenntnisse, die bei der Arbeit an der E2E-Test-Suite unter `e2e/` aufgefallen
@@ -748,6 +748,18 @@ Assertion-Pattern: `{ name: /approve/i }` matcht beide. Für den exakten
 Zähler: `{ name: /1\s*approve/i }`.
 
 Quelle: PW-007 PR #TBD.
+
+**Erweiterung (PW-010)**: Das gleiche Pattern gilt auch für den
+**Rewards-Tab**, wenn Pending-Redemptions existieren:
+
+- Ohne Pending: `button "Rewards"`
+- Mit Pending: `button "1 Rewards"`, `button "2 Rewards"`, …
+
+Konsequenz: In Navigation-Helpers, die nach Quest-Approval oder Reward-
+Purchase auf „Rewards" klicken wollen, darf **nicht** `exact: true`
+verwendet werden. Besser: `{ name: /\brewards$/i }` — der `\b`+`$`-Anchor
+matcht sowohl „Rewards" als auch „N Rewards" und verhindert falsche Treffer
+wie „Neue Belohnung"/„Belohnungen verwalten".
 
 ### F-31 · Level-Up-Animation ist ein Canvas-Overlay, nicht in Semantics
 
