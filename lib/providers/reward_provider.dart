@@ -231,6 +231,19 @@ class RewardProvider extends ChangeNotifier {
 
           await _savePurchases();
           notifyListeners();
+
+          // Notify the child that their redemption was confirmed (#152)
+          final reward = getRewardById(purchase.rewardId);
+          if (reward != null) {
+            _notificationProvider?.create(
+              userId: userId,
+              type: NotificationType.rewardConfirmed,
+              title: 'Einlösung bestätigt!',
+              message: '"${reward.name}" wurde freigegeben. Viel Spaß!',
+              icon: '✅',
+            );
+          }
+
           return true;
         }
       }
@@ -299,6 +312,17 @@ class RewardProvider extends ChangeNotifier {
 
           await _savePurchases();
           notifyListeners();
+
+          // Notify the child that their redemption was rejected + refunded (#152)
+          _notificationProvider?.create(
+            userId: userId,
+            type: NotificationType.rewardRejected,
+            title: 'Einlösung abgelehnt',
+            message:
+                '"${reward?.name ?? "Belohnung"}" wurde nicht freigegeben. ${purchase.totalPrice} MP zurückerstattet.',
+            icon: '↩️',
+          );
+
           return true;
         }
       }

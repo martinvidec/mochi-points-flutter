@@ -384,9 +384,47 @@ test.describe('PW-010 Reward-Einlösung', () => {
     // See docs/tests/playwright/PW-010-reward-redemption.md TC-010.5.
   });
 
-  test.skip('TC-010.6 — Kind erhält Notification bei Einlösungs-Entscheidung (blocked by #152)',
-      () => {
-    // Parent confirm/reject does not currently create a notification
-    // for the child. See issue #152.
+  test('TC-010.6 — Kind erhält Notification bei Einlösungs-Entscheidung',
+      async ({ seededPage }) => {
+    // Closes issue #152: both confirmRedemption and rejectRedemption
+    // now create a child-facing notification. We verify the confirm
+    // path here; the reject-path notification is structurally identical
+    // and could be exercised by extending TC-010.4 — but keeping this
+    // test focused makes debugging simpler if the feature regresses.
+    const page = await seededPage(seedWithPendingQuest());
+
+    await setupPurchasedReward(page, {
+      rewardName: 'Sticker',
+      rewardPrice: '5',
+    });
+
+    // Child requests redemption
+    await childOpenMyRewards(page);
+    await page.getByRole('button', { name: 'Einlösen' }).click();
+    await page
+      .getByRole('button', { name: 'Einlösen anfragen' })
+      .click();
+    await expect(
+      flutterText(page, /einlösung angefragt/i),
+    ).toBeVisible();
+
+    // Parent confirms
+    await switchToParent(page);
+    await parentOpenRedemptions(page);
+    await page.getByRole('button', { name: 'Bestätigen' }).click();
+    await expect(flutterText(page, /einlösung bestätigt/i)).toBeVisible();
+
+    // Child-facing notification created
+    const raw = await page.evaluate(() =>
+      window.localStorage.getItem('flutter.notifications'),
+    );
+    const notifications = JSON.parse(JSON.parse(raw!));
+    const childNotif = notifications.find(
+      (n: { type: string; userId: string }) =>
+        n.type === 'rewardConfirmed' && n.userId === IDS.childLucaId,
+    );
+    expect(childNotif).toBeTruthy();
+    expect(childNotif.title).toContain('bestätigt');
+    expect(childNotif.message).toContain('Sticker');
   });
 });

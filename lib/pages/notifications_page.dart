@@ -186,6 +186,10 @@ class NotificationsPage extends StatelessWidget {
         return AppColors.gold;
       case NotificationType.rewardRedeemed:
         return AppColors.gold;
+      case NotificationType.rewardConfirmed:
+        return AppColors.success;
+      case NotificationType.rewardRejected:
+        return AppColors.error;
       case NotificationType.achievementUnlocked:
         return AppColors.rarityEpic;
       case NotificationType.streakMilestone:

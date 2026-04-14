@@ -3,7 +3,13 @@ enum NotificationType {
   questRejected,
   questCompleted,
   rewardPurchased,
+  // Parent-facing: child requested a redemption and the parent needs to
+  // confirm or reject it.
   rewardRedeemed,
+  // Child-facing: parent confirmed the pending redemption.
+  rewardConfirmed,
+  // Child-facing: parent rejected the pending redemption; points refunded.
+  rewardRejected,
   achievementUnlocked,
   streakMilestone,
   streakLost,
