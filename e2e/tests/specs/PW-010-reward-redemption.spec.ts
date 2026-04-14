@@ -378,10 +378,48 @@ test.describe('PW-010 Reward-Einlösung', () => {
     expect(refundTxn.amount).toBe(5);
   });
 
-  test.skip('TC-010.5 — Kind bricht pending Einlösung ab (blocked by #153)',
-      () => {
-    // No UI exists for the child to cancel a pending redemption.
-    // See docs/tests/playwright/PW-010-reward-redemption.md TC-010.5.
+  test('TC-010.5 — Kind bricht pending Einlösung ab', async ({
+    seededPage,
+  }) => {
+    // Closes issue #153: MyRewardsPage now shows an "Abbrechen" button
+    // for purchases in pendingRedemption state.
+    const page = await seededPage(seedWithPendingQuest());
+
+    await setupPurchasedReward(page, {
+      rewardName: 'Sticker',
+      rewardPrice: '5',
+    });
+
+    // Child requests redemption
+    await childOpenMyRewards(page);
+    await page.getByRole('button', { name: 'Einlösen' }).click();
+    await page
+      .getByRole('button', { name: 'Einlösen anfragen' })
+      .click();
+    await expect(flutterText(page, /einlösung angefragt/i)).toBeVisible();
+
+    // Status card now shows "Warte auf Bestätigung" + Abbrechen button
+    await expect(
+      page.getByRole('button', { name: 'Abbrechen' }),
+    ).toBeVisible();
+
+    // Cancel the redemption
+    await page.getByRole('button', { name: 'Abbrechen' }).click();
+    await expect(
+      flutterText(page, /einlösungs-anfrage zurückgezogen/i),
+    ).toBeVisible();
+
+    // Purchase status flipped back to purchased (no refund, no notif)
+    const purchaseRaw = await page.evaluate(() =>
+      window.localStorage.getItem('flutter.purchases'),
+    );
+    const purchases = JSON.parse(JSON.parse(purchaseRaw!));
+    expect(purchases[0].status).toBe('purchased');
+
+    // "Einlösen" button should be visible again (purchased state action)
+    await expect(
+      page.getByRole('button', { name: 'Einlösen' }),
+    ).toBeVisible();
   });
 
   test('TC-010.6 — Kind erhält Notification bei Einlösungs-Entscheidung',

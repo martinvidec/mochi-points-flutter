@@ -184,9 +184,30 @@ class _PurchaseCard extends StatelessWidget {
               onPressed: () => _showRedeemDialog(context),
               label: 'Einlösen',
             ),
+          // Child can withdraw a pending redemption request until the
+          // parent decides (#153).
+          if (showRedeemButton &&
+              purchase.status == PurchaseStatus.pendingRedemption)
+            AppButton.text(
+              onPressed: () => _cancelRedemption(context),
+              label: 'Abbrechen',
+            ),
         ],
       ),
     );
+  }
+
+  Future<void> _cancelRedemption(BuildContext context) async {
+    final rewardProvider = context.read<RewardProvider>();
+    final success = await rewardProvider.cancelRedemption(purchase.id);
+
+    if (context.mounted) {
+      if (success) {
+        AppSnackbar.success(context, 'Einlösungs-Anfrage zurückgezogen.');
+      } else {
+        AppSnackbar.error(context, 'Abbrechen fehlgeschlagen.');
+      }
+    }
   }
 
   Widget _buildStatusBadge() {
