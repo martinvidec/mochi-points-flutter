@@ -1,7 +1,7 @@
 # Playwright + Flutter Web: Findings
 
 Stand: 2026-04-12
-Quellen: PR #181 (Bootstrap), #182 (PW-001), #183 (PW-002), #185 (PW-003), #TBD (PW-004), #TBD (PW-005), #TBD (PW-006), #TBD (PW-007), #TBD (PW-008), #TBD (PW-009), #TBD (PW-010)
+Quellen: PR #181 (Bootstrap), #182 (PW-001), #183 (PW-002), #185 (PW-003), #TBD (PW-004), #TBD (PW-005), #TBD (PW-006), #TBD (PW-007), #TBD (PW-008), #TBD (PW-009), #TBD (PW-010), #TBD (PW-014)
 
 Dieses Dokument ist ein **lebender Katalog** aller nicht-offensichtlichen
 Erkenntnisse, die bei der Arbeit an der E2E-Test-Suite unter `e2e/` aufgefallen
@@ -949,6 +949,43 @@ await page.getByRole('button', { name: 'Kaufen', exact: true }).click();
 ```
 
 Quelle: PW-009 PR #TBD.
+
+### F-40 · Datums-Seeds: Noon-UTC statt Local-Midnight-ISO
+
+Beim Seeden von `activityDates` (oder anderen DateTime-Listen) über
+`new Date().toISOString()` aus Local-Midnight-Werten schleicht sich
+ein Off-by-One ein, der Streak-Berechnungen zerstört.
+
+**Warum**: Dart deserialisiert ISO-Strings mit `DateTime.parse` → UTC
+DateTime. `StreakService.calculateStreak` normalisiert dann mit
+`DateTime(d.year, d.month, d.day)` **aus den UTC-Komponenten**. Wenn
+der ISO-String aus local-midnight stammt (z. B. CEST `00:00`), liegt
+er im UTC-Raum bei `22:00` am **Vortag** — die Komponenten weisen auf
+ein anderes Kalenderdatum als beabsichtigt.
+
+**Fix**: Datums-Seeds um **12:00 UTC** verankern. Noon UTC fällt in
+**jeder** Zeitzone (UTC-12 bis UTC+12) auf dasselbe Kalenderdatum wie
+das lokale Mitternacht-Äquivalent. Sowohl die UTC-Komponenten als
+auch die Local-Now-Komponenten zeigen dann auf denselben Tag.
+
+```typescript
+function datesBack(n: number): string[] {
+  const today = new Date();
+  const out: string[] = [];
+  for (let i = 1; i <= n; i++) {
+    const d = new Date(Date.UTC(
+      today.getFullYear(), today.getMonth(), today.getDate() - i, 12,
+    ));
+    out.push(d.toISOString());
+  }
+  return out;
+}
+```
+
+Gleiches Problem würde bei Expiration-Dates, Deadlines etc. auftreten,
+sobald der App-Code `DateTime(y,m,d)` zum Normalisieren benutzt.
+
+Quelle: PW-014 PR #TBD.
 
 ---
 
