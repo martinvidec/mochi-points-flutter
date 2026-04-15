@@ -19,14 +19,13 @@
  *   - Fields: Name (textbox), Rolle (dropdown, default "Kind"), PIN (optional)
  *   - Buttons: "Abbrechen", "Hinzufügen"
  *
- * The FAB that opens the dialog is an unlabeled FloatingActionButton
- * with Icons.person_add — no text/tooltip. We use clickUnlabeledButton
- * scoped to the page body to find it.
+ * The FAB has tooltip "Mitglied hinzufügen" (#206 fix), matched by
+ * role=button.
  */
 
 import type { Page } from '@playwright/test';
 import { test, expect } from '../fixtures';
-import { flutterFill, flutterText, clickUnlabeledButton } from '../fixtures/flutter';
+import { flutterFill, flutterText } from '../fixtures/flutter';
 import { seedFamilyWithParent, seedFamilyWithChild, IDS } from '../fixtures/seed';
 
 /** Navigate from parent dashboard to the family management page. */
@@ -41,10 +40,12 @@ async function navigateToFamilyManagement(page: Page): Promise<void> {
 
 /** Open the add-member dialog via the FAB. */
 async function openAddMemberDialog(page: Page): Promise<void> {
-  // The FAB is an unlabeled button (Icons.person_add, no tooltip).
-  // We need to find and click it. It's the only unlabeled button on
-  // the FamilyManagementPage.
-  await clickUnlabeledButton(page.locator('body'));
+  // FAB has tooltip "Mitglied hinzufügen" (#206). The dialog title is
+  // the same text (rendered as plain text, not a button), so disambiguate
+  // by role when clicking vs asserting visibility.
+  await page
+    .getByRole('button', { name: 'Mitglied hinzufügen' })
+    .click();
   await expect(page.getByText('Mitglied hinzufügen')).toBeVisible();
 }
 
@@ -186,8 +187,12 @@ test.describe('PW-004 Familienmitglied hinzufügen', () => {
     // Cancel
     await page.getByRole('button', { name: 'Abbrechen' }).click();
 
-    // Dialog closes — "Mitglied hinzufügen" title gone
-    await expect(page.getByText('Mitglied hinzufügen')).toHaveCount(0);
+    // Dialog closes — check via a dialog-only element (the Name textbox)
+    // since the dialog's "Mitglied hinzufügen" title collides with the
+    // FAB's tooltip (#206) in the accessible tree.
+    await expect(
+      page.getByRole('textbox', { name: 'Name' }),
+    ).toHaveCount(0);
 
     // Member count unchanged
     await expect(page.getByText('1 Familienmitglieder')).toBeVisible();

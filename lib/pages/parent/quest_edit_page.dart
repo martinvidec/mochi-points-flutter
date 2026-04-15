@@ -143,6 +143,7 @@ class _QuestEditPageState extends State<QuestEditPage> {
         actions: [
           IconButton(
             icon: const Icon(Icons.check),
+            tooltip: 'Quest speichern',
             onPressed: _save,
           ),
         ],

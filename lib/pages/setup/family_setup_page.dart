@@ -221,6 +221,7 @@ class _FamilySetupPageState extends State<FamilySetupPage> {
                         ),
                         trailing: IconButton(
                           icon: const Icon(Icons.delete),
+                          tooltip: 'Mitglied entfernen: ${member.name}',
                           onPressed: () => _removeMember(index),
                         ),
                       ),

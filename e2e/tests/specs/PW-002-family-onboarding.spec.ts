@@ -19,7 +19,7 @@
  */
 
 import { test, expect } from '../fixtures';
-import { clickUnlabeledButton, flutterFill, flutterText } from '../fixtures/flutter';
+import { flutterFill, flutterText } from '../fixtures/flutter';
 import { seedFreshApp } from '../fixtures/seed';
 
 test.describe('PW-002 Familie einrichten', () => {
@@ -159,10 +159,10 @@ test.describe('PW-002 Familie einrichten', () => {
     const lucaGroup = page.getByRole('group', { name: /luca.*kind/i });
     await expect(lucaGroup).toBeVisible();
 
-    // Click the unlabeled delete button inside the member group.
-    // TODO(app): wrap the remove IconButton in Semantics(label: 'Mitglied entfernen: …')
-    //            so this can become a standard getByRole('button', { name: … }) call.
-    await clickUnlabeledButton(lucaGroup);
+    // Click the remove IconButton — tooltip-based label after #206 fix.
+    await page
+      .getByRole('button', { name: /mitglied entfernen.*luca/i })
+      .click();
 
     // Member is gone, Fertig is still available (step 3 permits zero children)
     await expect(page.getByRole('group', { name: /luca.*kind/i })).toHaveCount(0);

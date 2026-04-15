@@ -19,6 +19,7 @@ class FamilyManagementPage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         heroTag: 'family_add_fab',
+        tooltip: 'Mitglied hinzufügen',
         onPressed: () => _showAddMemberDialog(context),
         child: const Icon(Icons.person_add),
       ),
