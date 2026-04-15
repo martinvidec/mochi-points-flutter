@@ -1015,7 +1015,7 @@ trailing: IconButton(
 ),
 ```
 
-### B-3 · `PointsProvider.loadData()` wird nicht beim Bootstrap gerufen
+### B-3 · `PointsProvider.loadData()` wird nicht beim Bootstrap gerufen — **BEHOBEN (#205)**
 
 
 Siehe F-9. Ausführlich in `docs/IST_ANALYSE.md` §5.2.
@@ -1064,7 +1064,7 @@ IconButton(
 
 Quelle: PW-005.
 
-### B-7 · `HeroProvider.loadData()` wird nicht im Parent-Flow gerufen
+### B-7 · `HeroProvider.loadData()` wird nicht im Parent-Flow gerufen — **BEHOBEN (#205)**
 
 Verwandt mit B-3: `HeroProvider.loadData()` wird **nur** in
 `lib/pages/child/hero_home_page.dart:58` aufgerufen — beim Child-Login.
@@ -1089,7 +1089,7 @@ aufrufen, analog zu `notificationProvider.loadData()`.
 
 Quelle: PW-007 PR #TBD.
 
-### B-8 · `RewardProvider.loadData()` wird nirgendwo gerufen
+### B-8 · `RewardProvider.loadData()` wird nirgendwo gerufen — **BEHOBEN (#205)**
 
 Analog zu B-3 und B-7: Kein Aufruf von `rewardProvider.loadData()` im
 ganzen App-Code. Gesehen in:
