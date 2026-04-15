@@ -64,6 +64,15 @@ class PointsProvider extends ChangeNotifier {
         _transactions[transaction.userId]!.add(transaction);
       }
 
+      // Ensure every loaded account also has a transactions bucket so
+      // subsequent `earn()` / `spend()` calls — which use `_transactions[userId]!`
+      // unconditionally — don't NPE when the user has no prior transactions.
+      // Without this, loading an account with an empty transaction history
+      // silently broke points awards. See #205.
+      for (final userId in _accounts.keys) {
+        _transactions.putIfAbsent(userId, () => []);
+      }
+
       notifyListeners();
     } catch (e) {
       debugPrint('PointsProvider.loadData error: $e');
