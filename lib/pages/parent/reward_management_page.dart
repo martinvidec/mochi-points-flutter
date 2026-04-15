@@ -125,7 +125,11 @@ class _RewardManagementCard extends StatelessWidget {
                     const SizedBox(height: 4),
                     Row(
                       children: [
-                        const Text('✨', style: TextStyle(fontSize: 12)),
+                        Icon(
+                          Icons.auto_awesome,
+                          color: AppColors.gold,
+                          size: 14,
+                        ),
                         const SizedBox(width: 4),
                         Text(
                           '${reward.price} Punkte',

@@ -56,6 +56,14 @@ class AppIcons {
     'cart': Icons.shopping_cart,
     'sunrise': Icons.wb_twilight,
     'owl': Icons.nightlight,
+
+    // Notification icons
+    'level_up': Icons.emoji_events,     // 🎉 level up
+    'approved': Icons.check_circle,      // ✅ quest approved
+    'rejected': Icons.cancel,            // ❌ quest rejected
+    'hourglass': Icons.hourglass_top,    // ⏳ quest pending approval
+    'streak_lost': Icons.heart_broken,   // 💔 streak lost
+    'streak_out': Icons.air,             // 💨 streak inactive / not yet started
   };
 
   /// Available quest icons (ordered for picker)

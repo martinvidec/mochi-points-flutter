@@ -80,7 +80,7 @@ class _ProviderConnectorState extends State<ProviderConnector> {
         type: NotificationType.levelUp,
         title: 'Level Up!',
         message: 'Du bist jetzt Level $newLevel! Weiter so!',
-        icon: '🎉',
+        icon: 'level_up',
       );
     };
 
@@ -89,8 +89,8 @@ class _ProviderConnectorState extends State<ProviderConnector> {
         userId: userId,
         type: NotificationType.streakMilestone,
         title: 'Streak Milestone!',
-        message: '$milestone Tage in Folge aktiv! 🔥',
-        icon: '🔥',
+        message: '$milestone Tage in Folge aktiv!',
+        icon: 'fire',
       );
     };
 
@@ -100,7 +100,7 @@ class _ProviderConnectorState extends State<ProviderConnector> {
         type: NotificationType.streakLost,
         title: 'Streak verloren',
         message: 'Deine $previousStreak-Tage-Streak ist vorbei. Starte neu!',
-        icon: '💔',
+        icon: 'streak_lost',
       );
     };
 
@@ -141,7 +141,7 @@ class _ProviderConnectorState extends State<ProviderConnector> {
           bonusPoints,
           TransactionType.bonus,
           referenceId: questId,
-          description: 'Streak Bonus +$bonusPercent% (🔥 $streak)',
+          description: 'Streak Bonus +$bonusPercent% ($streak Tage)',
         );
       }
 
@@ -154,7 +154,7 @@ class _ProviderConnectorState extends State<ProviderConnector> {
         type: NotificationType.questApproved,
         title: 'Quest genehmigt!',
         message: '"$questName" wurde genehmigt. +$totalPoints MP!',
-        icon: '✅',
+        icon: 'approved',
       );
 
       // Log total for debugging

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../models/notification.dart';
 import '../providers/auth_provider.dart';
 import '../providers/notification_provider.dart';
+import '../theme/app_icons.dart';
 import '../theme/app_colors.dart';
 import '../widgets/empty_state.dart';
 import '../widgets/glass_app_bar.dart';
@@ -103,7 +104,9 @@ class NotificationsPage extends StatelessWidget {
           padding: const EdgeInsets.all(12),
           child: Row(
             children: [
-              // Icon
+              // Icon — AppIcons.get returns a fallback for legacy emoji
+              // keys so older notifications stored as emoji strings still
+              // render something sensible.
               Container(
                 width: 44,
                 height: 44,
@@ -112,9 +115,10 @@ class NotificationsPage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Center(
-                  child: Text(
-                    notification.icon,
-                    style: const TextStyle(fontSize: 22),
+                  child: Icon(
+                    AppIcons.get(notification.icon),
+                    color: _getTypeColor(notification.type),
+                    size: 22,
                   ),
                 ),
               ),

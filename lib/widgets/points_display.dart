@@ -125,9 +125,10 @@ class _PointsDisplayState extends State<PointsDisplay>
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Text(
-            '✨',
-            style: TextStyle(fontSize: 16),
+          const Icon(
+            Icons.auto_awesome,
+            color: Colors.black87,
+            size: 18,
           ),
           const SizedBox(width: 6),
           Text(
@@ -174,9 +175,10 @@ class _PointsDisplayState extends State<PointsDisplay>
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text(
-                '✨',
-                style: TextStyle(fontSize: 32),
+              const Icon(
+                Icons.auto_awesome,
+                color: Colors.black87,
+                size: 36,
               ),
               const SizedBox(height: 8),
               Text(

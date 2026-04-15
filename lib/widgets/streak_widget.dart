@@ -126,9 +126,14 @@ class _StreakWidgetState extends State<StreakWidget>
                   builder: (context, child) {
                     return Transform.scale(
                       scale: widget.streak > 0 ? _pulseAnimation.value : 1.0,
-                      child: Text(
-                        widget.streak > 0 ? '🔥' : '💨',
-                        style: const TextStyle(fontSize: 18),
+                      child: Icon(
+                        widget.streak > 0
+                            ? Icons.local_fire_department
+                            : Icons.air,
+                        color: widget.streak > 0
+                            ? AppColors.warning
+                            : AppColors.textSecondary,
+                        size: 20,
                       ),
                     );
                   },
@@ -212,9 +217,14 @@ class _StreakWidgetState extends State<StreakWidget>
                 builder: (context, child) {
                   return Transform.scale(
                     scale: widget.streak > 0 ? _pulseAnimation.value : 1.0,
-                    child: Text(
-                      widget.streak > 0 ? '🔥' : '💨',
-                      style: const TextStyle(fontSize: 28),
+                    child: Icon(
+                      widget.streak > 0
+                          ? Icons.local_fire_department
+                          : Icons.air,
+                      color: widget.streak > 0
+                          ? AppColors.warning
+                          : AppColors.textSecondary,
+                      size: 32,
                     ),
                   );
                 },
@@ -386,7 +396,11 @@ class _StreakWidgetState extends State<StreakWidget>
       ),
       child: Center(
         child: hasActivity && !isFuture
-            ? const Text('🔥', style: TextStyle(fontSize: 16))
+            ? const Icon(
+                Icons.local_fire_department,
+                color: Colors.white,
+                size: 18,
+              )
             : null,
       ),
     );
@@ -418,7 +432,11 @@ class _StreakWidgetState extends State<StreakWidget>
               ),
               child: Center(
                 child: hasActivity
-                    ? const Text('🔥', style: TextStyle(fontSize: 16))
+                    ? const Icon(
+                        Icons.local_fire_department,
+                        color: Colors.white,
+                        size: 18,
+                      )
                     : const Text('?', style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
