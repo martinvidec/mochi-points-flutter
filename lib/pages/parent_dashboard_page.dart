@@ -380,7 +380,11 @@ class _ParentDashboardPageState extends State<ParentDashboardPage> {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Text('🔥', style: TextStyle(fontSize: 12)),
+                  const Icon(
+                    Icons.local_fire_department,
+                    color: AppColors.warning,
+                    size: 14,
+                  ),
                   const SizedBox(width: 2),
                   Text(
                     '$streak',

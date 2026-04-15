@@ -110,7 +110,11 @@ class RewardCard extends StatelessWidget {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Text('✨', style: TextStyle(fontSize: 12)),
+                          Icon(
+                            Icons.auto_awesome,
+                            color: canAfford ? Colors.black87 : Colors.red,
+                            size: 14,
+                          ),
                           const SizedBox(width: 4),
                           Text(
                             '${reward.price}',

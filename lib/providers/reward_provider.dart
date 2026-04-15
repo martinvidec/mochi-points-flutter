@@ -199,7 +199,7 @@ class RewardProvider extends ChangeNotifier {
               type: NotificationType.rewardRedeemed,
               title: 'Einlösung angefragt',
               message: '"${reward.name}" wartet auf Bestätigung.',
-              icon: '🎁',
+              icon: 'gift',
             );
           }
 
@@ -240,7 +240,7 @@ class RewardProvider extends ChangeNotifier {
               type: NotificationType.rewardConfirmed,
               title: 'Einlösung bestätigt!',
               message: '"${reward.name}" wurde freigegeben. Viel Spaß!',
-              icon: '✅',
+              icon: 'approved',
             );
           }
 
@@ -320,7 +320,7 @@ class RewardProvider extends ChangeNotifier {
             title: 'Einlösung abgelehnt',
             message:
                 '"${reward?.name ?? "Belohnung"}" wurde nicht freigegeben. ${purchase.totalPrice} MP zurückerstattet.',
-            icon: '↩️',
+            icon: 'rejected',
           );
 
           return true;

@@ -221,7 +221,7 @@ class QuestProvider extends ChangeNotifier {
           type: NotificationType.questCompleted,
           title: 'Quest wartet auf Genehmigung',
           message: '"${quest.name}" wurde abgeschlossen und wartet auf Bestätigung.',
-          icon: '⏳',
+          icon: 'hourglass',
         );
       }
 
@@ -319,7 +319,7 @@ class QuestProvider extends ChangeNotifier {
           type: NotificationType.questRejected,
           title: 'Quest abgelehnt',
           message: '"${quest.name}" wurde nicht genehmigt.${reason != null ? ' Grund: $reason' : ''}',
-          icon: '❌',
+          icon: 'rejected',
         );
       }
 
