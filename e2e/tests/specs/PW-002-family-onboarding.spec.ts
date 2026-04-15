@@ -23,7 +23,7 @@ import { flutterFill, flutterText } from '../fixtures/flutter';
 import { seedFreshApp } from '../fixtures/seed';
 
 test.describe('PW-002 Familie einrichten', () => {
-  test('TC-002.1 — happy path: family + first parent + child routes to login', async ({
+  test('TC-002.1 — happy path: family + first parent + child auto-logs in to parent dashboard', async ({
     seededPage,
   }) => {
     const page = await seededPage(seedFreshApp());
@@ -66,19 +66,16 @@ test.describe('PW-002 Familie einrichten', () => {
     await page.getByRole('button', { name: 'Speichern' }).click();
     await expect(page.getByRole('group', { name: /luca.*kind/i })).toBeVisible();
 
-    // Finish — expect navigation to /login (NOT auto-login to dashboard)
+    // Finish — expect auto-login into the parent dashboard (#208)
     await page.getByRole('button', { name: 'Fertig' }).click();
 
-    await expect(page).toHaveURL(/#\/login/);
-    await expect(page.getByText(/wer bist du\?/i)).toBeVisible();
+    await expect(page).toHaveURL(/#\/parent-dashboard/);
     await expect(
-      page.getByRole('button', { name: /mama.*eltern/i }),
-    ).toBeVisible();
-    await expect(
-      page.getByRole('button', { name: /luca.*kind/i }),
+      page.getByRole('heading', { name: /hallo,\s*mama/i }),
     ).toBeVisible();
 
-    // Raw storage: family + members persisted, but no last_user_id
+    // Raw storage: family + members persisted AND last_user_id points
+    // to the first parent (Mama) — confirms auto-login wrote prefs too.
     const keys = await page.evaluate(() => ({
       family: window.localStorage.getItem('flutter.family'),
       members: window.localStorage.getItem('flutter.family_members'),
@@ -86,7 +83,16 @@ test.describe('PW-002 Familie einrichten', () => {
     }));
     expect(keys.family).not.toBeNull();
     expect(keys.members).not.toBeNull();
-    expect(keys.lastUserId).toBeNull();
+    expect(keys.lastUserId).not.toBeNull();
+    // The raw value is JSON-encoded (double-JSON per F-7 for primitives
+    // means a single JSON-encoded string). Parse and assert it names Mama.
+    const loggedInUserId = JSON.parse(keys.lastUserId!);
+    const members = JSON.parse(JSON.parse(keys.members!));
+    const mama = members.find(
+      (m: { name: string }) => m.name === 'Mama',
+    );
+    expect(mama).toBeTruthy();
+    expect(loggedInUserId).toBe(mama.id);
   });
 
   test('TC-002.2 — empty family name shows validation error', async ({

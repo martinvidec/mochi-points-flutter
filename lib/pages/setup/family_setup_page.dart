@@ -96,7 +96,18 @@ class _FamilySetupPageState extends State<FamilySetupPage> {
       );
     }
 
-    if (mounted) {
+    // Auto-login the first parent so they go straight to the dashboard
+    // rather than having to re-enter the PIN they just set on /login.
+    // Falls back to the login page if no first parent was added. (#208)
+    if (_firstParent != null && authProvider.parents.isNotEmpty) {
+      final firstParentId = authProvider.parents.first.id;
+      await authProvider.login(firstParentId, pin: _firstParent!.pin);
+    }
+
+    if (!mounted) return;
+    if (authProvider.isLoggedIn) {
+      Navigator.of(context).pushReplacementNamed('/parent-dashboard');
+    } else {
       Navigator.of(context).pushReplacementNamed('/login');
     }
   }
