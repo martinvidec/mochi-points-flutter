@@ -994,7 +994,7 @@ Quelle: PW-014 PR #TBD.
 Diese Punkte sind **echte Mängel in der App** (nicht Spec-Fehler). Sie haben
 Auswirkungen auf Tests, sollten idealerweise App-seitig gefixt werden.
 
-### B-1 · Parent-Dashboard Bottom-Nav „Approve" statt „Genehmigungen"
+### B-1 · Parent-Dashboard Bottom-Nav „Approve" statt „Genehmigungen" — **BEHOBEN (#207)**
 
 Siehe F-11. Translation-Miss in
 `lib/pages/parent_dashboard_page.dart` (Bottom-Nav-Tab-Labels).
@@ -1135,7 +1135,7 @@ Die Spec sagte:
 Tatsächlich navigiert `FamilySetupPage._finishSetup()` hart zu `/login`. Der
 Parent muss manuell den PIN-Login durchlaufen. Korrigiert in PR #181 Review-Runde.
 
-### S-2 · Sämtliche Specs haben initial „Genehmigungen"-Labels
+### S-2 · Sämtliche Specs haben initial „Genehmigungen"-Labels — **ERFÜLLT (#207)**
 
 Mehrere Specs (PW-003, PW-007, PW-016) nehmen Bottom-Nav-Labels wie
 `"Genehmigungen"` an, obwohl der echte Label-String `"Approve"` ist (siehe F-11).

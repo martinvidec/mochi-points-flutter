@@ -195,7 +195,7 @@ test.describe('PW-015 Benachrichtigungen (Inbox)', () => {
     await page.getByText('Zuerst zu lesen').click();
 
     // Go back to hero-home
-    await page.getByRole('button', { name: 'Back' }).click();
+    await page.getByRole('button', { name: 'Zurück' }).click();
     await expect(
       page.getByRole('heading', { name: /mochi hero/i }),
     ).toBeVisible();

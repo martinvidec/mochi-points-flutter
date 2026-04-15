@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'models/enums.dart';
 import 'models/notification.dart';
@@ -176,6 +177,15 @@ class MochiPointsApp extends StatelessWidget {
       title: 'Mochi Points',
       theme: AppTheme.darkTheme(),
       debugShowCheckedModeBanner: false,
+      // German localisation for built-in Material widgets (AppBar Back
+      // button tooltip, date pickers, default dialog buttons, …).
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [Locale('de'), Locale('en')],
+      locale: const Locale('de'),
       home: const SplashPage(),
       routes: {
         '/login': (context) => const LoginPage(),

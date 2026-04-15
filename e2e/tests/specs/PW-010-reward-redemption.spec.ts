@@ -70,7 +70,7 @@ function seedWithPendingQuest(): SeedPayload {
 
 /** Approve the pending quest to give the child points. */
 async function approvePendingQuest(page: Page): Promise<void> {
-  await page.getByRole('button', { name: /approve/i }).click();
+  await page.getByRole('button', { name: /\bgenehmigungen$/i }).click();
   await expect(
     page.getByRole('heading', { name: /freigabe/i }),
   ).toBeVisible();

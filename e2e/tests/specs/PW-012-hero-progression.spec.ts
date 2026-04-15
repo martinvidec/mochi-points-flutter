@@ -121,7 +121,7 @@ async function switchToChild(page: Page): Promise<void> {
 
 /** As parent (on the dashboard), approve the pending quest. */
 async function parentApproveQuest(page: Page): Promise<void> {
-  await page.getByRole('button', { name: /\bapprove$/i }).click();
+  await page.getByRole('button', { name: /\bgenehmigungen$/i }).click();
   await expect(
     page.getByRole('heading', { name: /freigabe/i }),
   ).toBeVisible();

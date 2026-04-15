@@ -127,7 +127,7 @@ async function switchToParent(page: Page): Promise<void> {
 }
 
 async function parentApproveQuest(page: Page): Promise<void> {
-  await page.getByRole('button', { name: /\bapprove$/i }).click();
+  await page.getByRole('button', { name: /\bgenehmigungen$/i }).click();
   await expect(
     page.getByRole('heading', { name: /freigabe/i }),
   ).toBeVisible();

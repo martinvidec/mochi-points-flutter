@@ -43,6 +43,8 @@ dependencies:
   confetti: ^0.7.0
   percent_indicator: ^4.2.3
   shimmer: ^3.0.0
+  flutter_localizations:
+    sdk: flutter
 
 dev_dependencies:
   flutter_test:

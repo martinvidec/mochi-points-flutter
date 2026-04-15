@@ -56,7 +56,7 @@ test.describe('PW-016 Bottom-Navigation & Logout', () => {
       page.getByRole('heading', { name: /belohnungen verwalten/i }),
     ).toBeVisible();
 
-    await clickTab(page, 'Approve');
+    await clickTab(page, 'Genehmigungen');
     await expect(
       page.getByRole('heading', { name: /freigabe/i }),
     ).toBeVisible();

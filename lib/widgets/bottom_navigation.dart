@@ -87,7 +87,7 @@ class BottomNavigation extends StatelessWidget {
         NavItem(
           icon: Icons.check_circle_outline,
           activeIcon: Icons.check_circle,
-          label: 'Approve',
+          label: 'Genehmigungen',
           badgeCount: pendingApprovals > 0 ? pendingApprovals : null,
         ),
         const NavItem(

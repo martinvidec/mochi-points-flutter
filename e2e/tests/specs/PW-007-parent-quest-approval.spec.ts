@@ -107,7 +107,7 @@ function seedNearLevelUp(): SeedPayload {
 
 /** Navigate to the Approve tab. */
 async function navigateToApprove(page: Page): Promise<void> {
-  await page.getByRole('button', { name: /approve/i }).click();
+  await page.getByRole('button', { name: /\bgenehmigungen$/i }).click();
   await expect(
     page.getByRole('heading', { name: /freigabe/i }),
   ).toBeVisible();
@@ -119,7 +119,7 @@ test.describe('PW-007 Parent: Quest Approval & Rejection', () => {
 
     // Badge on Approve tab shows count
     await expect(
-      page.getByRole('button', { name: /1\s*approve/i }),
+      page.getByRole('button', { name: /1\s*genehmigungen/i }),
     ).toBeVisible();
 
     await navigateToApprove(page);
@@ -161,7 +161,7 @@ test.describe('PW-007 Parent: Quest Approval & Rejection', () => {
 
     // Badge gone from Approve tab
     await expect(
-      page.getByRole('button', { name: 'Approve' }),
+      page.getByRole('button', { name: 'Genehmigungen' }),
     ).toBeVisible();
 
     // Verify localStorage: points awarded

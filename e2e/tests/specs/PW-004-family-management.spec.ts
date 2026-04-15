@@ -153,7 +153,7 @@ test.describe('PW-004 Familienmitglied hinzufügen', () => {
 
     // Now verify Papa can log in with PIN 5555:
     // Navigate back to dashboard, then logout
-    await page.getByRole('button', { name: /back/i }).click();
+    await page.getByRole('button', { name: /zurück/i }).click();
     await page
       .getByRole('button', { name: /abmelden.*ausloggen/i })
       .click();
