@@ -1020,7 +1020,7 @@ trailing: IconButton(
 
 Siehe F-9. Ausführlich in `docs/IST_ANALYSE.md` §5.2.
 
-### B-4 · `FamilySetup._finishSetup` loggt den ersten Parent nicht auto-ein
+### B-4 · `FamilySetup._finishSetup` loggt den ersten Parent nicht auto-ein — **BEHOBEN (#208)**
 
 Nach Familien-Setup wird zu `/login` navigiert, nicht zum Dashboard. Siehe
 die Spec-Korrektur S-1 unten. Das ist möglicherweise **gewollt** (User soll
@@ -1126,7 +1126,7 @@ Spec-Korrekturen sind **Fehler in den Markdown-Specs** unter
 `docs/tests/playwright/PW-*.md`, die während der Implementierung aufgefallen
 sind. Sie sind inzwischen behoben, aber die Root Causes sind erhaltenswert.
 
-### S-1 · PW-002 TC-002.1 dachte, der erste Parent wird auto-eingeloggt
+### S-1 · PW-002 TC-002.1 dachte, der erste Parent wird auto-eingeloggt — **APP HOLT AUF (#208)**
 
 Die Spec sagte:
 
