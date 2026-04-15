@@ -60,7 +60,7 @@ function seedWithPendingQuest(): SeedPayload {
 }
 
 async function approveQuest(page: Page): Promise<void> {
-  await page.getByRole('button', { name: /\bapprove$/i }).click();
+  await page.getByRole('button', { name: /\bgenehmigungen$/i }).click();
   await expect(page.getByRole('heading', { name: /freigabe/i })).toBeVisible();
   await page.getByRole('button', { name: 'Bestätigen' }).click();
   await expect(flutterText(page, /quest bestätigt/i)).toBeVisible();

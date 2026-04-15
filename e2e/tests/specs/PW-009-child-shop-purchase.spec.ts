@@ -256,7 +256,7 @@ test.describe('PW-009 Child: Shop-Kauf', () => {
     const page = await seededPage(seedWithPendingQuest());
 
     // Approve quest → child gets 10 MP
-    await page.getByRole('button', { name: /approve/i }).click();
+    await page.getByRole('button', { name: /\bgenehmigungen$/i }).click();
     await expect(
       page.getByRole('heading', { name: /freigabe/i }),
     ).toBeVisible();
