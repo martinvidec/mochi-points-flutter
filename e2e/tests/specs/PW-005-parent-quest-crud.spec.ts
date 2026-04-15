@@ -45,29 +45,11 @@ async function navigateToQuests(page: Page): Promise<void> {
 }
 
 /**
- * Click the save button (unlabeled Icons.check) in the QuestEditPage AppBar.
- *
- * The AppBar renders: Back button (labeled), heading, then the save button
- * (unlabeled). Both `heading.locator('..')` and `clickUnlabeledButton(body)`
- * are unreliable:
- *   - `.locator('..')` doesn't always resolve to the correct DOM parent
- *     in Flutter's flt-semantics tree.
- *   - body-level iteration can pick up icon picker buttons that sometimes
- *     appear before the save button in DOM order.
- *
- * Reliable approach: find the heading flt-semantics element, then get the
- * next sibling with role="button" — that's always the save button.
+ * Click the save button in the QuestEditPage AppBar.
+ * After #206 the IconButton has tooltip "Quest speichern".
  */
 async function clickSaveButton(page: Page): Promise<void> {
-  await expect(
-    page.getByRole('heading', { name: /quest/i }),
-  ).toBeVisible();
-  // The heading renders as <h2> inside a <flt-semantics> parent.
-  // The save button is the <flt-semantics role="button"> immediately
-  // following the <h2>. CSS adjacent sibling selector targets it precisely.
-  // Using Playwright's native .click() (not dispatchEvent) so the event
-  // goes through Flutter's event pipeline correctly.
-  await page.locator('h2 + flt-semantics[role="button"]').click();
+  await page.getByRole('button', { name: 'Quest speichern' }).click();
 }
 
 test.describe('PW-005 Parent: Quest CRUD', () => {

@@ -999,7 +999,7 @@ Auswirkungen auf Tests, sollten idealerweise App-seitig gefixt werden.
 Siehe F-11. Translation-Miss in
 `lib/pages/parent_dashboard_page.dart` (Bottom-Nav-Tab-Labels).
 
-### B-2 · Member-Remove-IconButton hat kein Semantics-Label
+### B-2 · Member-Remove-IconButton hat kein Semantics-Label — **BEHOBEN (#206)**
 
 In `FamilySetupPage` Step 3 (Member-Liste) hat der Remove-IconButton
 (`lib/pages/setup/family_setup_page.dart:222`) keinen `Semantics(label: ...)`-
@@ -1026,7 +1026,7 @@ Nach Familien-Setup wird zu `/login` navigiert, nicht zum Dashboard. Siehe
 die Spec-Korrektur S-1 unten. Das ist möglicherweise **gewollt** (User soll
 einmal aktiv den PIN bestätigen), gehört aber dokumentiert.
 
-### B-5 · FamilyManagementPage FAB hat kein Tooltip / Semantics-Label
+### B-5 · FamilyManagementPage FAB hat kein Tooltip / Semantics-Label — **BEHOBEN (#206)**
 
 Der FloatingActionButton in `lib/pages/family_management_page.dart:20-24`
 (`Icons.person_add`) hat weder `tooltip` noch `Semantics(label: ...)`-Wrapper.
@@ -1045,7 +1045,7 @@ FloatingActionButton(
 
 Quelle: PW-004.
 
-### B-6 · QuestEditPage Save-Button hat kein Tooltip / Semantics-Label
+### B-6 · QuestEditPage Save-Button hat kein Tooltip / Semantics-Label — **BEHOBEN (#206)**
 
 Der IconButton (Icons.check) in `lib/pages/parent/quest_edit_page.dart:144`
 hat weder `tooltip` noch `Semantics(label: ...)`. Tests müssen den
